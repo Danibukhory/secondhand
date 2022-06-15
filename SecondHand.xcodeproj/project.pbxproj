@@ -33,6 +33,7 @@
 		E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FCB285A1C35008F0615 /* SellingViewController.swift */; };
 		E9B46FCE285A1C40008F0615 /* SellingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FCD285A1C40008F0615 /* SellingListViewController.swift */; };
 		E9B46FD0285A1C4B008F0615 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FCF285A1C4B008F0615 /* AccountViewController.swift */; };
+		E9B46FD4285A3354008F0615 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FD3285A3354008F0615 /* String+Extensions.swift */; };
 		E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3352858AC3900489969 /* SignInViewController.swift */; };
 		E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3382858AC4C00489969 /* SignUpViewController.swift */; };
 /* End PBXBuildFile section */
@@ -66,6 +67,7 @@
 		E9B46FCB285A1C35008F0615 /* SellingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellingViewController.swift; sourceTree = "<group>"; };
 		E9B46FCD285A1C40008F0615 /* SellingListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellingListViewController.swift; sourceTree = "<group>"; };
 		E9B46FCF285A1C4B008F0615 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		E9B46FD3285A3354008F0615 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		E9C1F3352858AC3900489969 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		E9C1F3382858AC4C00489969 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -128,6 +130,7 @@
 				38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */,
 				E95E27222859B01C0090A5CC /* UIView+Extensions.swift */,
 				38940C752859EB79000DD541 /* UICollectionView+Extension.swift */,
+				E9B46FD3285A3354008F0615 /* String+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 				6E78118428522ED600104FE1 /* SceneDelegate.swift in Sources */,
 				38940C6E2859EB08000DD541 /* HomeHeaderCell.swift in Sources */,
 				38AB06D628588CB60006342E /* UIColor+Extension.swift in Sources */,
+				E9B46FD4285A3354008F0615 /* String+Extensions.swift in Sources */,
 				E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */,
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
 				E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */,
