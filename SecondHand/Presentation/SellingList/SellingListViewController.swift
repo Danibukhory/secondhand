@@ -8,7 +8,14 @@
 import UIKit
 
 final class SellingListViewController: UIViewController {
-
+    
+    
+    private lazy var sellingListTableView: UITableView = {
+        let tableView = UITableView()
+        
+        return tableView
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
