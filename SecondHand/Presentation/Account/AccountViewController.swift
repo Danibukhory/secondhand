@@ -18,9 +18,7 @@ final class AccountViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .systemBackground
-        
         configure()
     }
     
@@ -33,15 +31,11 @@ final class AccountViewController: UIViewController {
     
     private func configure() {
         view.addSubview(signInButton)
-        
         NSLayoutConstraint.activate([
-            
             signInButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signInButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             signInButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             signInButton.heightAnchor.constraint(equalToConstant: buttonSizeType.regular.rawValue),
-            
-            
         ])
     }
 
