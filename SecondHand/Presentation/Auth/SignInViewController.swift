@@ -12,15 +12,15 @@ final class SignInViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 32, weight: .bold)
         label.text = "Masuk"
+        label.font = UIFont(name:"Poppins-Bold",size:32)
         return label
     }()
     
     private lazy var usernameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 18, weight: .regular)
+        label.font = UIFont(name:"Poppins-Regular",size:16)
         label.text = "Username"
         return label
     }()
@@ -34,7 +34,7 @@ final class SignInViewController: UIViewController {
     private lazy var passwordLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 18, weight: .regular)
+        label.font = UIFont(name:"Poppins-Regular",size:16)
         label.text = "Password"
         return label
     }()
@@ -56,7 +56,7 @@ final class SignInViewController: UIViewController {
     private lazy var noAccountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .systemFont(ofSize: 16, weight: .regular)
+        label.font = UIFont(name:"Poppins-Regular",size:16)
         label.text = "Belum punya akun?"
         return label
     }()
@@ -66,7 +66,7 @@ final class SignInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Daftar di sini", for: .normal)
         button.setTitleColor(UIColor.tintColor, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 18, weight: .bold)
+        button.titleLabel?.font = UIFont(name:"Poppins-Bold",size:18)
         button.layer.cornerRadius = 10
 //        button.addTarget(self, action: #selector(handleTextField), for: .touchUpInside)
         return button
@@ -95,10 +95,10 @@ final class SignInViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
-            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             
             usernameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-            usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 15),
+            usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             
             emailTextField.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 10),
             emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -106,7 +106,7 @@ final class SignInViewController: UIViewController {
             emailTextField.heightAnchor.constraint(equalToConstant: 48),
             
             passwordLabel.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 15),
-            passwordLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 15),
+            passwordLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             
             passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 10),
             passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -121,7 +121,7 @@ final class SignInViewController: UIViewController {
             noAccountLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
             noAccountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 75),
             
-            moveToSignUpPageButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor,constant: -10),
+            moveToSignUpPageButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor,constant: -11),
             moveToSignUpPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 5),
             moveToSignUpPageButton.heightAnchor.constraint(equalToConstant: 20),
         ])
