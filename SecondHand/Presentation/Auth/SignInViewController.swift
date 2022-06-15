@@ -43,6 +43,7 @@ final class SignInViewController: UIViewController {
         let textField = SHRoundedTextfield()
         textField.setPlaceholder(placeholder: "Password")
         textField.isSecureTextEntry = true
+        textField.setForPasswordTextfield()
         return textField
     }()
         
