@@ -66,8 +66,8 @@ final class SHRoundedTextfield: UITextField {
     public func setForPasswordTextfield() {
            clearButtonMode = .never
            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-           button.setImage(UIImage(systemName: "shield"), for: .normal)
-           button.setImage(UIImage(systemName: "shield.fill"), for: .selected)
+           button.setImage(UIImage(named: "img-sh-eye"), for: .normal)
+           button.setImage(UIImage(named: "img-sh-eye"), for: .selected)
            button.addTarget(self, action: #selector(togglePasswordView), for: .touchUpInside)
            rightView = button
            rightViewMode = .always
