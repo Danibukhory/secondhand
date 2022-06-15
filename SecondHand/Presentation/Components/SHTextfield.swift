@@ -44,6 +44,8 @@ final class SHRoundedTextfield: UITextField {
         return rect.offsetBy(dx: -24, dy: 0)
     }
     
+    
+    
     private func configure() {
         translatesAutoresizingMaskIntoConstraints = false
         font = UIFont(name: "Poppins-Regular", size: 14)
@@ -63,13 +65,24 @@ final class SHRoundedTextfield: UITextField {
         self.placeholder = placeholder
     }
     
+    
     public func setForPasswordTextfield() {
         clearButtonMode = .never
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        button.setImage(UIImage(systemName: "shield"), for: .normal)
+        button.setImage(UIImage(systemName: "shield.fill"), for: .selected)
+        button.addTarget(self, action: #selector(togglePasswordView), for: .touchUpInside)
+        rightView = button
+        rightViewMode = .always
     }
     
     public func setForSearchBar() {
         
     }
     
+    @objc func togglePasswordView(_ sender: UIButton) {
+        isSecureTextEntry.toggle()
+        sender.isSelected.toggle()
+    }
 }
 

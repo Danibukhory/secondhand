@@ -19,6 +19,7 @@
 		6E78118C28522ED600104FE1 /* SecondHand.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E78118A28522ED600104FE1 /* SecondHand.xcdatamodeld */; };
 		6E78118E28522ED900104FE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E78118D28522ED900104FE1 /* Assets.xcassets */; };
 		6E78119128522ED900104FE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E78118F28522ED900104FE1 /* LaunchScreen.storyboard */; };
+		E95E271F28599A7F0090A5CC /* UITextfield+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E271E28599A7F0090A5CC /* UITextfield+Extensions.swift */; };
 		E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3352858AC3900489969 /* SignInViewController.swift */; };
 		E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3382858AC4C00489969 /* SignUpViewController.swift */; };
 		E9C1F33C2858C6B800489969 /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F33B2858C6B800489969 /* UIView+Extensions.swift */; };
@@ -40,6 +41,7 @@
 		6E78118D28522ED900104FE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E78119028522ED900104FE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E78119228522ED900104FE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E95E271E28599A7F0090A5CC /* UITextfield+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextfield+Extensions.swift"; sourceTree = "<group>"; };
 		E9C1F3352858AC3900489969 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		E9C1F3382858AC4C00489969 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		E9C1F33B2858C6B800489969 /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			children = (
 				38AB06D528588CB60006342E /* UIColor+Extension.swift */,
 				E9C1F33B2858C6B800489969 /* UIView+Extensions.swift */,
+				E95E271E28599A7F0090A5CC /* UITextfield+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -231,6 +234,7 @@
 				6E78118628522ED600104FE1 /* ViewController.swift in Sources */,
 				E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */,
 				E9C1F33C2858C6B800489969 /* UIView+Extensions.swift in Sources */,
+				E95E271F28599A7F0090A5CC /* UITextfield+Extensions.swift in Sources */,
 				E9C1F33E2858D32100489969 /* SHTextfield.swift in Sources */,
 				6E78118228522ED600104FE1 /* AppDelegate.swift in Sources */,
 				38AB06E128588D5D0006342E /* SHButton.swift in Sources */,
