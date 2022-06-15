@@ -17,11 +17,11 @@ final class SignInViewController: UIViewController {
         return label
     }()
     
-    private lazy var usernameLabel: UILabel = {
+    private lazy var emailLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name:"Poppins-Regular",size:16)
-        label.text = "Username"
+        label.text = "Email"
         return label
     }()
     
@@ -84,7 +84,7 @@ final class SignInViewController: UIViewController {
         
         view.addSubviews(
             titleLabel,
-            usernameLabel,
+            emailLabel,
             emailTextField,
             passwordLabel,
             passwordTextField,
@@ -98,10 +98,10 @@ final class SignInViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             
-            usernameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-            usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
+            emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            emailLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             
-            emailTextField.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 10),
+            emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 10),
             emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emailTextField.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             emailTextField.heightAnchor.constraint(equalToConstant: 48),
