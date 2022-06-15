@@ -1,5 +1,5 @@
 //
-//  SignInViewController.swift
+//  SignUpViewController.swift
 //  SecondHand
 //
 //  Created by Raden Dimas on 14/06/22.
@@ -7,14 +7,28 @@
 
 import UIKit
 
-final class SignInViewController: UIViewController {
+final class SignUpViewController: UIViewController {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Masuk"
+        label.text = "Daftar"
         label.font = UIFont(name:"Poppins-Bold",size:32)
         return label
+    }()
+    
+    private lazy var usernameLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont(name:"Poppins-Regular",size:16)
+        label.text = "Username"
+        return label
+    }()
+    
+    private lazy var usernameTextField: SHRoundedTextfield = {
+        let textField = SHRoundedTextfield()
+        textField.setPlaceholder(placeholder: "Email")
+        return textField
     }()
     
     private lazy var emailLabel: UILabel = {
@@ -58,18 +72,18 @@ final class SignInViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name:"Poppins-Regular",size:16)
-        label.text = "Belum punya akun?"
+        label.text = "Sudah punya akun?"
         return label
     }()
     
     private lazy var moveToSignUpPageButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Daftar di sini", for: .normal)
+        button.setTitle("Masuk di sini", for: .normal)
         button.setTitleColor(UIColor.tintColor, for: .normal)
         button.titleLabel?.font = UIFont(name:"Poppins-Bold",size:18)
         button.layer.cornerRadius = 10
-//        button.addTarget(self, action: #selector(handleTextField), for: .touchUpInside)
+        button.addTarget(self, action: #selector(moveToSignUpPage), for: .touchUpInside)
         return button
         // give spring animation for button if needed
     }()
@@ -84,6 +98,8 @@ final class SignInViewController: UIViewController {
         
         view.addSubviews(
             titleLabel,
+            usernameLabel,
+            usernameTextField,
             emailLabel,
             emailTextField,
             passwordLabel,
@@ -98,7 +114,15 @@ final class SignInViewController: UIViewController {
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             
-            emailLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            usernameLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            usernameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
+            
+            usernameTextField.topAnchor.constraint(equalTo: usernameLabel.bottomAnchor, constant: 10),
+            usernameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            usernameTextField.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
+            usernameTextField.heightAnchor.constraint(equalToConstant: 48),
+            
+            emailLabel.topAnchor.constraint(equalTo: usernameTextField.bottomAnchor, constant: 10),
             emailLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
             
             emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 10),
@@ -132,9 +156,10 @@ final class SignInViewController: UIViewController {
         
     }
     
-    @objc func handleTextField() {
-        
+    @objc func moveToSignUpPage() {
+//        let viewController = 
+//        self?.navigationController?.pushViewController(viewController, animated: true)
     }
-    
+   
     
 }
