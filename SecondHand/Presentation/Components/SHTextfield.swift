@@ -1,13 +1,13 @@
 //
-//  SHTextfield.swift
+//  SHTextField.swift
 //  SecondHand
 //
-//  Created by Raden Dimas on 14/06/22.
+//  Created by Bagas Ilham on 15/06/22.
 //
 
 import UIKit
 
-final class SHRoundedTextfield: UITextField {
+class SHTextField: UITextField {
     var textPadding = UIEdgeInsets(
         top: 0,
         left: 20,
@@ -24,6 +24,19 @@ final class SHRoundedTextfield: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
+    private func configure() {
+        font = UIFont(name: "Poppins-Regular", size: 14)
+        borderStyle = .none
+        layer.cornerRadius = 16
+        clipsToBounds = true
+        backgroundColor = .systemBackground
+        clearButtonMode = .whileEditing
+        
+        NSLayoutConstraint.activate([
+            self.heightAnchor.constraint(equalToConstant: 48)
+        ])
+    }
+
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         let rect = super.textRect(forBounds: bounds)
         return rect.inset(by: textPadding)
@@ -44,32 +57,4 @@ final class SHRoundedTextfield: UITextField {
         return rect.offsetBy(dx: -24, dy: 0)
     }
     
-    private func configure() {
-        translatesAutoresizingMaskIntoConstraints = false
-        font = UIFont(name: "Poppins-Regular", size: 14)
-        layer.borderWidth = 1.0
-        layer.borderColor = UIColor.systemGray5.cgColor
-        layer.cornerRadius = 16
-        clipsToBounds = true
-        backgroundColor = .systemBackground
-        clearButtonMode = .whileEditing
-        
-        NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: 48)
-        ])
-    }
-    
-    public func setPlaceholder(placeholder: String) {
-        self.placeholder = placeholder
-    }
-    
-    public func setForPasswordTextfield() {
-        clearButtonMode = .never
-    }
-    
-    public func setForSearchBar() {
-        
-    }
-    
 }
-
