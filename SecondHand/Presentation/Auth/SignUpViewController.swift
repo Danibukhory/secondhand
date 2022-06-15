@@ -27,7 +27,7 @@ final class SignUpViewController: UIViewController {
     
     private lazy var usernameTextField: SHRoundedTextfield = {
         let textField = SHRoundedTextfield()
-        textField.setPlaceholder(placeholder: "Email")
+        textField.setPlaceholder(placeholder: "Username")
         return textField
     }()
     
@@ -94,6 +94,43 @@ final class SignUpViewController: UIViewController {
         configure()
     }
     
+    @objc func handleTextField() {
+        guard let emailText = emailTextField.text?.trimmingCharacters(in: .whitespaces),
+              let usernameText = usernameTextField.text?.trimmingCharacters(in: .whitespaces),
+              let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
+        else { return }
+        
+        switch(emailText.isEmpty,usernameText.isEmpty,passwordText.isEmpty) {
+            
+        case (true,true,true):
+            setupAlert(title: "Error", message: "Please Input Email, Username & Password", style: .alert)
+        case (false,true,true):
+            setupAlert(title: "Error", message: "Please Input Username & Password", style: .alert)
+        case (false,false,true):
+            setupAlert(title: "Error", message: "Please Input Password", style: .alert)
+        case (true,true,false):
+            setupAlert(title: "Error", message: "Please Input Email & Username", style: .alert)
+        case (true,false,true):
+            setupAlert(title: "Error", message: "Please Input Email & Password", style: .alert)
+        case (true,false,false):
+            setupAlert(title: "Error", message: "Please Input Email", style: .alert)
+        case (false,true,false):
+            setupAlert(title: "Error", message: "Please Input Username", style: .alert)
+            
+        default:
+            if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
+                setupAlert(title: "Success", message: "Success Registered Please Sign In!", style: .alert)
+            } else {
+                setupAlert(title: "Failed", message: "Email or Password is invalid", style: .alert)
+            }
+        }
+        
+    }
+    
+    @objc func handleSignInButton() {
+        
+    }
+    
     private func configure() {
         
         view.addSubviews(
@@ -152,12 +189,14 @@ final class SignUpViewController: UIViewController {
         ])
     }
     
-    @objc func handleSignInButton() {
-        
-    }
-    
-    @objc func handleTextField() {
-        
+    private func setupAlert(
+        title titleAlert: String,
+        message messageAlert: String,
+        style styleAlert: UIAlertController.Style)
+    {
+        let alert = UIAlertController(title: titleAlert, message: messageAlert, preferredStyle: styleAlert)
+        alert.addAction(UIAlertAction(title: "OKE", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
    
     
