@@ -74,7 +74,7 @@ final class HomeHeaderCell: UITableViewCell {
         discountValueLabel.setTitle(text: "60%", size: 20, weight: .medium, color: UIColor(rgb: 0xFA2C5A))
         
         promoImageView.translatesAutoresizingMaskIntoConstraints = false
-        promoImageView.image = UIImage(named: "gift")
+        promoImageView.image = UIImage(named: "img-home-gift")
         
         collectionLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionLabel.setTitle(text: "Telusuri Kategori", size: 14, weight: .medium)

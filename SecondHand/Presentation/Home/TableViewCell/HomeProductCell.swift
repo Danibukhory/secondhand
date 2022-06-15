@@ -63,9 +63,9 @@ extension HomeProductCell: UICollectionViewDataSource, UICollectionViewDelegate,
         }
         switch item % 2 {
         case 0:
-            cell.productImageView.image = UIImage(named: "home_product_placeholder_1")
+            cell.productImageView.image = UIImage(named: "img-home-product-placeholder-1")
         default:
-            cell.productImageView.image = UIImage(named: "home_product_placeholder_2")
+            cell.productImageView.image = UIImage(named: "img-home-product-placeholder-2")
         }
         return cell
     }
