@@ -52,7 +52,7 @@ final class SignInViewController: UIViewController {
     private lazy var signInButton: SHDefaultButton = {
         let button = SHDefaultButton()
         button.setActiveButtonTitle(string: "Masuk")
-        button.addTarget(self, action: #selector(handleSignInButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(moveToMainView), for: .touchUpInside)
         return button
     }()
     
@@ -82,6 +82,11 @@ final class SignInViewController: UIViewController {
         configure()
     }
     
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        navigationController?.setNavigationBarHidden(false, animated: false)
+//    }
+//    
     @objc func handleSignInButton() {
         guard let emailText = emailTextField.text?.trimmingCharacters(in: .whitespaces),
               let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
@@ -100,10 +105,17 @@ final class SignInViewController: UIViewController {
         default:
             if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
                 setupAlert(title: "Success", message: "Success Sign In", style: .alert)
+
             } else {
                 setupAlert(title: "Error", message: "Password is not valid", style: .alert)
             }
         }
+    }
+    
+    @objc func moveToMainView() {
+        let viewController = MainTabBarController()
+        navigationController?.pushViewController(viewController, animated: true)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     @objc func handleEmailTextChange() {
@@ -133,8 +145,9 @@ final class SignInViewController: UIViewController {
     }
     
     @objc func moveToSignUpPage() {
-        let viewController = SignUpViewController()
-        navigationController?.pushViewController(viewController, animated: true)
+        let viewController = UINavigationController(rootViewController: SignUpViewController())
+        viewController.modalPresentationStyle = .fullScreen
+        present(viewController, animated: true, completion: nil)
     }
     
     

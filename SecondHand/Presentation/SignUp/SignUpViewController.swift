@@ -61,10 +61,10 @@ final class SignUpViewController: UIViewController {
         return textField
     }()
         
-    private lazy var signInButton: SHDefaultButton = {
+    private lazy var signUpButton: SHDefaultButton = {
         let button = SHDefaultButton()
         button.setActiveButtonTitle(string: "Masuk")
-        button.addTarget(self, action: #selector(handleSignInButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleTextField), for: .touchUpInside)
         return button
     }()
     
@@ -76,14 +76,14 @@ final class SignUpViewController: UIViewController {
         return label
     }()
     
-    private lazy var moveToSignUpPageButton: UIButton = {
+    private lazy var moveToSignInPageButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Masuk di sini", for: .normal)
         button.setTitleColor(UIColor.tintColor, for: .normal)
         button.titleLabel?.font = UIFont(name:"Poppins-Bold",size:18)
         button.layer.cornerRadius = 10
-//        button.addTarget(self, action: #selector(handleTextField), for: .touchUpInside)
+        button.addTarget(self, action: #selector(moveToSignInPage), for: .touchUpInside)
         return button
         // give spring animation for button if needed
     }()
@@ -127,8 +127,8 @@ final class SignUpViewController: UIViewController {
         
     }
     
-    @objc func handleSignInButton() {
-        
+    @objc func moveToSignInPage() {
+        self.dismiss(animated: true)
     }
     
     private func configure() {
@@ -141,9 +141,9 @@ final class SignUpViewController: UIViewController {
             emailTextField,
             passwordLabel,
             passwordTextField,
-            signInButton,
+            signUpButton,
             noAccountLabel,
-            moveToSignUpPageButton
+            moveToSignInPageButton
         )
         
         
@@ -175,17 +175,17 @@ final class SignUpViewController: UIViewController {
             passwordTextField.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             passwordTextField.heightAnchor.constraint(equalToConstant: 48),
             
-            signInButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
-            signInButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
-            signInButton.heightAnchor.constraint(equalToConstant: buttonSizeType.regular.rawValue),
+            signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
+            signUpButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
+            signUpButton.heightAnchor.constraint(equalToConstant: buttonSizeType.regular.rawValue),
             
             noAccountLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
             noAccountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 75),
             
-            moveToSignUpPageButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor,constant: -11),
-            moveToSignUpPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 5),
-            moveToSignUpPageButton.heightAnchor.constraint(equalToConstant: 20),
+            moveToSignInPageButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor,constant: -11),
+            moveToSignInPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 5),
+            moveToSignInPageButton.heightAnchor.constraint(equalToConstant: 20),
         ])
     }
     
