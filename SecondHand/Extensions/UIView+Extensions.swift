@@ -19,4 +19,13 @@ extension UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
     }
+    func constraintsPinTo(leading: NSLayoutXAxisAnchor, trailing: NSLayoutXAxisAnchor, top: NSLayoutYAxisAnchor, bottom: NSLayoutYAxisAnchor) {
+            self.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                self.leadingAnchor.constraint(equalTo: leading),
+                self.trailingAnchor.constraint(equalTo: trailing),
+                self.topAnchor.constraint(equalTo: top),
+                self.bottomAnchor.constraint(equalTo: bottom)
+                ])
+    }
 }
