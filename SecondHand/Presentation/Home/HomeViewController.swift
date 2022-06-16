@@ -15,6 +15,10 @@ enum HomeViewCellRowType: Int {
 final class HomeViewController: UITableViewController {
     
     var searchTableView = UITableView()
+<<<<<<< HEAD
+=======
+    private typealias rowType = HomeViewCellRowType
+>>>>>>> f316ea941653e6537e832173c62e1c2e1dac8ca0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,7 +54,11 @@ final class HomeViewController: UITableViewController {
             return UITableViewCell()
         default:
             switch row {
+<<<<<<< HEAD
             case 0:
+=======
+            case rowType.header.rawValue:
+>>>>>>> f316ea941653e6537e832173c62e1c2e1dac8ca0
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "\(HomeHeaderCell.self)",
                     for: indexPath
@@ -72,14 +80,23 @@ final class HomeViewController: UITableViewController {
                 }
                 return cell
                 
+<<<<<<< HEAD
             case 1:
                 guard let cell2 = tableView.dequeueReusableCell(
+=======
+            case rowType.product.rawValue:
+                guard let cell = tableView.dequeueReusableCell(
+>>>>>>> f316ea941653e6537e832173c62e1c2e1dac8ca0
                     withIdentifier: "\(HomeProductCell.self)",
                     for: indexPath
                 ) as? HomeProductCell else {
                     return UITableViewCell()
                 }
+<<<<<<< HEAD
                 return cell2
+=======
+                return cell
+>>>>>>> f316ea941653e6537e832173c62e1c2e1dac8ca0
             default:
                 return UITableViewCell()
             }
@@ -104,6 +121,12 @@ final class HomeViewController: UITableViewController {
             searchTableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
             searchTableView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
+<<<<<<< HEAD
+=======
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+>>>>>>> f316ea941653e6537e832173c62e1c2e1dac8ca0
     }
     
     private func setupGestureRecognizers() {
