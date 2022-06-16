@@ -15,6 +15,7 @@ enum HomeViewCellRowType: Int {
 final class HomeViewController: UITableViewController {
     
     var searchTableView = UITableView()
+    private typealias rowType = HomeViewCellRowType
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,9 +25,6 @@ final class HomeViewController: UITableViewController {
         tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
         tableView.backgroundColor = UIColor(rgb: 0xFFE9C9)
         tableView.separatorStyle = .none
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,7 +48,7 @@ final class HomeViewController: UITableViewController {
             return UITableViewCell()
         default:
             switch row {
-            case 0:
+            case rowType.header.rawValue:
                 guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "\(HomeHeaderCell.self)",
                     for: indexPath
@@ -72,14 +70,14 @@ final class HomeViewController: UITableViewController {
                 }
                 return cell
                 
-            case 1:
-                guard let cell2 = tableView.dequeueReusableCell(
+            case rowType.product.rawValue:
+                guard let cell = tableView.dequeueReusableCell(
                     withIdentifier: "\(HomeProductCell.self)",
                     for: indexPath
                 ) as? HomeProductCell else {
                     return UITableViewCell()
                 }
-                return cell2
+                return cell
             default:
                 return UITableViewCell()
             }
@@ -104,6 +102,9 @@ final class HomeViewController: UITableViewController {
             searchTableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
             searchTableView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     private func setupGestureRecognizers() {

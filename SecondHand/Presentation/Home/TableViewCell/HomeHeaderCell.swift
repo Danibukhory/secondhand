@@ -192,7 +192,7 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
             return UICollectionViewCell()
         }
         self.flowLayout.itemSize = CGSize(width: cell.frame.width, height: 50)
-        cell.onCellTap = { [weak self] in
+        cell.onCellTap = {
             if cell.isCellSelected {
                 cell.categoryView.backgroundColor = UIColor(rgb: 0x7126B5)
                 cell.searchImageView.tintColor = .systemBackground
