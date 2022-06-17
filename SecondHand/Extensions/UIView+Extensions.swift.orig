@@ -19,6 +19,16 @@ extension UIView {
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
     }
+<<<<<<< HEAD
+    func constraintsPinTo(leading: NSLayoutXAxisAnchor, trailing: NSLayoutXAxisAnchor, top: NSLayoutYAxisAnchor, bottom: NSLayoutYAxisAnchor) {
+            self.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                self.leadingAnchor.constraint(equalTo: leading),
+                self.trailingAnchor.constraint(equalTo: trailing),
+                self.topAnchor.constraint(equalTo: top),
+                self.bottomAnchor.constraint(equalTo: bottom)
+                ])
+=======
     
     func fadeIn(
         _ duration: TimeInterval = 0.15,
@@ -46,16 +56,7 @@ extension UIView {
             animations: { self.alpha = 0.0 },
             completion: completion
         )
-    }
-    
-    func constraintsPinTo(leading: NSLayoutXAxisAnchor, trailing: NSLayoutXAxisAnchor, top: NSLayoutYAxisAnchor, bottom: NSLayoutYAxisAnchor) {
-            self.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                self.leadingAnchor.constraint(equalTo: leading),
-                self.trailingAnchor.constraint(equalTo: trailing),
-                self.topAnchor.constraint(equalTo: top),
-                self.bottomAnchor.constraint(equalTo: bottom)
-                ])
+>>>>>>> main
     }
     
 }
