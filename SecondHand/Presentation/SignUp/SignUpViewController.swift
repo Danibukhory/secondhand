@@ -42,6 +42,7 @@ final class SignUpViewController: UIViewController {
     private lazy var emailTextField: SHRoundedTextfield = {
         let textField = SHRoundedTextfield()
         textField.setPlaceholder(placeholder: "Email")
+        textField.addTarget(self, action: #selector(handleEmailTextChange), for: .editingChanged)
         return textField
     }()
     
@@ -58,13 +59,14 @@ final class SignUpViewController: UIViewController {
         textField.setPlaceholder(placeholder: "Password")
         textField.isSecureTextEntry = true
         textField.setForPasswordTextfield()
+        textField.addTarget(self, action: #selector(handlePasswordTextChange), for: .editingChanged)
         return textField
     }()
         
     private lazy var signUpButton: SHDefaultButton = {
         let button = SHDefaultButton()
         button.setActiveButtonTitle(string: "Masuk")
-        button.addTarget(self, action: #selector(handleTextField), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleSignUpButton), for: .touchUpInside)
         return button
     }()
     
@@ -94,7 +96,7 @@ final class SignUpViewController: UIViewController {
         configure()
     }
     
-    @objc func handleTextField() {
+    @objc func handleSignUpButton() {
         guard let emailText = emailTextField.text?.trimmingCharacters(in: .whitespaces),
               let usernameText = usernameTextField.text?.trimmingCharacters(in: .whitespaces),
               let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
@@ -120,11 +122,39 @@ final class SignUpViewController: UIViewController {
         default:
             if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
                 setupAlert(title: "Success", message: "Success Registered Please Sign In!", style: .alert)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    self.moveToSignInPage()
+                }
             } else {
                 setupAlert(title: "Failed", message: "Email or Password is invalid", style: .alert)
             }
         }
-        
+    }
+    
+    @objc func handleEmailTextChange() {
+        guard let text = emailTextField.text else {
+            return
+        }
+        if text.isValidEmail {
+            emailTextField.layer.borderColor = UIColor.systemGreen.cgColor
+        } else if text.isEmpty {
+            emailTextField.layer.borderColor = UIColor.systemGray5.cgColor
+        } else {
+            emailTextField.layer.borderColor = UIColor.systemRed.cgColor
+        }
+    }
+    
+    @objc func handlePasswordTextChange() {
+        guard let text = passwordTextField.text else {
+            return
+        }
+        if text.isValidPassword(text) {
+            passwordTextField.layer.borderColor = UIColor.systemGreen.cgColor
+        } else if text.isEmpty{
+            passwordTextField.layer.borderColor = UIColor.systemGray5.cgColor
+        } else {
+            passwordTextField.layer.borderColor = UIColor.systemRed.cgColor
+        }
     }
     
     @objc func moveToSignInPage() {
@@ -132,7 +162,6 @@ final class SignUpViewController: UIViewController {
     }
     
     private func configure() {
-        
         view.addSubviews(
             titleLabel,
             usernameLabel,
@@ -145,7 +174,6 @@ final class SignUpViewController: UIViewController {
             noAccountLabel,
             moveToSignInPageButton
         )
-        
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
