@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class HomeHeaderCell: UITableViewCell {
+final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
     
     var searchBar = SHRoundedTextfield()
     var promoLabel = UILabel()
@@ -18,6 +18,21 @@ final class HomeHeaderCell: UITableViewCell {
     var collectionLabel = UILabel()
     var collectionView: UICollectionView?
     var flowLayout = UICollectionViewFlowLayout()
+    var searchImageView: UIImageView = {
+        let searchImage = UIImage(systemName: "magnifyingglass")
+        let searchImageView = UIImageView(image: searchImage)
+        searchImageView.translatesAutoresizingMaskIntoConstraints = false
+        searchImageView.tintColor = UIColor(rgb: 0x8A8A8A)
+        searchImageView.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        searchImageView.widthAnchor.constraint(equalTo: searchImageView.heightAnchor).isActive = true
+        return searchImageView
+    }()
+    
+    typealias OnSearchBarTap = () -> Void
+    var onSearchBarTap: OnSearchBarTap?
+    
+    typealias OnDismissButtonTap = () -> Void
+    var onDismissButtonTap: OnDismissButtonTap?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -54,14 +69,9 @@ final class HomeHeaderCell: UITableViewCell {
         
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.placeholder = "Cari di SecondHand"
-        let searchImage = UIImage(systemName: "magnifyingglass")
-        let searchImageView = UIImageView(image: searchImage)
-        searchImageView.translatesAutoresizingMaskIntoConstraints = false
-        searchImageView.tintColor = UIColor(rgb: 0x8A8A8A)
-        searchImageView.heightAnchor.constraint(equalToConstant: 24).isActive = true
-        searchImageView.widthAnchor.constraint(equalTo: searchImageView.heightAnchor).isActive = true
         searchBar.rightView = searchImageView
         searchBar.rightViewMode = .unlessEditing
+        searchBar.delegate = self
         
         promoLabel.translatesAutoresizingMaskIntoConstraints = false
         promoLabel.setTitle(text: "Bulan Ramadhan\nBanyak Diskon!", size: 20, weight: .bold)
@@ -123,6 +133,22 @@ final class HomeHeaderCell: UITableViewCell {
         
     }
     
+    @objc private func dismissView() {
+        onDismissButtonTap?()
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        let dismissButton = UIButton()
+        dismissButton.translatesAutoresizingMaskIntoConstraints = false
+        dismissButton.tintColor = .secondaryLabel
+        dismissButton.setImage(UIImage(systemName: "xmark"), for: .normal)
+        dismissButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
+        dismissButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        dismissButton.widthAnchor.constraint(equalToConstant: 24).isActive = true
+        textField.rightView = dismissButton
+        onSearchBarTap?()
+    }
+    
 }
 
 extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -166,7 +192,7 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
             return UICollectionViewCell()
         }
         self.flowLayout.itemSize = CGSize(width: cell.frame.width, height: 50)
-        cell.onCellTap = { [weak self] in
+        cell.onCellTap = {
             if cell.isCellSelected {
                 cell.categoryView.backgroundColor = UIColor(rgb: 0x7126B5)
                 cell.searchImageView.tintColor = .systemBackground
