@@ -122,6 +122,9 @@ final class SignUpViewController: UIViewController {
         default:
             if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
                 setupAlert(title: "Success", message: "Success Registered Please Sign In!", style: .alert)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    self.moveToSignInPage()
+                }
             } else {
                 setupAlert(title: "Failed", message: "Email or Password is invalid", style: .alert)
             }
