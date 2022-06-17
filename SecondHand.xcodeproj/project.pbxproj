@@ -28,6 +28,9 @@
 		6E78119128522ED900104FE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E78118F28522ED900104FE1 /* LaunchScreen.storyboard */; };
 		7BCE01AA285A21B100FF94BA /* AccountInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */; };
 		7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */; };
+		7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */; };
+		7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */; };
+		7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */; };
 		E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27202859AEE30090A5CC /* SHTextfield.swift */; };
 		E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27222859B01C0090A5CC /* UIView+Extensions.swift */; };
 		E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3352858AC3900489969 /* SignInViewController.swift */; };
@@ -58,6 +61,9 @@
 		6E78119228522ED900104FE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoViewController.swift; sourceTree = "<group>"; };
 		7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHLongTextField.swift; sourceTree = "<group>"; };
+		7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
+		7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHCustomTextFieldForm.swift; sourceTree = "<group>"; };
+		7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		E95E27202859AEE30090A5CC /* SHTextfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHTextfield.swift; sourceTree = "<group>"; };
 		E95E27222859B01C0090A5CC /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E9C1F3352858AC3900489969 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
@@ -122,6 +128,7 @@
 				38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */,
 				E95E27222859B01C0090A5CC /* UIView+Extensions.swift */,
 				38940C752859EB79000DD541 /* UICollectionView+Extension.swift */,
+				7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -165,6 +172,14 @@
 			path = Account;
 			sourceTree = "<group>";
 		};
+		7BCE01AD285B5D3A00FF94BA /* Product Detail */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
+			);
+			path = "Product Detail";
+			sourceTree = "<group>";
+		};
 		E9C1F3302858ABB300489969 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +200,7 @@
 		E9C1F3322858ABC700489969 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				7BCE01AD285B5D3A00FF94BA /* Product Detail */,
 				7BCE01A8285A217D00FF94BA /* Account */,
 				38940C6A2859EAC9000DD541 /* Home */,
 				E9C1F3342858AC1700489969 /* Auth */,
@@ -199,6 +215,7 @@
 				38AB06E028588D5D0006342E /* SHButton.swift */,
 				E95E27202859AEE30090A5CC /* SHTextfield.swift */,
 				7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */,
+				7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -288,6 +305,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38940C742859EB5B000DD541 /* HomeProductCollectionCell.swift in Sources */,
+				7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */,
 				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
 				38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */,
@@ -301,8 +319,10 @@
 				38940C6E2859EB08000DD541 /* HomeHeaderCell.swift in Sources */,
 				38AB06D628588CB60006342E /* UIColor+Extension.swift in Sources */,
 				E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */,
+				7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */,
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
 				38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */,
+				7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */,
 				38940C722859EB44000DD541 /* HomeProductCell.swift in Sources */,
 				38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */,
 			);
