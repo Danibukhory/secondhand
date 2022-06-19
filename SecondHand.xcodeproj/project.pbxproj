@@ -32,6 +32,7 @@
 		7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */; };
 		7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */; };
 		7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */; };
+		E92ED129285F25E900CB0476 /* TopSellingListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92ED128285F25E900CB0476 /* TopSellingListTableViewCell.swift */; };
 		E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27202859AEE30090A5CC /* SHTextfield.swift */; };
 		E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27222859B01C0090A5CC /* UIView+Extensions.swift */; };
 		E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FC3285A1B5E008F0615 /* MainTabBarController.swift */; };
@@ -72,6 +73,7 @@
 		7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHCustomTextFieldForm.swift; sourceTree = "<group>"; };
 		7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
+		E92ED128285F25E900CB0476 /* TopSellingListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSellingListTableViewCell.swift; sourceTree = "<group>"; };
 		E95E27202859AEE30090A5CC /* SHTextfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHTextfield.swift; sourceTree = "<group>"; };
 		E95E27222859B01C0090A5CC /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E9B46FC3285A1B5E008F0615 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -180,6 +182,30 @@
 			path = SecondHand;
 			sourceTree = "<group>";
 		};
+		7BCE01A8285A217D00FF94BA /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		7BCE01AD285B5D3A00FF94BA /* Product Detail */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
+			);
+			path = "Product Detail";
+			sourceTree = "<group>";
+		};
+		E92ED127285F238C00CB0476 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				E92ED128285F25E900CB0476 /* TopSellingListTableViewCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		E9B46FC0285A1A01008F0615 /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +249,7 @@
 		E9B46FC7285A1BC4008F0615 /* SellingList */ = {
 			isa = PBXGroup;
 			children = (
+				E92ED127285F238C00CB0476 /* Cells */,
 				E9B46FCD285A1C40008F0615 /* SellingListViewController.swift */,
 			);
 			path = SellingList;
@@ -234,22 +261,6 @@
 				E9B46FCF285A1C4B008F0615 /* AccountViewController.swift */,
 			);
 			path = Account;
-			sourceTree = "<group>";
-		};
-		7BCE01A8285A217D00FF94BA /* Account */ = {
-			isa = PBXGroup;
-			children = (
-				7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */,
-			);
-			path = Account;
-			sourceTree = "<group>";
-		};
-		7BCE01AD285B5D3A00FF94BA /* Product Detail */ = {
-			isa = PBXGroup;
-			children = (
-				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
-			);
-			path = "Product Detail";
 			sourceTree = "<group>";
 		};
 		E9C1F3302858ABB300489969 /* App */ = {
@@ -392,6 +403,7 @@
 				E9B46FD4285A3354008F0615 /* String+Extensions.swift in Sources */,
 				E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */,
 				7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */,
+				E92ED129285F25E900CB0476 /* TopSellingListTableViewCell.swift in Sources */,
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
 				E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */,
 				38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */,
