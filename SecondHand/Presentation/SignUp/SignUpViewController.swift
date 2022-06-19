@@ -27,7 +27,7 @@ final class SignUpViewController: UIViewController {
     
     private lazy var usernameTextField: SHRoundedTextfield = {
         let textField = SHRoundedTextfield()
-        textField.setPlaceholder(placeholder: "Email")
+        textField.setPlaceholder(placeholder: "Username")
         return textField
     }()
     
@@ -42,6 +42,7 @@ final class SignUpViewController: UIViewController {
     private lazy var emailTextField: SHRoundedTextfield = {
         let textField = SHRoundedTextfield()
         textField.setPlaceholder(placeholder: "Email")
+        textField.addTarget(self, action: #selector(handleEmailTextChange), for: .editingChanged)
         return textField
     }()
     
@@ -58,13 +59,14 @@ final class SignUpViewController: UIViewController {
         textField.setPlaceholder(placeholder: "Password")
         textField.isSecureTextEntry = true
         textField.setForPasswordTextfield()
+        textField.addTarget(self, action: #selector(handlePasswordTextChange), for: .editingChanged)
         return textField
     }()
         
-    private lazy var signInButton: SHDefaultButton = {
+    private lazy var signUpButton: SHDefaultButton = {
         let button = SHDefaultButton()
         button.setActiveButtonTitle(string: "Masuk")
-        button.addTarget(self, action: #selector(handleSignInButton), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleSignUpButton), for: .touchUpInside)
         return button
     }()
     
@@ -76,14 +78,14 @@ final class SignUpViewController: UIViewController {
         return label
     }()
     
-    private lazy var moveToSignUpPageButton: UIButton = {
+    private lazy var moveToSignInPageButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Masuk di sini", for: .normal)
         button.setTitleColor(UIColor.tintColor, for: .normal)
         button.titleLabel?.font = UIFont(name:"Poppins-Bold",size:18)
         button.layer.cornerRadius = 10
-        button.addTarget(self, action: #selector(moveToSignUpPage), for: .touchUpInside)
+        button.addTarget(self, action: #selector(moveToSignInPage), for: .touchUpInside)
         return button
         // give spring animation for button if needed
     }()
@@ -94,8 +96,72 @@ final class SignUpViewController: UIViewController {
         configure()
     }
     
-    private func configure() {
+    @objc func handleSignUpButton() {
+        guard let emailText = emailTextField.text?.trimmingCharacters(in: .whitespaces),
+              let usernameText = usernameTextField.text?.trimmingCharacters(in: .whitespaces),
+              let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
+        else { return }
         
+        switch(emailText.isEmpty,usernameText.isEmpty,passwordText.isEmpty) {
+            
+        case (true,true,true):
+            setupAlert(title: "Error", message: "Please Input Email, Username & Password", style: .alert)
+        case (false,true,true):
+            setupAlert(title: "Error", message: "Please Input Username & Password", style: .alert)
+        case (false,false,true):
+            setupAlert(title: "Error", message: "Please Input Password", style: .alert)
+        case (true,true,false):
+            setupAlert(title: "Error", message: "Please Input Email & Username", style: .alert)
+        case (true,false,true):
+            setupAlert(title: "Error", message: "Please Input Email & Password", style: .alert)
+        case (true,false,false):
+            setupAlert(title: "Error", message: "Please Input Email", style: .alert)
+        case (false,true,false):
+            setupAlert(title: "Error", message: "Please Input Username", style: .alert)
+            
+        default:
+            if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
+                setupAlert(title: "Success", message: "Success Registered Please Sign In!", style: .alert)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                    self.moveToSignInPage()
+                }
+            } else {
+                setupAlert(title: "Failed", message: "Email or Password is invalid", style: .alert)
+            }
+        }
+    }
+    
+    @objc func handleEmailTextChange() {
+        guard let text = emailTextField.text else {
+            return
+        }
+        if text.isValidEmail {
+            emailTextField.layer.borderColor = UIColor.systemGreen.cgColor
+        } else if text.isEmpty {
+            emailTextField.layer.borderColor = UIColor.systemGray5.cgColor
+        } else {
+            emailTextField.layer.borderColor = UIColor.systemRed.cgColor
+        }
+    }
+    
+    @objc func handlePasswordTextChange() {
+        guard let text = passwordTextField.text else {
+            return
+        }
+        if text.isValidPassword(text) {
+            passwordTextField.layer.borderColor = UIColor.systemGreen.cgColor
+        } else if text.isEmpty{
+            passwordTextField.layer.borderColor = UIColor.systemGray5.cgColor
+        } else {
+            passwordTextField.layer.borderColor = UIColor.systemRed.cgColor
+        }
+    }
+    
+    @objc func moveToSignInPage() {
+        self.dismiss(animated: true)
+    }
+    
+    private func configure() {
         view.addSubviews(
             titleLabel,
             usernameLabel,
@@ -104,11 +170,10 @@ final class SignUpViewController: UIViewController {
             emailTextField,
             passwordLabel,
             passwordTextField,
-            signInButton,
+            signUpButton,
             noAccountLabel,
-            moveToSignUpPageButton
+            moveToSignInPageButton
         )
-        
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
@@ -138,27 +203,28 @@ final class SignUpViewController: UIViewController {
             passwordTextField.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             passwordTextField.heightAnchor.constraint(equalToConstant: 48),
             
-            signInButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
-            signInButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
-            signInButton.heightAnchor.constraint(equalToConstant: buttonSizeType.regular.rawValue),
+            signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
+            signUpButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
+            signUpButton.heightAnchor.constraint(equalToConstant: buttonSizeType.regular.rawValue),
             
             noAccountLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
             noAccountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 75),
             
-            moveToSignUpPageButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor,constant: -11),
-            moveToSignUpPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 5),
-            moveToSignUpPageButton.heightAnchor.constraint(equalToConstant: 20),
+            moveToSignInPageButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor,constant: -11),
+            moveToSignInPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 5),
+            moveToSignInPageButton.heightAnchor.constraint(equalToConstant: 20),
         ])
     }
     
-    @objc func handleSignInButton() {
-        
-    }
-    
-    @objc func moveToSignUpPage() {
-//        let viewController = 
-//        self?.navigationController?.pushViewController(viewController, animated: true)
+    private func setupAlert(
+        title titleAlert: String,
+        message messageAlert: String,
+        style styleAlert: UIAlertController.Style)
+    {
+        let alert = UIAlertController(title: titleAlert, message: messageAlert, preferredStyle: styleAlert)
+        alert.addAction(UIAlertAction(title: "OKE", style: UIAlertAction.Style.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
    
     

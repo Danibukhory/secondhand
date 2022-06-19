@@ -13,6 +13,7 @@
 		38940C722859EB44000DD541 /* HomeProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C712859EB44000DD541 /* HomeProductCell.swift */; };
 		38940C742859EB5B000DD541 /* HomeProductCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C732859EB5B000DD541 /* HomeProductCollectionCell.swift */; };
 		38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C752859EB79000DD541 /* UICollectionView+Extension.swift */; };
+		38940C7D285A2C60000DD541 /* HomeSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C7C285A2C60000DD541 /* HomeSearchViewController.swift */; };
 		38AB06D628588CB60006342E /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AB06D528588CB60006342E /* UIColor+Extension.swift */; };
 		38AB06DC28588D030006342E /* Poppins-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38AB06D828588D030006342E /* Poppins-Regular.ttf */; };
 		38AB06DD28588D030006342E /* Poppins-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38AB06D928588D030006342E /* Poppins-Bold.ttf */; };
@@ -26,6 +27,11 @@
 		6E78118C28522ED600104FE1 /* SecondHand.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E78118A28522ED600104FE1 /* SecondHand.xcdatamodeld */; };
 		6E78118E28522ED900104FE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E78118D28522ED900104FE1 /* Assets.xcassets */; };
 		6E78119128522ED900104FE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E78118F28522ED900104FE1 /* LaunchScreen.storyboard */; };
+		7BCE01AA285A21B100FF94BA /* AccountInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */; };
+		7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */; };
+		7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */; };
+		7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */; };
+		7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */; };
 		E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27202859AEE30090A5CC /* SHTextfield.swift */; };
 		E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27222859B01C0090A5CC /* UIView+Extensions.swift */; };
 		E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FC3285A1B5E008F0615 /* MainTabBarController.swift */; };
@@ -33,6 +39,7 @@
 		E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FCB285A1C35008F0615 /* SellingViewController.swift */; };
 		E9B46FCE285A1C40008F0615 /* SellingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FCD285A1C40008F0615 /* SellingListViewController.swift */; };
 		E9B46FD0285A1C4B008F0615 /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FCF285A1C4B008F0615 /* AccountViewController.swift */; };
+		E9B46FD4285A3354008F0615 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FD3285A3354008F0615 /* String+Extensions.swift */; };
 		E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3352858AC3900489969 /* SignInViewController.swift */; };
 		E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3382858AC4C00489969 /* SignUpViewController.swift */; };
 /* End PBXBuildFile section */
@@ -44,6 +51,7 @@
 		38940C712859EB44000DD541 /* HomeProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeProductCell.swift; sourceTree = "<group>"; };
 		38940C732859EB5B000DD541 /* HomeProductCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeProductCollectionCell.swift; sourceTree = "<group>"; };
 		38940C752859EB79000DD541 /* UICollectionView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Extension.swift"; sourceTree = "<group>"; };
+		38940C7C285A2C60000DD541 /* HomeSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSearchViewController.swift; sourceTree = "<group>"; };
 		38AB06D528588CB60006342E /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		38AB06D828588D030006342E /* Poppins-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Regular.ttf"; sourceTree = "<group>"; };
 		38AB06D928588D030006342E /* Poppins-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Bold.ttf"; sourceTree = "<group>"; };
@@ -59,6 +67,11 @@
 		6E78118D28522ED900104FE1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6E78119028522ED900104FE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E78119228522ED900104FE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoViewController.swift; sourceTree = "<group>"; };
+		7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHLongTextField.swift; sourceTree = "<group>"; };
+		7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
+		7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHCustomTextFieldForm.swift; sourceTree = "<group>"; };
+		7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
 		E95E27202859AEE30090A5CC /* SHTextfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHTextfield.swift; sourceTree = "<group>"; };
 		E95E27222859B01C0090A5CC /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E9B46FC3285A1B5E008F0615 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -66,6 +79,7 @@
 		E9B46FCB285A1C35008F0615 /* SellingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellingViewController.swift; sourceTree = "<group>"; };
 		E9B46FCD285A1C40008F0615 /* SellingListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellingListViewController.swift; sourceTree = "<group>"; };
 		E9B46FCF285A1C4B008F0615 /* AccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		E9B46FD3285A3354008F0615 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		E9C1F3352858AC3900489969 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		E9C1F3382858AC4C00489969 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -87,6 +101,7 @@
 				38940C6B2859EAD7000DD541 /* HomeViewController.swift */,
 				38940C782859EC6D000DD541 /* CollectionViewCell */,
 				38940C772859EC55000DD541 /* TableViewCell */,
+				38940C7C285A2C60000DD541 /* HomeSearchViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -128,6 +143,8 @@
 				38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */,
 				E95E27222859B01C0090A5CC /* UIView+Extensions.swift */,
 				38940C752859EB79000DD541 /* UICollectionView+Extension.swift */,
+				E9B46FD3285A3354008F0615 /* String+Extensions.swift */,
+				7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -219,6 +236,22 @@
 			path = Account;
 			sourceTree = "<group>";
 		};
+		7BCE01A8285A217D00FF94BA /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		7BCE01AD285B5D3A00FF94BA /* Product Detail */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
+			);
+			path = "Product Detail";
+			sourceTree = "<group>";
+		};
 		E9C1F3302858ABB300489969 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -246,6 +279,8 @@
 				E9B46FC2285A1AFD008F0615 /* TabBar */,
 				E9B46FC1285A1A06008F0615 /* SignUp */,
 				E9B46FC0285A1A01008F0615 /* SignIn */,
+				7BCE01AD285B5D3A00FF94BA /* Product Detail */,
+				7BCE01A8285A217D00FF94BA /* Account */,
 				38940C6A2859EAC9000DD541 /* Home */,
 				E9C1F3332858ABED00489969 /* Components */,
 			);
@@ -257,6 +292,8 @@
 			children = (
 				38AB06E028588D5D0006342E /* SHButton.swift */,
 				E95E27202859AEE30090A5CC /* SHTextfield.swift */,
+				7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */,
+				7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -337,23 +374,30 @@
 			buildActionMask = 2147483647;
 			files = (
 				38940C742859EB5B000DD541 /* HomeProductCollectionCell.swift in Sources */,
+				7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */,
+				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
 				E9B46FD0285A1C4B008F0615 /* AccountViewController.swift in Sources */,
 				38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */,
 				E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */,
 				E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */,
 				6E78118228522ED600104FE1 /* AppDelegate.swift in Sources */,
+				38940C7D285A2C60000DD541 /* HomeSearchViewController.swift in Sources */,
 				38AB06E128588D5D0006342E /* SHButton.swift in Sources */,
+				7BCE01AA285A21B100FF94BA /* AccountInfoViewController.swift in Sources */,
 				6E78118C28522ED600104FE1 /* SecondHand.xcdatamodeld in Sources */,
 				6E78118428522ED600104FE1 /* SceneDelegate.swift in Sources */,
 				38940C6E2859EB08000DD541 /* HomeHeaderCell.swift in Sources */,
 				38AB06D628588CB60006342E /* UIColor+Extension.swift in Sources */,
+				E9B46FD4285A3354008F0615 /* String+Extensions.swift in Sources */,
 				E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */,
+				7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */,
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
 				E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */,
 				38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */,
 				E9B46FCE285A1C40008F0615 /* SellingListViewController.swift in Sources */,
 				E9B46FCA285A1C23008F0615 /* NotificationViewController.swift in Sources */,
+				7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */,
 				38940C722859EB44000DD541 /* HomeProductCell.swift in Sources */,
 				38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */,
 				E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */,
@@ -497,7 +541,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ADZAAG75MX;
+				DEVELOPMENT_TEAM = CA9KP7YRD3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SecondHand/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -509,7 +553,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.secondhand.SecondHand;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Binar.SecondHand;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -524,7 +568,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = ADZAAG75MX;
+				DEVELOPMENT_TEAM = CA9KP7YRD3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = SecondHand/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -536,7 +580,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.secondhand.SecondHand;
+				PRODUCT_BUNDLE_IDENTIFIER = com.Binar.SecondHand;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
