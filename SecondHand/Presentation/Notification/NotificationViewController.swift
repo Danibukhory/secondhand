@@ -33,6 +33,7 @@ final class NotificationViewController: UITableViewController {
         ) as? NotificationCell else {
             return UITableViewCell()
         }
+        cell.fill()
         return cell
     }
     
@@ -92,6 +93,9 @@ final class NotificationViewController: UITableViewController {
         _ tableView: UITableView,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(NotificationCell.self)", for: indexPath) as? NotificationCell else {
+            return nil
+        }
         let item = UIContextualAction(
             style: .normal,
             title: "Mark As Read"
@@ -105,6 +109,9 @@ final class NotificationViewController: UITableViewController {
                 title: "Mark As Read",
                 style: .default
             ) { _ in
+                cell.removeNotificationBadge()
+                tableView.beginUpdates()
+                tableView.endUpdates()
                 completion(true)
             }
             

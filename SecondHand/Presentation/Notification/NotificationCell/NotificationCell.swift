@@ -51,15 +51,11 @@ final class NotificationCell: UITableViewCell {
         notificationImageView.clipsToBounds = true
         notificationImageView.contentMode = .scaleAspectFill
         notificationImageView.layer.cornerRadius = 12
-        notificationImageView.image = UIImage(named: "img-home-product-placeholder-1")
         
-        notificationCategoryLabel.setTitle(text: "Penawaran produk", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         notificationCategoryLabel.numberOfLines = 1
         
-        notificationContentLabel.setTitle(text: "Apple Watch Series 6\nRp 5.999.999\nDitawar Rp 10.000", size: 14, weight: .regular, color: UIColor.black)
         notificationContentLabel.numberOfLines = 0
         
-        notificationTimeLabel.setTitle(text: "16 Jun, 09:41", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         notificationTimeLabel.numberOfLines = 1
         
         notificationBadge.layer.cornerRadius = 4
@@ -82,14 +78,30 @@ final class NotificationCell: UITableViewCell {
             notificationContentLabel.leadingAnchor.constraint(equalTo: notificationCategoryLabel.leadingAnchor),
             notificationContentLabel.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
             
+            notificationTimeLabel.topAnchor.constraint(equalTo: notificationImageView.topAnchor),
+            notificationTimeLabel.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -16),
+            
             notificationBadge.topAnchor.constraint(equalTo: notificationImageView.topAnchor, constant: 2),
             notificationBadge.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             notificationBadge.heightAnchor.constraint(equalToConstant: 8),
             notificationBadge.widthAnchor.constraint(equalTo: notificationBadge.heightAnchor),
-            
-            notificationTimeLabel.topAnchor.constraint(equalTo: notificationImageView.topAnchor),
-            notificationTimeLabel.trailingAnchor.constraint(equalTo: notificationBadge.leadingAnchor, constant: -8)
         ])
+    }
+    
+    func fill() {
+        notificationImageView.image = UIImage(named: "img-home-product-placeholder-1")
+        notificationCategoryLabel.setTitle(text: "Penawaran produk", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        notificationContentLabel.setTitle(text: "Apple Watch Series 6\nRp 5.999.999\nDitawar Rp 10.000", size: 14, weight: .regular, color: UIColor.black)
+        notificationTimeLabel.setTitle(text: "16 Jun, 09:41", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+    }
+    
+    func removeNotificationBadge() {
+        notificationBadge.alpha = 0
+        notificationBadge.removeFromSuperview()
+        UIView.animate(withDuration: 0.15, delay: 0, options: .layoutSubviews) {
+            self.contentView.layoutIfNeeded()
+        }
+
     }
 }
 
