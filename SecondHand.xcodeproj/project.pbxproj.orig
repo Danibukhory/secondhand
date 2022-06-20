@@ -143,8 +143,11 @@
 				38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */,
 				E95E27222859B01C0090A5CC /* UIView+Extensions.swift */,
 				38940C752859EB79000DD541 /* UICollectionView+Extension.swift */,
-				E9B46FD3285A3354008F0615 /* String+Extensions.swift */,
+<<<<<<< HEAD
 				7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */,
+=======
+				E9B46FD3285A3354008F0615 /* String+Extensions.swift */,
+>>>>>>> main
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -180,6 +183,22 @@
 			path = SecondHand;
 			sourceTree = "<group>";
 		};
+<<<<<<< HEAD
+		7BCE01A8285A217D00FF94BA /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		7BCE01AD285B5D3A00FF94BA /* Product Detail */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
+			);
+			path = "Product Detail";
+=======
 		E9B46FC0285A1A01008F0615 /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,22 +253,7 @@
 				E9B46FCF285A1C4B008F0615 /* AccountViewController.swift */,
 			);
 			path = Account;
-			sourceTree = "<group>";
-		};
-		7BCE01A8285A217D00FF94BA /* Account */ = {
-			isa = PBXGroup;
-			children = (
-				7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */,
-			);
-			path = Account;
-			sourceTree = "<group>";
-		};
-		7BCE01AD285B5D3A00FF94BA /* Product Detail */ = {
-			isa = PBXGroup;
-			children = (
-				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
-			);
-			path = "Product Detail";
+>>>>>>> main
 			sourceTree = "<group>";
 		};
 		E9C1F3302858ABB300489969 /* App */ = {
@@ -272,6 +276,10 @@
 		E9C1F3322858ABC700489969 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+<<<<<<< HEAD
+				7BCE01AD285B5D3A00FF94BA /* Product Detail */,
+				7BCE01A8285A217D00FF94BA /* Account */,
+=======
 				E9B46FC8285A1BDD008F0615 /* Account */,
 				E9B46FC7285A1BC4008F0615 /* SellingList */,
 				E9B46FC6285A1BA9008F0615 /* Selling */,
@@ -279,8 +287,7 @@
 				E9B46FC2285A1AFD008F0615 /* TabBar */,
 				E9B46FC1285A1A06008F0615 /* SignUp */,
 				E9B46FC0285A1A01008F0615 /* SignIn */,
-				7BCE01AD285B5D3A00FF94BA /* Product Detail */,
-				7BCE01A8285A217D00FF94BA /* Account */,
+>>>>>>> main
 				38940C6A2859EAC9000DD541 /* Home */,
 				E9C1F3332858ABED00489969 /* Components */,
 			);
@@ -395,9 +402,12 @@
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
 				E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */,
 				38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */,
+<<<<<<< HEAD
+				7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */,
+=======
 				E9B46FCE285A1C40008F0615 /* SellingListViewController.swift in Sources */,
 				E9B46FCA285A1C23008F0615 /* NotificationViewController.swift in Sources */,
-				7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */,
+>>>>>>> main
 				38940C722859EB44000DD541 /* HomeProductCell.swift in Sources */,
 				38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */,
 				E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */,

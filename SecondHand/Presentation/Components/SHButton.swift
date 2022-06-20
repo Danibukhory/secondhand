@@ -53,7 +53,10 @@ final class SHBorderedButton: UIButton {
     private func configure() {
         configuration = .bordered()
         translatesAutoresizingMaskIntoConstraints = false
-        tintColor = UIColor(rgb: 0x7126B5)
+        tintColor = UIColor.black
+        self.backgroundColor = .clear
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor(rgb: 0x7126B5).cgColor
         layer.cornerRadius = 16
         clipsToBounds = true
     }
