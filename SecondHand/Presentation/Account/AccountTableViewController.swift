@@ -148,14 +148,14 @@ final class ChangeAccountViewCell: UITableViewCell {
         changelabelaccount.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             changeaccount.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            changelabelaccount.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -220)
+            changelabelaccount.leadingAnchor.constraint(equalTo: changeaccount.trailingAnchor, constant: 20)
         ])
     }
 }
 final class SettingAccountViewCell: UITableViewCell {
     
     private lazy var settingaccount: UIImageView = {
-        let photo = UIImage(named: "img-sh-edit")
+        let photo = UIImage(named: "img-sh-setting")
         let photoView = UIImageView(image: photo)
         return photoView
     }()
@@ -180,8 +180,10 @@ final class SettingAccountViewCell: UITableViewCell {
         settingaccount.translatesAutoresizingMaskIntoConstraints = false
         settinglabelaccount.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
+            settingaccount.widthAnchor.constraint(equalToConstant: 22),
+            settingaccount.heightAnchor.constraint(equalToConstant: 22),
             settingaccount.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            settinglabelaccount.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -220)
+            settinglabelaccount.leadingAnchor.constraint(equalTo: settingaccount.trailingAnchor, constant: 20)
         ])
     }
 }
@@ -214,8 +216,7 @@ final class LogOutAccountViewCell: UITableViewCell {
         logoutlabelaccount.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             logoutaccount.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            logoutlabelaccount.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -260)
-        ])
+            logoutlabelaccount.leadingAnchor.constraint(equalTo: logoutaccount.trailingAnchor, constant: 20)])
     }
 }
         
