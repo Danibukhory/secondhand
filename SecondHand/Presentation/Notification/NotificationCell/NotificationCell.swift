@@ -29,6 +29,7 @@ final class NotificationCell: UITableViewCell {
         notificationCategoryLabel.attributedText = nil
         notificationContentLabel.attributedText = nil
         notificationTimeLabel.attributedText = nil
+        notificationBadge.removeFromSuperview()
     }
     
     private func defineLayout() {

@@ -15,7 +15,7 @@ extension UINavigationBar {
 //        self.barTintColor = .white
         self.titleTextAttributes = [
             .foregroundColor : UIColor.black,
-            .font : UIFont(name: "Poppins-Bold", size: 16)!
+            .font : UIFont(name: "Poppins-Medium", size: 16)!
         ]
         self.largeTitleTextAttributes = [
             .foregroundColor : UIColor.black,
