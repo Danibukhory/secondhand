@@ -32,6 +32,9 @@
 		7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */; };
 		7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */; };
 		7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */; };
+		7BCE022428605F3300FF94BA /* SHDropDownTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE022328605F3300FF94BA /* SHDropDownTextField.swift */; };
+		7BCE02262860671600FF94BA /* ListKotaIndonesia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE02252860671600FF94BA /* ListKotaIndonesia.swift */; };
+		DDE4585FBA86630339325FCB /* Pods_SecondHand.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C9322B975302445342BB087 /* Pods_SecondHand.framework */; };
 		E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27202859AEE30090A5CC /* SHTextfield.swift */; };
 		E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27222859B01C0090A5CC /* UIView+Extensions.swift */; };
 		E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FC3285A1B5E008F0615 /* MainTabBarController.swift */; };
@@ -45,6 +48,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C9322B975302445342BB087 /* Pods_SecondHand.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecondHand.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		38940C6B2859EAD7000DD541 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		38940C6D2859EB08000DD541 /* HomeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderCell.swift; sourceTree = "<group>"; };
 		38940C6F2859EB2F000DD541 /* CategorySelectorCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectorCollectionCell.swift; sourceTree = "<group>"; };
@@ -60,6 +64,7 @@
 		38AB06E028588D5D0006342E /* SHButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHButton.swift; sourceTree = "<group>"; };
 		38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		38BC0E8F28597E4D00AB4281 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		394850F0AC48B4276E986C7A /* Pods-SecondHand.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecondHand.release.xcconfig"; path = "Target Support Files/Pods-SecondHand/Pods-SecondHand.release.xcconfig"; sourceTree = "<group>"; };
 		6E78117E28522ED600104FE1 /* SecondHand.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecondHand.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E78118128522ED600104FE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E78118328522ED600104FE1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +77,9 @@
 		7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHCustomTextFieldForm.swift; sourceTree = "<group>"; };
 		7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
+		7BCE022328605F3300FF94BA /* SHDropDownTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHDropDownTextField.swift; sourceTree = "<group>"; };
+		7BCE02252860671600FF94BA /* ListKotaIndonesia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListKotaIndonesia.swift; sourceTree = "<group>"; };
+		E629055528C10A47A9646598 /* Pods-SecondHand.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecondHand.debug.xcconfig"; path = "Target Support Files/Pods-SecondHand/Pods-SecondHand.debug.xcconfig"; sourceTree = "<group>"; };
 		E95E27202859AEE30090A5CC /* SHTextfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHTextfield.swift; sourceTree = "<group>"; };
 		E95E27222859B01C0090A5CC /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E9B46FC3285A1B5E008F0615 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
@@ -89,6 +97,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DDE4585FBA86630339325FCB /* Pods_SecondHand.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +163,8 @@
 			children = (
 				6E78118028522ED600104FE1 /* SecondHand */,
 				6E78117F28522ED600104FE1 /* Products */,
+				73CD4F178E2CACD6E67F1789 /* Pods */,
+				7560E02AC5D1F806DA0DF47E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -178,6 +189,39 @@
 				6E78119228522ED900104FE1 /* Info.plist */,
 			);
 			path = SecondHand;
+			sourceTree = "<group>";
+		};
+		73CD4F178E2CACD6E67F1789 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E629055528C10A47A9646598 /* Pods-SecondHand.debug.xcconfig */,
+				394850F0AC48B4276E986C7A /* Pods-SecondHand.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		7560E02AC5D1F806DA0DF47E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2C9322B975302445342BB087 /* Pods_SecondHand.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7BCE01A8285A217D00FF94BA /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		7BCE01AD285B5D3A00FF94BA /* Product Detail */ = {
+			isa = PBXGroup;
+			children = (
+				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
+			);
+			path = "Product Detail";
 			sourceTree = "<group>";
 		};
 		E9B46FC0285A1A01008F0615 /* SignIn */ = {
@@ -236,22 +280,6 @@
 			path = Account;
 			sourceTree = "<group>";
 		};
-		7BCE01A8285A217D00FF94BA /* Account */ = {
-			isa = PBXGroup;
-			children = (
-				7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */,
-			);
-			path = Account;
-			sourceTree = "<group>";
-		};
-		7BCE01AD285B5D3A00FF94BA /* Product Detail */ = {
-			isa = PBXGroup;
-			children = (
-				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
-			);
-			path = "Product Detail";
-			sourceTree = "<group>";
-		};
 		E9C1F3302858ABB300489969 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -265,6 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				6E78118A28522ED600104FE1 /* SecondHand.xcdatamodeld */,
+				7BCE02252860671600FF94BA /* ListKotaIndonesia.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -294,6 +323,7 @@
 				E95E27202859AEE30090A5CC /* SHTextfield.swift */,
 				7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */,
 				7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */,
+				7BCE022328605F3300FF94BA /* SHDropDownTextField.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -305,9 +335,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6E78119528522ED900104FE1 /* Build configuration list for PBXNativeTarget "SecondHand" */;
 			buildPhases = (
+				A05F4736BA5665D6E339743F /* [CP] Check Pods Manifest.lock */,
 				6E78117A28522ED600104FE1 /* Sources */,
 				6E78117B28522ED600104FE1 /* Frameworks */,
 				6E78117C28522ED600104FE1 /* Resources */,
+				8E681E98D19B416443A27BC4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -368,6 +400,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		8E681E98D19B416443A27BC4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SecondHand/Pods-SecondHand-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-SecondHand/Pods-SecondHand-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-SecondHand/Pods-SecondHand-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A05F4736BA5665D6E339743F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-SecondHand-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6E78117A28522ED600104FE1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -376,10 +450,12 @@
 				38940C742859EB5B000DD541 /* HomeProductCollectionCell.swift in Sources */,
 				7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */,
 				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
+				7BCE02262860671600FF94BA /* ListKotaIndonesia.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
 				E9B46FD0285A1C4B008F0615 /* AccountViewController.swift in Sources */,
 				38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */,
 				E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */,
+				7BCE022428605F3300FF94BA /* SHDropDownTextField.swift in Sources */,
 				E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */,
 				6E78118228522ED600104FE1 /* AppDelegate.swift in Sources */,
 				38940C7D285A2C60000DD541 /* HomeSearchViewController.swift in Sources */,
@@ -536,6 +612,7 @@
 		};
 		6E78119628522ED900104FE1 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E629055528C10A47A9646598 /* Pods-SecondHand.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -563,6 +640,7 @@
 		};
 		6E78119728522ED900104FE1 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 394850F0AC48B4276E986C7A /* Pods-SecondHand.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

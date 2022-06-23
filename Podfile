@@ -6,5 +6,6 @@ target 'SecondHand' do
   use_frameworks!
 
   # Pods for SecondHand
+  pod 'iOSDropDown'
 
 end

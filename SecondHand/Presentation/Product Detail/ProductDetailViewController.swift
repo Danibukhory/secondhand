@@ -5,7 +5,7 @@
 //  Created by Daffashiddiq on 16/06/22.
 //
 
-import Foundation
+import PhotosUI
 import UIKit
 
 final class ProductDetailViewController: UITableViewController {
@@ -38,41 +38,54 @@ final class ProductDetailViewController: UITableViewController {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(NamaProdukTextField.self)", for: indexPath) as? NamaProdukTextField else {
                 return UITableViewCell()
             }
+            cell.selectionStyle = .none
             return cell
             
         case 1:
             guard let cell2 = tableView.dequeueReusableCell(withIdentifier: "\(HargaProdukTextField.self)", for: indexPath) as? HargaProdukTextField else {
                 return UITableViewCell()
             }
+            cell2.selectionStyle = .none
             return cell2
 
         case 2:
             guard let cell3 = tableView.dequeueReusableCell(withIdentifier: "\(KategoriTextField.self)", for: indexPath) as? KategoriTextField else {
                 return UITableViewCell()
             }
+            cell3.selectionStyle = .none
             return cell3
         case 3:
             guard let cell4 = tableView.dequeueReusableCell(withIdentifier: "\(DeskripsiTextField.self)", for: indexPath) as? DeskripsiTextField else {
                 return UITableViewCell()
             }
+            cell4.selectionStyle = .none
             return cell4
 
         case 4:
             guard let cell5 = tableView.dequeueReusableCell(withIdentifier: "\(FotoProdukViewCell.self)", for: indexPath) as? FotoProdukViewCell else {
                 return UITableViewCell()
             }
+            cell5.viewController = self
+            cell5.selectionStyle = .none
             return cell5
 //
         case 5:
             guard let cell6 = tableView.dequeueReusableCell(withIdentifier: "\(ButtonCell.self)", for: indexPath) as? ButtonCell else {
                 return UITableViewCell()
             }
+            cell6.selectionStyle = .none
             return cell6
                 
         default:
             return UITableViewCell()
         }
     
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            self.tableView.reloadRows(at: [indexPath], with: .fade)
+        }
     }
 }
 
@@ -92,21 +105,42 @@ final class HargaProdukTextField: SHCustomTextFieldForm {
 }
 
 final class KategoriTextField: SHCustomTextFieldForm {
-    
-    private lazy var triangleIndicator: UIImageView = {
-        let image = UIImage(named: "img-chevron-down")
-        let imageView = UIImageView(image: image)
-        imageView.contentMode = .scaleAspectFit
-        return imageView
+
+    private lazy var dropDown: SHDropDownTextField = {
+        let  dropDown = SHDropDownTextField()
+
+        dropDown.optionArray = ["Option 1", "Option 2", "Option 3"]
+        dropDown.setPlaceholder(placeholder: "Pilih Kategori")
+        dropDown.translatesAutoresizingMaskIntoConstraints = false
+        return dropDown
     }()
     
     override func addConfiguration() {
         self.setTextFieldName(nama: "Kategori", placeHolderLabel: "Pilih Kategori")
         
-        self.customTextField.rightView = triangleIndicator
-        self.customTextField.rightViewMode = .unlessEditing
         addConstraintForTextField()
     }
+    
+    override func addConstraintForTextField() {
+        let margin = contentView.layoutMarginsGuide
+        
+        contentView.addSubviews(
+            self.customLabel,
+            dropDown
+        )
+        
+        NSLayoutConstraint.activate([
+            customLabel.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
+            customLabel.topAnchor.constraint(equalTo: margin.topAnchor),
+            
+            dropDown.topAnchor.constraint(equalTo: customLabel.bottomAnchor),
+            dropDown.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
+            dropDown.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
+            dropDown.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
+            dropDown.heightAnchor.constraint(equalToConstant: 48)
+        ])
+    }
+    
     
 }
 
@@ -145,14 +179,17 @@ final class DeskripsiTextField: SHCustomTextFieldForm {
     }
 }
 
-final class FotoProdukViewCell : SHCustomTextFieldForm {
+final class FotoProdukViewCell : SHCustomTextFieldForm, PHPickerViewControllerDelegate {
+
+    weak var viewController: UIViewController?
+    weak var tableView: UITableView?
+    var photosFromLibrary:[UIImageView] = []
     
     private lazy var photoIcon: UIImageView = {
         let lm = contentView.layoutMargins
         let photo = UIImage(named: "img-sh-plus")
         let photoView = UIImageView(image: photo)
-//        photoView.frame = CGRect(x: 0, y: 0, width: 96, height: 96)
-//        photoView.addDashedBorder()
+
         photoView.translatesAutoresizingMaskIntoConstraints = false
         photoView.contentMode = .center
 
@@ -179,8 +216,48 @@ final class FotoProdukViewCell : SHCustomTextFieldForm {
         shapeView.layer.addSublayer(shapeLayer)
         shapeView.translatesAutoresizingMaskIntoConstraints = false
         
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(pickImageFromLibrary))
+        shapeView.addGestureRecognizer(tapRecognizer)
+        shapeView.isUserInteractionEnabled = true
+        
+        shapeView.clipsToBounds = true
+        shapeView.layer.cornerRadius = 12
+
+        
         return shapeView
     }()
+    
+    @objc func pickImageFromLibrary() {
+        lazy var config = PHPickerConfiguration(photoLibrary: .shared())
+        config.selectionLimit = 1
+        config.filter = .images
+        lazy var pickerVC = PHPickerViewController(configuration: config)
+        pickerVC.delegate = self
+        viewController?.present(pickerVC, animated: true)
+    }
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        results[0].itemProvider.loadObject(ofClass: UIImage.self) {[weak self] reading, error in
+            if let image = reading as? UIImage {
+                DispatchQueue.main.async {
+                    let imv = self?.newImageView(image: image)
+                    self?.photosFromLibrary.append(imv!)
+                    self?.photoPlace.bringSubviewToFront(imv!)
+                    self?.viewController?.view.setNeedsLayout()
+                    self?.addConfiguration()
+                }
+            }
+        }
+    }
+    
+    func newImageView(image:UIImage?) -> UIImageView {
+        let imv = UIImageView()
+        imv.backgroundColor = .clear
+        imv.image = image
+        imv.layer.cornerRadius = 12
+        return imv
+    }
     
     override func addConfiguration() {
         self.setTextFieldName(nama: "Foto Produk", placeHolderLabel: "")
@@ -194,16 +271,12 @@ final class FotoProdukViewCell : SHCustomTextFieldForm {
             self.customLabel,
             photoPlace
         )
-        
-        
-        
         NSLayoutConstraint.activate([
             customLabel.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             customLabel.topAnchor.constraint(equalTo: margin.topAnchor),
             
             photoPlace.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             photoPlace.topAnchor.constraint(equalTo: customLabel.bottomAnchor, constant: 4),
-//            photoPlace.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             photoPlace.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
             photoPlace.widthAnchor.constraint(equalToConstant: 96),
             photoPlace.heightAnchor.constraint(equalToConstant: 96),
@@ -214,6 +287,18 @@ final class FotoProdukViewCell : SHCustomTextFieldForm {
             photoIcon.bottomAnchor.constraint(equalTo: photoPlace.bottomAnchor)
             
         ])
+        for photoFromLibrary in photosFromLibrary {
+            photoFromLibrary.translatesAutoresizingMaskIntoConstraints = false
+            print("lewat juga")
+            photoPlace.addSubviews(photoFromLibrary)
+            
+            NSLayoutConstraint.activate([
+                photoFromLibrary.topAnchor.constraint(equalTo: photoPlace.topAnchor),
+                photoFromLibrary.bottomAnchor.constraint(equalTo: photoPlace.bottomAnchor),
+                photoFromLibrary.leadingAnchor.constraint(equalTo: photoPlace.leadingAnchor),
+                photoFromLibrary.trailingAnchor.constraint(equalTo: photoPlace.trailingAnchor)
+            ])
+        }
     }
 }
 
@@ -241,7 +326,6 @@ final class ButtonCell: SHCustomTextFieldForm {
             terbitkanButton
         )
         
-//        previewButton.constraintsPinTo(leading: margin.leadingAnchor, trailing: mar, top: , bottom: T##NSLayoutYAxisAnchor)
         NSLayoutConstraint.activate([
             previewButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             previewButton.topAnchor.constraint(equalTo: margin.topAnchor),
@@ -254,8 +338,6 @@ final class ButtonCell: SHCustomTextFieldForm {
             terbitkanButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             terbitkanButton.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
             terbitkanButton.heightAnchor.constraint(equalToConstant: 48),
-//            terbitkanButton.widthAnchor.constraint(lessThanOrEqualToConstant: 156),
-
         ])
     }
     

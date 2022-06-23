@@ -1,0 +1,6 @@
+framework module Pods_SecondHand {
+  umbrella header "Pods-SecondHand-umbrella.h"
+
+  export *
+  module * { export * }
+}
