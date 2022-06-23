@@ -10,6 +10,10 @@
 		382F59622860B00E009F0BB5 /* OffererViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F59612860B00E009F0BB5 /* OffererViewController.swift */; };
 		382F59652860CEED009F0BB5 /* OffererDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F59642860CEED009F0BB5 /* OffererDetailCell.swift */; };
 		382F59672860CF04009F0BB5 /* OffererProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F59662860CF04009F0BB5 /* OffererProductCell.swift */; };
+		383095DD28646FD300EDFDAB /* RenewTransactionStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383095DC28646FD300EDFDAB /* RenewTransactionStatusViewController.swift */; };
+		383095E02864A7EC00EDFDAB /* TransactionStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383095DF2864A7EC00EDFDAB /* TransactionStatusCell.swift */; };
+		384B04EA2862278A00949209 /* SHPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B04E92862278A00949209 /* SHPopupView.swift */; };
+		384B04ED2862427500949209 /* OfferAcceptedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B04EC2862427500949209 /* OfferAcceptedViewController.swift */; };
 		38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C6B2859EAD7000DD541 /* HomeViewController.swift */; };
 		38940C6E2859EB08000DD541 /* HomeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C6D2859EB08000DD541 /* HomeHeaderCell.swift */; };
 		38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C6F2859EB2F000DD541 /* CategorySelectorCollectionCell.swift */; };
@@ -26,6 +30,7 @@
 		38AB06E128588D5D0006342E /* SHButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AB06E028588D5D0006342E /* SHButton.swift */; };
 		38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */; };
 		38BC0E9028597E4D00AB4281 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38BC0E8F28597E4D00AB4281 /* Poppins-Medium.ttf */; };
+		38D0CC3728634BF300561C17 /* SHModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0CC3628634BF300561C17 /* SHModalViewController.swift */; };
 		6E78118228522ED600104FE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E78118128522ED600104FE1 /* AppDelegate.swift */; };
 		6E78118428522ED600104FE1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E78118328522ED600104FE1 /* SceneDelegate.swift */; };
 		6E78118C28522ED600104FE1 /* SecondHand.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E78118A28522ED600104FE1 /* SecondHand.xcdatamodeld */; };
@@ -52,6 +57,10 @@
 		382F59612860B00E009F0BB5 /* OffererViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffererViewController.swift; sourceTree = "<group>"; };
 		382F59642860CEED009F0BB5 /* OffererDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffererDetailCell.swift; sourceTree = "<group>"; };
 		382F59662860CF04009F0BB5 /* OffererProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffererProductCell.swift; sourceTree = "<group>"; };
+		383095DC28646FD300EDFDAB /* RenewTransactionStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenewTransactionStatusViewController.swift; sourceTree = "<group>"; };
+		383095DF2864A7EC00EDFDAB /* TransactionStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStatusCell.swift; sourceTree = "<group>"; };
+		384B04E92862278A00949209 /* SHPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHPopupView.swift; sourceTree = "<group>"; };
+		384B04EC2862427500949209 /* OfferAcceptedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferAcceptedViewController.swift; sourceTree = "<group>"; };
 		38940C6B2859EAD7000DD541 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		38940C6D2859EB08000DD541 /* HomeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderCell.swift; sourceTree = "<group>"; };
 		38940C6F2859EB2F000DD541 /* CategorySelectorCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectorCollectionCell.swift; sourceTree = "<group>"; };
@@ -68,6 +77,7 @@
 		38AB06E028588D5D0006342E /* SHButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHButton.swift; sourceTree = "<group>"; };
 		38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		38BC0E8F28597E4D00AB4281 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
+		38D0CC3628634BF300561C17 /* SHModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHModalViewController.swift; sourceTree = "<group>"; };
 		6E78117E28522ED600104FE1 /* SecondHand.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecondHand.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E78118128522ED600104FE1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6E78118328522ED600104FE1 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -119,6 +129,31 @@
 				382F59662860CF04009F0BB5 /* OffererProductCell.swift */,
 			);
 			path = TableViewCell;
+			sourceTree = "<group>";
+		};
+		383095DB28646FA600EDFDAB /* RenewTransactionStatus */ = {
+			isa = PBXGroup;
+			children = (
+				383095DE2864A7CA00EDFDAB /* TableViewCell */,
+				383095DC28646FD300EDFDAB /* RenewTransactionStatusViewController.swift */,
+			);
+			path = RenewTransactionStatus;
+			sourceTree = "<group>";
+		};
+		383095DE2864A7CA00EDFDAB /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				383095DF2864A7EC00EDFDAB /* TransactionStatusCell.swift */,
+			);
+			path = TableViewCell;
+			sourceTree = "<group>";
+		};
+		384B04EB2862425300949209 /* OfferAccepted */ = {
+			isa = PBXGroup;
+			children = (
+				384B04EC2862427500949209 /* OfferAcceptedViewController.swift */,
+			);
+			path = OfferAccepted;
 			sourceTree = "<group>";
 		};
 		38940C6A2859EAC9000DD541 /* Home */ = {
@@ -307,6 +342,8 @@
 		E9C1F3322858ABC700489969 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				383095DB28646FA600EDFDAB /* RenewTransactionStatus */,
+				384B04EB2862425300949209 /* OfferAccepted */,
 				382F59602860AFF6009F0BB5 /* Offerer */,
 				E9B46FC8285A1BDD008F0615 /* Account */,
 				E9B46FC7285A1BC4008F0615 /* SellingList */,
@@ -330,6 +367,8 @@
 				E95E27202859AEE30090A5CC /* SHTextfield.swift */,
 				7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */,
 				7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */,
+				384B04E92862278A00949209 /* SHPopupView.swift */,
+				38D0CC3628634BF300561C17 /* SHModalViewController.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -411,11 +450,14 @@
 			files = (
 				38940C742859EB5B000DD541 /* HomeProductCollectionCell.swift in Sources */,
 				7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */,
+				38D0CC3728634BF300561C17 /* SHModalViewController.swift in Sources */,
 				382F59622860B00E009F0BB5 /* OffererViewController.swift in Sources */,
 				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
 				E9B46FD0285A1C4B008F0615 /* AccountViewController.swift in Sources */,
+				383095DD28646FD300EDFDAB /* RenewTransactionStatusViewController.swift in Sources */,
 				38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */,
+				383095E02864A7EC00EDFDAB /* TransactionStatusCell.swift in Sources */,
 				E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */,
 				E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */,
 				6E78118228522ED600104FE1 /* AppDelegate.swift in Sources */,
@@ -436,10 +478,12 @@
 				38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */,
 				E9B46FCE285A1C40008F0615 /* SellingListViewController.swift in Sources */,
 				E9B46FCA285A1C23008F0615 /* NotificationViewController.swift in Sources */,
+				384B04EA2862278A00949209 /* SHPopupView.swift in Sources */,
 				7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */,
 				38940C722859EB44000DD541 /* HomeProductCell.swift in Sources */,
 				382F59672860CF04009F0BB5 /* OffererProductCell.swift in Sources */,
 				38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */,
+				384B04ED2862427500949209 /* OfferAcceptedViewController.swift in Sources */,
 				E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

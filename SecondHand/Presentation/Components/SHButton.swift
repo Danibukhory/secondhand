@@ -33,7 +33,7 @@ final class SHDefaultButton: UIButton {
     func setActiveButtonTitle(string: String) {
         let attributedTitle = NSAttributedString(
             string: string,
-            attributes: [.font : UIFont(name: "Poppins-Regular", size: UIFont.buttonFontSize)!]
+            attributes: [.font : UIFont(name: "Poppins-Medium", size: 14)!]
         )
         setAttributedTitle(attributedTitle, for: .normal)
     }
@@ -64,7 +64,7 @@ final class SHBorderedButton: UIButton {
     func setActiveButtonTitle(string: String) {
         let attributedTitle = NSAttributedString(
             string: string,
-            attributes: [.font : UIFont(name: "Poppins-Regular", size: UIFont.buttonFontSize)!]
+            attributes: [.font : UIFont(name: "Poppins-Medium", size: 14)!]
         )
         setAttributedTitle(attributedTitle, for: .normal)
     }
@@ -91,7 +91,7 @@ final class SHGhostButton: UIButton {
     func setActiveButtonTitle(string: String) {
         let attributedTitle = NSAttributedString(
             string: string,
-            attributes: [.font : UIFont(name: "Poppins-Regular", size: UIFont.buttonFontSize)!]
+            attributes: [.font : UIFont(name: "Poppins-Medium", size: 14)!]
         )
         setAttributedTitle(attributedTitle, for: .normal)
     }

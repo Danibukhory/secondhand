@@ -40,6 +40,7 @@ final class OffererProductCell: UITableViewCell {
     private func defineLayout() {
         contentView.addSubviews(productImageView, offerTypeLabel, productNameLabel, offerValueLabel, offerTimeLabel, rejectButton, acceptButton)
         contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(productImageView, offerTypeLabel, productNameLabel, offerValueLabel, offerTimeLabel, rejectButton, acceptButton)
+        contentView.backgroundColor = .white
         
         productImageView.clipsToBounds = true
         productImageView.contentMode = .scaleAspectFill

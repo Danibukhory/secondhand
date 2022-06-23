@@ -24,7 +24,6 @@ final class OffererDetailCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         defineLayout()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -35,7 +34,7 @@ final class OffererDetailCell: UITableViewCell {
         contentView.addSubview(borderView)
         borderView.addSubviews(offererImageView, offererNameLabel, offererCityLabel)
         contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(borderView, offererImageView, offererNameLabel, offererCityLabel)
-        contentView.clipsToBounds = true
+        contentView.backgroundColor = .white
         
         borderView.backgroundColor = .white
         borderView.layer.cornerRadius = 16

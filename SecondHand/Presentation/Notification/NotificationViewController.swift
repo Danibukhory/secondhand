@@ -13,6 +13,7 @@ final class NotificationViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.backgroundColor = .white
         tableView.register(NotificationCell.self, forCellReuseIdentifier: "\(NotificationCell.self)")
         title = "Notifikasi"
         navigationController?.navigationBar.useSHLargeTitle()
