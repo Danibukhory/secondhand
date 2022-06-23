@@ -222,9 +222,6 @@ final class LogOutAccountViewCell: UITableViewCell {
         
         
         
-        
-        
-        
 
         
         
