@@ -13,6 +13,7 @@ final class NotificationViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.backgroundColor = .white
         tableView.register(NotificationCell.self, forCellReuseIdentifier: "\(NotificationCell.self)")
         title = "Notifikasi"
         navigationController?.navigationBar.useSHLargeTitle()
@@ -38,7 +39,7 @@ final class NotificationViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewController = SignInViewController()
+        let viewController = OffererViewController()
         navigationController?.pushViewController(viewController, animated: true)
     }
     
