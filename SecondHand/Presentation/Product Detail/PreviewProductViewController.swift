@@ -13,8 +13,11 @@ import UIKit
 class PreviewProductViewController: UIViewController {
     
     let scrollView = UIScrollView()
-    
     let contentView = UIView()
+    let contentPhotoView = UIView()
+    let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout.init())
+    let layout:UICollectionViewFlowLayout = UICollectionViewFlowLayout.init()
+    var photoForProduct: [UIImage] = []
     
     private lazy var photoProduct: UIImageView = {
         let imageView = UIImageView()
@@ -22,6 +25,31 @@ class PreviewProductViewController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
+    }()
+    
+    private lazy var backButton: UIView = {
+        let view = UIView()
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 12
+        view.backgroundColor = .white
+        
+        let arrow = UIImageView()
+        arrow.image = UIImage(systemName: "arrow.left")
+        arrow.tintColor = .black
+        view.translatesAutoresizingMaskIntoConstraints = false
+        arrow.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(arrow)
+        
+        NSLayoutConstraint.activate([
+            arrow.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            arrow.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            view.widthAnchor.constraint(equalToConstant: 24),
+            view.heightAnchor.constraint(equalToConstant: 24),
+        ])
+        
+        
+        return view
     }()
     
     private lazy var pageControl = UIPageControl()
@@ -202,15 +230,16 @@ class PreviewProductViewController: UIViewController {
         scrollView.addSubviews(contentView)
         
         contentView.addSubviews(
-            photoProduct,
+            contentPhotoView,
             pageControl
         )
+        
+        contentPhotoView.addSubviews(collectionView,backButton)
     }
     
     private func setupScrollView() {
         scrollView.isScrollEnabled = true
         scrollView.bounces = true
-//        scrollView.contentSize = CGSize(width: 400, height: 2300)
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -228,9 +257,12 @@ class PreviewProductViewController: UIViewController {
     }
     
     private func setupContentView() {
+        configurePhotoCollectionView()
         configurePageControl()
         
-        photoProduct.translatesAutoresizingMaskIntoConstraints = false
+        contentPhotoView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        backButton.translatesAutoresizingMaskIntoConstraints = false
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         productDetail.translatesAutoresizingMaskIntoConstraints = false
         productOwner.translatesAutoresizingMaskIntoConstraints = false
@@ -238,13 +270,16 @@ class PreviewProductViewController: UIViewController {
         publishButton.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            photoProduct.topAnchor.constraint(equalTo: contentView.topAnchor),
-            photoProduct.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            photoProduct.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-            photoProduct.heightAnchor.constraint(equalToConstant: 300),
+            contentPhotoView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            contentPhotoView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            contentPhotoView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            contentPhotoView.heightAnchor.constraint(equalToConstant: 300),
+            
+            backButton.topAnchor.constraint(equalTo: contentPhotoView.topAnchor, constant: 44),
+            backButton.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor, constant: 16),
             
             pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            pageControl.bottomAnchor.constraint(equalTo: photoProduct.bottomAnchor, constant: -51),
+            pageControl.bottomAnchor.constraint(equalTo: contentPhotoView.bottomAnchor, constant: -51),
             
             productDetail.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
             productDetail.heightAnchor.constraint(greaterThanOrEqualToConstant: 10),
@@ -273,11 +308,114 @@ class PreviewProductViewController: UIViewController {
     private func configurePageControl() {
         self.pageControl.numberOfPages = 4
         self.pageControl.currentPage = 0
-        self.pageControl.tintColor = UIColor.red
-        self.pageControl.pageIndicatorTintColor = UIColor.black
-        self.pageControl.currentPageIndicatorTintColor = UIColor.green
+        self.pageControl.tintColor = .clear
+        self.pageControl.pageIndicatorTintColor = UIColor.systemGray
+        self.pageControl.currentPageIndicatorTintColor = UIColor.white
         self.view.addSubview(pageControl)
+        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
     }
+    @objc func changePage(sender: AnyObject) -> () {
+            let x = CGFloat(pageControl.currentPage) * collectionView.frame.size.width
+            collectionView.setContentOffset(CGPoint(x:x, y:0), animated: true)
+    }
+    
+    private func configurePhotoCollectionView(){
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(PhotoProductViewCell.self, forCellWithReuseIdentifier: "\(PhotoProductViewCell.self)")
+        
+        layout.scrollDirection = .horizontal
+        collectionView.isPagingEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
+        
+        collectionView.setCollectionViewLayout(layout, animated: true)
+        
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: contentPhotoView.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentPhotoView.bottomAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentPhotoView.trailingAnchor),
+            
+        ])
+        
+    }
+    
+}
+
+extension PreviewProductViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 4 //photoForProduct.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(PhotoProductViewCell.self)", for: indexPath) as? PhotoProductViewCell else {return UICollectionViewCell()}
+        
+//        cell.setImage(to: photoForProduct[indexPath.row])
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 300)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0
+    }
+    
+    
+}
+
+extension PreviewProductViewController: UIScrollViewDelegate {
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+
+        let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
+        pageControl.currentPage = Int(pageNumber)
+    }
+}
+
+final class PhotoProductViewCell: UICollectionViewCell {
+    
+    var imageProduct: UIImage? = nil
+    
+    private lazy var photoProduct: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = imageProduct ?? UIImage(named: "img-home-product-placeholder-1")
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
+    func setImage(to img: UIImage) {
+        self.imageProduct = img
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        contentView.addSubview(photoProduct)
+        
+        photoProduct.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+//            photoProduct.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+//            photoProduct.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+//            photoProduct.heightAnchor.constraint(equalTo: contentView.heightAnchor),
+            
+            photoProduct.topAnchor.constraint(equalTo: contentView.topAnchor),
+            photoProduct.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            photoProduct.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            photoProduct.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+   
 }
 
 
