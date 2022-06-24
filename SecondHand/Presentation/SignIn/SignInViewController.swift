@@ -49,9 +49,8 @@ final class SignInViewController: UIViewController {
         return textField
     }()
         
-    private lazy var signInButton: SHDefaultButton = {
-        let button = SHDefaultButton()
-        button.setActiveButtonTitle(string: "Masuk")
+    private lazy var signInButton: SHButton = {
+        let button = SHButton(frame: CGRect(), title: "Masuk", type: .filled, size: .regular)
         button.addTarget(self, action: #selector(moveToMainView), for: .touchUpInside)
         return button
     }()
@@ -73,7 +72,6 @@ final class SignInViewController: UIViewController {
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(moveToSignUpPage), for: .touchUpInside)
         return button
-        // give spring animation for button if needed
     }()
     
     override func viewDidLoad() {
@@ -82,11 +80,6 @@ final class SignInViewController: UIViewController {
         configure()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        navigationController?.setNavigationBarHidden(false, animated: false)
-//    }
-//    
     @objc func handleSignInButton() {
         guard let emailText = emailTextField.text?.trimmingCharacters(in: .whitespaces),
               let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
@@ -186,7 +179,6 @@ final class SignInViewController: UIViewController {
             signInButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
             signInButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
-            signInButton.heightAnchor.constraint(equalToConstant: buttonSizeType.regular.rawValue),
             
             noAccountLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
             noAccountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 75),

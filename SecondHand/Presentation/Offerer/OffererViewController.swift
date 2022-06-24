@@ -107,8 +107,8 @@ final class OffererViewController: UITableViewController {
                         initialSpringVelocity: 18,
                         options: .layoutSubviews
                     ) {
-                        _self.popupView?.layer.position.y = (_self.navigationController?.view.layoutMargins.top)!
-                        if _self.popupView?.layer.position.y == (_self.navigationController?.view.layoutMargins.top)! {
+                        _self.popupView?.layer.position.y = _self.view.directionalLayoutMargins.top
+                        if _self.popupView?.layer.position.y == _self.view.directionalLayoutMargins.top {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                                 UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
                                     _self.popupView?.layer.position.y = -150
@@ -130,8 +130,8 @@ final class OffererViewController: UITableViewController {
                             initialSpringVelocity: 18,
                             options: .layoutSubviews
                         ) {
-                            _self.popupView?.layer.position.y = (_self.navigationController?.view.layoutMargins.top)!
-                            if _self.popupView?.layer.position.y == (_self.navigationController?.view.layoutMargins.top)! {
+                            _self.popupView?.layer.position.y = _self.view.directionalLayoutMargins.top
+                            if _self.popupView?.layer.position.y == _self.view.directionalLayoutMargins.top {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                                     UIView.animate(
                                         withDuration: 0.25,
