@@ -189,7 +189,6 @@ final class FotoProdukViewCell : SHCustomTextFieldForm, PHPickerViewControllerDe
         let lm = contentView.layoutMargins
         let photo = UIImage(named: "img-sh-plus")
         let photoView = UIImageView(image: photo)
-
         photoView.translatesAutoresizingMaskIntoConstraints = false
         photoView.contentMode = .center
 
@@ -304,16 +303,14 @@ final class FotoProdukViewCell : SHCustomTextFieldForm, PHPickerViewControllerDe
 
 final class ButtonCell: SHCustomTextFieldForm {
     
-    private lazy var previewButton: SHBorderedButton = {
-        let button = SHBorderedButton()
-        button.setActiveButtonTitle(string: "Preview")
+    private lazy var previewButton: SHButton = {
+        let button = SHButton(frame: CGRect(), title: "Preview", type: .bordered, size: .small)
         button.addTarget(self, action: #selector(handleSimpanButton), for: .touchUpInside)
         return button
     }()
     
-    private lazy var terbitkanButton: SHDefaultButton = {
-        let button = SHDefaultButton()
-        button.setActiveButtonTitle(string: "Terbitkan")
+    private lazy var terbitkanButton: SHButton = {
+        let button = SHButton(frame: CGRect(), title: "Terbitkan", type: .filled, size: .regular)
         button.addTarget(self, action: #selector(handleSimpanButton), for: .touchUpInside)
         return button
     }()
@@ -336,12 +333,9 @@ final class ButtonCell: SHCustomTextFieldForm {
             terbitkanButton.leadingAnchor.constraint(equalTo: previewButton.trailingAnchor, constant: 16),
             terbitkanButton.topAnchor.constraint(equalTo: margin.topAnchor),
             terbitkanButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            terbitkanButton.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
-            terbitkanButton.heightAnchor.constraint(equalToConstant: 48),
+            terbitkanButton.bottomAnchor.constraint(equalTo: margin.bottomAnchor)
         ])
     }
-    
-    
     
     @objc func handleSimpanButton() {
         
