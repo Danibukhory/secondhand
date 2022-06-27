@@ -12,7 +12,7 @@ final class SellingListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .white
     }
     
 
