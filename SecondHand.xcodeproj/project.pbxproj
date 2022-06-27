@@ -29,6 +29,8 @@
 		6E78119128522ED900104FE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E78118F28522ED900104FE1 /* LaunchScreen.storyboard */; };
 		7B9B5F5C28644AC2004B575E /* PreviewProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B5F5B28644AC2004B575E /* PreviewProductViewController.swift */; };
 		7B9B5F5E28648859004B575E /* HeaderTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B5F5D28648859004B575E /* HeaderTableViewController.swift */; };
+		7B9B5F602865F2E8004B575E /* BuyerSixViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B5F5F2865F2E8004B575E /* BuyerSixViewController.swift */; };
+		7B9B5F622865F4B2004B575E /* BuyerElevenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B9B5F612865F4B2004B575E /* BuyerElevenViewController.swift */; };
 		7BCE01AA285A21B100FF94BA /* AccountInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */; };
 		7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */; };
 		7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */; };
@@ -76,6 +78,8 @@
 		6E78119228522ED900104FE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7B9B5F5B28644AC2004B575E /* PreviewProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewProductViewController.swift; sourceTree = "<group>"; };
 		7B9B5F5D28648859004B575E /* HeaderTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderTableViewController.swift; sourceTree = "<group>"; };
+		7B9B5F5F2865F2E8004B575E /* BuyerSixViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerSixViewController.swift; sourceTree = "<group>"; };
+		7B9B5F612865F4B2004B575E /* BuyerElevenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerElevenViewController.swift; sourceTree = "<group>"; };
 		7BCE01A9285A21B100FF94BA /* AccountInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountInfoViewController.swift; sourceTree = "<group>"; };
 		7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHLongTextField.swift; sourceTree = "<group>"; };
 		7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
@@ -218,6 +222,8 @@
 				7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */,
 				7B9B5F5B28644AC2004B575E /* PreviewProductViewController.swift */,
 				7B9B5F5D28648859004B575E /* HeaderTableViewController.swift */,
+				7B9B5F5F2865F2E8004B575E /* BuyerSixViewController.swift */,
+				7B9B5F612865F4B2004B575E /* BuyerElevenViewController.swift */,
 			);
 			path = "Product Detail";
 			sourceTree = "<group>";
@@ -460,6 +466,7 @@
 				38940C7D285A2C60000DD541 /* HomeSearchViewController.swift in Sources */,
 				38AB06E128588D5D0006342E /* SHButton.swift in Sources */,
 				7BCE01AA285A21B100FF94BA /* AccountInfoViewController.swift in Sources */,
+				7B9B5F622865F4B2004B575E /* BuyerElevenViewController.swift in Sources */,
 				6E78118C28522ED600104FE1 /* SecondHand.xcdatamodeld in Sources */,
 				6E78118428522ED600104FE1 /* SceneDelegate.swift in Sources */,
 				38940C6E2859EB08000DD541 /* HomeHeaderCell.swift in Sources */,
@@ -468,6 +475,7 @@
 				E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */,
 				7B9B5F5C28644AC2004B575E /* PreviewProductViewController.swift in Sources */,
 				7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */,
+				7B9B5F602865F2E8004B575E /* BuyerSixViewController.swift in Sources */,
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
 				E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */,
 				38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */,

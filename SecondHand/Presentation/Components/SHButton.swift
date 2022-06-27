@@ -39,6 +39,34 @@ final class SHDefaultButton: UIButton {
     }
 }
 
+final class SHDefaultTransparentButton: UIButton {
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure() {
+        configuration = .filled()
+        translatesAutoresizingMaskIntoConstraints = false
+        tintColor = UIColor(rgb: 0xD0D0D0)
+        layer.cornerRadius = 16
+        clipsToBounds = true
+    }
+    
+    func setActiveButtonTitle(string: String) {
+        let attributedTitle = NSAttributedString(
+            string: string,
+            attributes: [.font : UIFont(name: "Poppins-Regular", size: UIFont.buttonFontSize)!]
+        )
+        setAttributedTitle(attributedTitle, for: .normal)
+    }
+}
+
 final class SHBorderedButton: UIButton {
     
     override init(frame: CGRect) {
