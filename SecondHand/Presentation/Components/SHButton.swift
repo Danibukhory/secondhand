@@ -68,6 +68,11 @@ final class SHBorderedButton: UIButton {
         )
         setAttributedTitle(attributedTitle, for: .normal)
     }
+    
+    func setImage(image: String) {
+        self.configuration?.image = UIImage(named: image)
+        self.configuration?.imagePlacement = .leading
+    }
 }
 
 final class SHGhostButton: UIButton {
