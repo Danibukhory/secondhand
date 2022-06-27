@@ -143,15 +143,21 @@ class SHModalViewController: UIViewController {
     }
     
     private func animatePresentContainer() {
-        UIView.animate(withDuration: 0.3) {
-            self.containerViewBottomConstraint?.constant = 0
+        UIView.animate(
+            withDuration: 0.5,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 5,
+            options: .layoutSubviews
+        ) {
+            self.containerViewBottomConstraint?.constant = 10
             self.view.layoutIfNeeded()
         }
     }
     
     private func animateShowDimmedView() {
         dimmedView.alpha = 0
-        UIView.animate(withDuration: 0.4) {
+        UIView.animate(withDuration: 0.3) {
             self.dimmedView.alpha = self.maxDimmedAlpha
         }
     }
