@@ -32,6 +32,4 @@ final class SoldOutListViewController: UIViewController {
         ])
     }
     
-
-
 }

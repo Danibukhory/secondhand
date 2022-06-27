@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SellingPageController: UIViewController {
+final class SellingListPageViewController: UIViewController {
 
     var pages = [UIViewController]()
     let items  = ["Produk","Diminati" ,"Terjual"]
@@ -16,31 +16,22 @@ final class SellingPageController: UIViewController {
     let initialPage = 0
     private var pageController = UIPageViewController()
     
-    private lazy var productButton: SHBorderedButton = { // change with UIView
-       let button = SHBorderedButton()
-        button.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+    private lazy var productButton: SHButton = {
+        let button = SHButton(frame: CGRect(x: 0, y: 0, width: 150, height: 0), title: " Produk", type: .bordered, size: .regular)
         button.tintColor = .white
-        button.setActiveButtonTitle(string: "  Produk")
-        button.setImage(image: myImageCategories[0])
+        button.setImageButton(image: myImageCategories[0])
         return button
     }()
     
-    private lazy var recomendedButton: SHBorderedButton = {
-       let button = SHBorderedButton()
-        button.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.setActiveButtonTitle(string: "  Diminati")
-        button.setImage(image: myImageCategories[1])
+    private lazy var recomendedButton: SHButton = {
+        let button = SHButton(frame: CGRect(x: 0, y: 0, width: 150, height: 0), title: " Diminati", type: .bordered, size: .regular)
+        button.setImageButton(image: myImageCategories[1])
         return button
     }()
     
-    private lazy var selledButton: SHBorderedButton = {
-       let button = SHBorderedButton()
-        button.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        button.setActiveButtonTitle(string: "  Terjual")
-        button.setImage(image: myImageCategories[2])
+    private lazy var selledButton: SHButton = {
+        let button = SHButton(frame: CGRect(x: 0, y: 0, width: 150, height: 0), title: " Terjual", type: .bordered, size: .regular)
+        button.setImageButton(image: myImageCategories[2])
        return button
     }()
    

@@ -33,15 +33,8 @@ final class MainTabBarController: UITabBarController {
             image: UIImage(named: "img-sh-plus-circle")?.withRenderingMode(.alwaysTemplate),
             selectedImage: UIImage(named: "img-sh-plus-circle")?.withRenderingMode(.alwaysTemplate)
         )
-        
-//        let sellingListViewController = SellingListViewController()
-//        sellingListViewController.tabBarItem = UITabBarItem(
-//            title: "Daftar Jual",
-//            image: UIImage(named: "img-sh-list-inactive")?.withRenderingMode(.alwaysTemplate),
-//            selectedImage: UIImage(named: "img-sh-list-active")?.withRenderingMode(.alwaysTemplate)
-//        )
-        
-        let sellingListViewController = SellingPageController()
+                
+        let sellingListViewController = SellingListPageViewController()
         sellingListViewController.tabBarItem = UITabBarItem(
             title: "Daftar Jual",
             image: UIImage(named: "img-sh-list-inactive")?.withRenderingMode(.alwaysTemplate),

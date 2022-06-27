@@ -56,4 +56,9 @@ final class SHButton: UIButton {
         setAttributedTitle(attributedTitle, for: .normal)
     }
     
+    func setImageButton(image: String) {
+        self.configuration?.image = UIImage(named: image)
+        self.configuration?.imagePlacement = .leading
+    }
+    
 }
