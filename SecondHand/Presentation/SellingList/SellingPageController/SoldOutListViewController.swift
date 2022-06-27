@@ -18,9 +18,7 @@ final class SoldOutListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .systemBackground
-        
         configure()
     }
     
@@ -29,13 +27,9 @@ final class SoldOutListViewController: UIViewController {
         view.addSubview(soldoutLabel)
         
         NSLayoutConstraint.activate([
-            
-        
             soldoutLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             soldoutLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-            
         ])
-        
     }
     
 

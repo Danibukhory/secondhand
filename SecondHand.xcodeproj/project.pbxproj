@@ -53,7 +53,6 @@
 		E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3352858AC3900489969 /* SignInViewController.swift */; };
 		E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3382858AC4C00489969 /* SignUpViewController.swift */; };
 		E9F43E2F28694B17009CB59B /* SellingPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F43E2E28694B17009CB59B /* SellingPageController.swift */; };
-		E9F43E3128694B60009CB59B /* OnBoardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F43E3028694B60009CB59B /* OnBoardingViewController.swift */; };
 		E9F43E3A2869A1D8009CB59B /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F43E392869A1D8009CB59B /* UIButton+Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -106,7 +105,6 @@
 		E9C1F3352858AC3900489969 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		E9C1F3382858AC4C00489969 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		E9F43E2E28694B17009CB59B /* SellingPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellingPageController.swift; sourceTree = "<group>"; };
-		E9F43E3028694B60009CB59B /* OnBoardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnBoardingViewController.swift; sourceTree = "<group>"; };
 		E9F43E392869A1D8009CB59B /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -361,7 +359,6 @@
 			isa = PBXGroup;
 			children = (
 				E9F43E2E28694B17009CB59B /* SellingPageController.swift */,
-				E9F43E3028694B60009CB59B /* OnBoardingViewController.swift */,
 				E90C4BA22869CF5B00C64528 /* ProductListViewController.swift */,
 				E90C4BA42869D16A00C64528 /* RecomendationListViewController.swift */,
 				E90C4BA62869D18300C64528 /* SoldOutListViewController.swift */,
@@ -480,7 +477,6 @@
 				7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */,
 				38940C722859EB44000DD541 /* HomeProductCell.swift in Sources */,
 				38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */,
-				E9F43E3128694B60009CB59B /* OnBoardingViewController.swift in Sources */,
 				E94B89A9286897B400946F7E /* SellingProductCollectionViewCell.swift in Sources */,
 				E90C4BA72869D18300C64528 /* SoldOutListViewController.swift in Sources */,
 				E94B89A028684ADD00946F7E /* CategoriesRowCollectionViewCell.swift in Sources */,

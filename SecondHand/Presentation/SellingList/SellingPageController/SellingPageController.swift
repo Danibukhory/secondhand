@@ -7,20 +7,21 @@
 
 import UIKit
 
-final class SellingPageController: UIPageViewController {
+final class SellingPageController: UIViewController {
 
     var pages = [UIViewController]()
     let items  = ["Produk","Diminati" ,"Terjual"]
     let myImageCategories = ["img-sh-box","img-sh-heart","img-sh-dollar-sign"]
     let segmentedControlBackgroundColor = UIColor(rgb: 0xE2D4f0)
     let initialPage = 0
+    private var pageController = UIPageViewController()
     
     private lazy var productButton: SHBorderedButton = { // change with UIView
        let button = SHBorderedButton()
         button.widthAnchor.constraint(equalToConstant: 150).isActive = true
         button.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        button.tintColor = .white
         button.setActiveButtonTitle(string: "  Produk")
-       
         button.setImage(image: myImageCategories[0])
         return button
     }()
@@ -107,8 +108,6 @@ final class SellingPageController: UIPageViewController {
             selledButton,
         ]
         let stackView = UIStackView(arrangedSubviews: segmentedControlButtons)
-     
-        
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
@@ -125,6 +124,13 @@ final class SellingPageController: UIPageViewController {
         return scrollView
     }()
     
+    private lazy var pagingContainer: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -134,20 +140,28 @@ final class SellingPageController: UIPageViewController {
     }
     
     private func setup() {
-
         let page1 = ProductListViewController()
         let page2 = RecomendationListViewController()
         let page3 = SoldOutListViewController()
         pages.append(page1)
         pages.append(page2)
         pages.append(page3)
+        self.pageController = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        self.pageController.view.backgroundColor = .clear
 
-        setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
+        self.pageController.view.translatesAutoresizingMaskIntoConstraints = false
+        self.pageController.setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
+        addChild(self.pageController)
+
+        pagingContainer.addSubview(pageController.view)
+        self.pageController.didMove(toParent: self)
+     
     }
     
     private func configure() {
         
         view.addSubview(topContainerView)
+        view.addSubview(pagingContainer)
         topContainerView.addSubviews(
             imageTopView,
             sellerNameLabel,
@@ -159,6 +173,15 @@ final class SellingPageController: UIPageViewController {
         catScrollView.addSubview(catStackView)
         
         NSLayoutConstraint.activate([
+            pagingContainer.topAnchor.constraint(equalTo: catScrollView.bottomAnchor, constant: 20),
+            pagingContainer.leadingAnchor.constraint(equalTo: catScrollView.leadingAnchor,constant: 16),
+            pagingContainer.trailingAnchor.constraint(equalTo: catScrollView.trailingAnchor,constant: -16),
+            pagingContainer.heightAnchor.constraint(equalToConstant: 400),
+            
+            pageController.view.topAnchor.constraint(equalTo: pagingContainer.topAnchor),
+            pageController.view.bottomAnchor.constraint(equalTo: pagingContainer.bottomAnchor),
+            pageController.view.leadingAnchor.constraint(equalTo: pagingContainer.leadingAnchor),
+            pageController.view.trailingAnchor.constraint(equalTo: pagingContainer.trailingAnchor),
             
             topContainerView.topAnchor.constraint(equalTo: view.topAnchor,constant:125),
             topContainerView.heightAnchor.constraint(equalToConstant: 80),
@@ -190,9 +213,9 @@ final class SellingPageController: UIPageViewController {
             catStackView.leadingAnchor.constraint(equalTo: catScrollView.leadingAnchor,constant: 12),
             catStackView.trailingAnchor.constraint(equalTo: catScrollView.trailingAnchor,constant: -12),
             catStackView.heightAnchor.constraint(equalToConstant: 40),
-        ])
         
-
+        ])
+    
         productButton.backgroundColor = UIColor(rgb: 0x7126B5)
         recomendedButton.backgroundColor = UIColor(rgb:  0xE2D4f0)
         selledButton.backgroundColor = UIColor(rgb:  0xE2D4f0)
@@ -207,10 +230,9 @@ final class SellingPageController: UIPageViewController {
                 
     }
     
-    @objc private func onCellTapped(sender: UIButton) {
-        
+    private func goToSpecificPage(index: Int, ofViewControllers pages: [UIViewController]) {
+        self.pageController.setViewControllers([pages[index]], direction: .forward, animated: true, completion: nil)
     }
-    
     
     @objc func handleSegmentedControlButtons(sender: UIButton) {
         
@@ -251,20 +273,15 @@ final class SellingPageController: UIPageViewController {
                 }
             }
         }
-        
-    }
-    
-}
-
-extension UIPageViewController {
-
-    func goToSpecificPage(index: Int, ofViewControllers pages: [UIViewController]) {
-        
-            setViewControllers([pages[index]], direction: .forward, animated: true, completion: nil)
-       
-       
     }
 }
+
+//extension UIPageViewController {
+//
+//    func goToSpecificPage(index: Int, ofViewControllers pages: [UIViewController]) {
+//        setViewControllers([pages[index]], direction: .forward, animated: true, completion: nil)
+//    }
+//}
 
 // test for pageview controler in uiviewcontroller
 
