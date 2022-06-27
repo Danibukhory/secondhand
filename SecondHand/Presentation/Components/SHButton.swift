@@ -70,8 +70,9 @@ final class SHBorderedButton: UIButton {
     }
     
     func setImage(image: String) {
-        self.configuration?.image = UIImage(named: image)
+        self.configuration?.image = UIImage(named: image)?.withRenderingMode(.alwaysTemplate)
         self.configuration?.imagePlacement = .leading
+       
     }
 }
 

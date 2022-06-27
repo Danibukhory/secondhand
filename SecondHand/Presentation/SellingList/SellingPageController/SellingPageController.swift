@@ -100,7 +100,7 @@ final class SellingPageController: UIPageViewController {
         return button
     }()
     
-    private lazy var catStackView: UIStackView = { // change it
+    private lazy var catStackView: UIStackView = {
         let segmentedControlButtons: [UIButton] = [
             productButton,
             recomendedButton,
@@ -135,18 +135,14 @@ final class SellingPageController: UIPageViewController {
     
     private func setup() {
 
-        let page1 = OnboardingViewController(titleText: "Hellow",
-                                             subtitleText: "Wolrd 1")
-        let page2 = OnboardingViewController(titleText: "Learn",
-                                             subtitleText: "World2")
-        let page3 = OnboardingViewController(titleText: "Have fun",
-                                             subtitleText: "Please")
+        let page1 = ProductListViewController()
+        let page2 = RecomendationListViewController()
+        let page3 = SoldOutListViewController()
         pages.append(page1)
         pages.append(page2)
         pages.append(page3)
 
         setViewControllers([pages[initialPage]], direction: .forward, animated: true, completion: nil)
-        
     }
     
     private func configure() {
@@ -194,7 +190,6 @@ final class SellingPageController: UIPageViewController {
             catStackView.leadingAnchor.constraint(equalTo: catScrollView.leadingAnchor,constant: 12),
             catStackView.trailingAnchor.constraint(equalTo: catScrollView.trailingAnchor,constant: -12),
             catStackView.heightAnchor.constraint(equalToConstant: 40),
-        
         ])
         
 
@@ -246,11 +241,13 @@ final class SellingPageController: UIPageViewController {
             if button == sender {
                 UIView.animate(withDuration: 0.2, delay: 0.1, options: .transitionFlipFromLeft) {
                     button.backgroundColor = UIColor(rgb: 0x7126B5)
+                    button.tintColor = .white
                 }
 
             } else {
                 UIView.animate(withDuration: 0.2, delay: 0.1, options: .transitionFlipFromLeft) { [weak self] in
                     button.backgroundColor = self?.segmentedControlBackgroundColor
+                    button.tintColor = .label
                 }
             }
         }

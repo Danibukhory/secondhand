@@ -32,6 +32,9 @@
 		7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */; };
 		7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */; };
 		7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */; };
+		E90C4BA32869CF5B00C64528 /* ProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C4BA22869CF5B00C64528 /* ProductListViewController.swift */; };
+		E90C4BA52869D16A00C64528 /* RecomendationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C4BA42869D16A00C64528 /* RecomendationListViewController.swift */; };
+		E90C4BA72869D18300C64528 /* SoldOutListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C4BA62869D18300C64528 /* SoldOutListViewController.swift */; };
 		E92ED129285F25E900CB0476 /* TopSellingListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E92ED128285F25E900CB0476 /* TopSellingListTableViewCell.swift */; };
 		E94B899D286844FF00946F7E /* CategoriesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B899C286844FF00946F7E /* CategoriesTableViewCell.swift */; };
 		E94B89A028684ADD00946F7E /* CategoriesRowCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B899F28684ADD00946F7E /* CategoriesRowCollectionViewCell.swift */; };
@@ -82,6 +85,9 @@
 		7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHCustomTextFieldForm.swift; sourceTree = "<group>"; };
 		7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
+		E90C4BA22869CF5B00C64528 /* ProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewController.swift; sourceTree = "<group>"; };
+		E90C4BA42869D16A00C64528 /* RecomendationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecomendationListViewController.swift; sourceTree = "<group>"; };
+		E90C4BA62869D18300C64528 /* SoldOutListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoldOutListViewController.swift; sourceTree = "<group>"; };
 		E92ED128285F25E900CB0476 /* TopSellingListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopSellingListTableViewCell.swift; sourceTree = "<group>"; };
 		E94B899C286844FF00946F7E /* CategoriesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesTableViewCell.swift; sourceTree = "<group>"; };
 		E94B899F28684ADD00946F7E /* CategoriesRowCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesRowCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -356,6 +362,9 @@
 			children = (
 				E9F43E2E28694B17009CB59B /* SellingPageController.swift */,
 				E9F43E3028694B60009CB59B /* OnBoardingViewController.swift */,
+				E90C4BA22869CF5B00C64528 /* ProductListViewController.swift */,
+				E90C4BA42869D16A00C64528 /* RecomendationListViewController.swift */,
+				E90C4BA62869D18300C64528 /* SoldOutListViewController.swift */,
 			);
 			path = SellingPageController;
 			sourceTree = "<group>";
@@ -436,7 +445,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				38940C742859EB5B000DD541 /* HomeProductCollectionCell.swift in Sources */,
+				E90C4BA32869CF5B00C64528 /* ProductListViewController.swift in Sources */,
 				7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */,
+				E90C4BA52869D16A00C64528 /* RecomendationListViewController.swift in Sources */,
 				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
 				E9B46FD0285A1C4B008F0615 /* AccountViewController.swift in Sources */,
@@ -471,6 +482,7 @@
 				38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */,
 				E9F43E3128694B60009CB59B /* OnBoardingViewController.swift in Sources */,
 				E94B89A9286897B400946F7E /* SellingProductCollectionViewCell.swift in Sources */,
+				E90C4BA72869D18300C64528 /* SoldOutListViewController.swift in Sources */,
 				E94B89A028684ADD00946F7E /* CategoriesRowCollectionViewCell.swift in Sources */,
 				E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */,
 			);
