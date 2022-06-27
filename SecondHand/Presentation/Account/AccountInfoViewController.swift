@@ -326,9 +326,8 @@ class NomorTextField: UITableViewCell {
 }
 
 final class SimpanButton: UITableViewCell {
-    private lazy var signInButton: SHDefaultButton = {
-        let button = SHDefaultButton()
-        button.setActiveButtonTitle(string: "Simpan")
+    private lazy var signInButton: SHButton = {
+        let button = SHButton(frame: CGRect(), title: "Simpan", type: .filled, size: .regular)
         button.addTarget(self, action: #selector(handleSimpanButton), for: .touchUpInside)
         return button
     }()

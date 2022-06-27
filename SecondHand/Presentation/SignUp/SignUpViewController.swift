@@ -63,9 +63,8 @@ final class SignUpViewController: UIViewController {
         return textField
     }()
         
-    private lazy var signUpButton: SHDefaultButton = {
-        let button = SHDefaultButton()
-        button.setActiveButtonTitle(string: "Masuk")
+    private lazy var signUpButton: SHButton = {
+        let button = SHButton(frame: CGRect(), title: "Masuk", type: .filled, size: .regular)
         button.addTarget(self, action: #selector(handleSignUpButton), for: .touchUpInside)
         return button
     }()
@@ -206,7 +205,6 @@ final class SignUpViewController: UIViewController {
             signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
             signUpButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
-            signUpButton.heightAnchor.constraint(equalToConstant: buttonSizeType.regular.rawValue),
             
             noAccountLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
             noAccountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 75),
