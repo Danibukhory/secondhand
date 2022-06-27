@@ -41,7 +41,7 @@ final class MainTabBarController: UITabBarController {
             selectedImage: UIImage(named: "img-sh-list-active")
         )
         
-        let accountViewController = AccountViewController()
+        let accountViewController = AccountTableViewController()
         accountViewController.tabBarItem = UITabBarItem(
             title: "Akun",
             image: UIImage(named: "img-sh-user-inactive"),
