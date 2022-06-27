@@ -117,16 +117,14 @@ final class OfferAcceptedViewController: SHModalViewController {
          return label
     }()
     
-    var contactBuyerButton: SHDefaultButton = {
-        let button = SHDefaultButton()
-        button.setActiveButtonTitle(string: "Hubungi Via WhatsApp")
+    var contactBuyerButton: SHButton = {
+        let button = SHButton(frame: CGRect(), title: "Hubungi Via WhatsApp", type: .filled, size: .regular)
         let whatsappImageView = UIImageView()
         button.addSubview(whatsappImageView)
         whatsappImageView.translatesAutoresizingMaskIntoConstraints = false
         whatsappImageView.image = UIImage(named: "img-sh-whatsapp")
         
         NSLayoutConstraint.activate([
-            whatsappImageView.heightAnchor.constraint(equalToConstant: 16),
             whatsappImageView.widthAnchor.constraint(equalToConstant: 16),
             whatsappImageView.centerYAnchor.constraint(equalTo: button.centerYAnchor),
             whatsappImageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -24)

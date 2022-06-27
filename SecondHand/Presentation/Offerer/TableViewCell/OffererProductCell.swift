@@ -14,8 +14,8 @@ final class OffererProductCell: UITableViewCell {
     var productNameLabel = UILabel()
     var offerValueLabel = UILabel()
     var offerTimeLabel = UILabel()
-    var rejectButton = SHBorderedButton()
-    var acceptButton = SHDefaultButton()
+    var rejectButton = SHButton(frame: CGRect(), title: "Tolak", type: .bordered, size: .small)
+    var acceptButton = SHButton(frame: CGRect(), title: "Terima", type: .filled, size: .small)
     
     typealias OnRejectButtonTap = () -> Void
     var onRejectButtonTap: OnRejectButtonTap?
@@ -93,12 +93,10 @@ final class OffererProductCell: UITableViewCell {
             
             rejectButton.topAnchor.constraint(equalTo: offerValueLabel.bottomAnchor, constant: 16),
             rejectButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            rejectButton.heightAnchor.constraint(equalToConstant: 36),
             rejectButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2) - 16 * 2),
             
             acceptButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             acceptButton.topAnchor.constraint(equalTo: rejectButton.topAnchor),
-            acceptButton.heightAnchor.constraint(equalTo: rejectButton.heightAnchor),
             acceptButton.widthAnchor.constraint(equalTo: rejectButton.widthAnchor),
             acceptButton.bottomAnchor.constraint(equalTo: margin.bottomAnchor)
         ])

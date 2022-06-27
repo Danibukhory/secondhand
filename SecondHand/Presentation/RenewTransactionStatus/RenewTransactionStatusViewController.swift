@@ -37,10 +37,8 @@ final class RenewTransactionStatusViewController: SHModalViewController {
         return tableView
     }()
     
-    var sendButton: SHDefaultButton = {
-        let button = SHDefaultButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setActiveButtonTitle(string: "Kirim")
+    var sendButton: SHButton = {
+        let button = SHButton(frame: CGRect(), title: "Kirim", type: .filled, size: .regular)
         button.isEnabled = false
         button.addTarget(Any.self, action: #selector(sendNewStatus), for: .touchUpInside)
         return button
@@ -86,7 +84,6 @@ final class RenewTransactionStatusViewController: SHModalViewController {
             tableView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
             tableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 160),
             
-            sendButton.heightAnchor.constraint(equalToConstant: 48),
             sendButton.widthAnchor.constraint(equalTo: containerView.widthAnchor, constant: -64),
             sendButton.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 16),
             sendButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor)

@@ -6,28 +6,46 @@
 //
 import UIKit
 
-enum buttonSizeType: CGFloat {
-    case regular = 48
-    case small = 36
-}
-
-final class SHDefaultButton: UIButton {
+final class SHButton: UIButton {
     
-    override init(frame: CGRect) {
+    enum buttonType {
+        case filled
+        case bordered
+        case ghost
+    }
+    
+    enum buttonSizeType: CGFloat {
+        case regular = 48
+        case small = 36
+    }
+    
+    init(frame: CGRect, title: String, type: buttonType, size: buttonSizeType) {
         super.init(frame: frame)
-        configure()
+        configure(size: size.rawValue, type: type)
+        setActiveButtonTitle(string: title)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func configure() {
-        configuration = .filled()
+    private func configure(size: CGFloat, type: buttonType) {
         translatesAutoresizingMaskIntoConstraints = false
         tintColor = UIColor(rgb: 0x7126B5)
         layer.cornerRadius = 16
         clipsToBounds = true
+        heightAnchor.constraint(equalToConstant: size).isActive = true
+        switch type {
+        case .filled:
+            configuration = .filled()
+        case .bordered:
+            configuration = .borderless()
+            tintColor = .black
+            layer.borderColor = UIColor(rgb: 0x7126B5).cgColor
+            layer.borderWidth = 1
+        case .ghost:
+            configuration = .plain()
+        }
     }
     
     func setActiveButtonTitle(string: String) {
@@ -37,63 +55,5 @@ final class SHDefaultButton: UIButton {
         )
         setAttributedTitle(attributedTitle, for: .normal)
     }
+    
 }
-
-final class SHBorderedButton: UIButton {
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configure()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func configure() {
-        configuration = .bordered()
-        translatesAutoresizingMaskIntoConstraints = false
-        tintColor = UIColor.black
-        self.backgroundColor = .clear
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor(rgb: 0x7126B5).cgColor
-        layer.cornerRadius = 16
-        clipsToBounds = true
-    }
-    
-    func setActiveButtonTitle(string: String) {
-        let attributedTitle = NSAttributedString(
-            string: string,
-            attributes: [.font : UIFont(name: "Poppins-Medium", size: 14)!]
-        )
-        setAttributedTitle(attributedTitle, for: .normal)
-    }
-}
-
-final class SHGhostButton: UIButton {
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        configure()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    private func configure() {
-        translatesAutoresizingMaskIntoConstraints = false
-        tintColor = UIColor(rgb: 0x7126B5)
-        layer.cornerRadius = 16
-        clipsToBounds = true
-    }
-    
-    func setActiveButtonTitle(string: String) {
-        let attributedTitle = NSAttributedString(
-            string: string,
-            attributes: [.font : UIFont(name: "Poppins-Medium", size: 14)!]
-        )
-        setAttributedTitle(attributedTitle, for: .normal)
-    }
-}
-

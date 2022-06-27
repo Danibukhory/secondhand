@@ -107,8 +107,8 @@ final class OffererViewController: UITableViewController {
                         initialSpringVelocity: 18,
                         options: .layoutSubviews
                     ) {
-                        _self.popupView?.layer.position.y = (_self.navigationController?.view.layoutMargins.top)!
-                        if _self.popupView?.layer.position.y == (_self.navigationController?.view.layoutMargins.top)! {
+                        _self.popupView?.layer.position.y = _self.tableView.layoutMargins.top - (_self.popupView?.bounds.height)!
+                        if _self.popupView?.layer.position.y == _self.tableView.layoutMargins.top - (_self.popupView?.bounds.height)! {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                                 UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
                                     _self.popupView?.layer.position.y = -150
@@ -130,8 +130,8 @@ final class OffererViewController: UITableViewController {
                             initialSpringVelocity: 18,
                             options: .layoutSubviews
                         ) {
-                            _self.popupView?.layer.position.y = (_self.navigationController?.view.layoutMargins.top)!
-                            if _self.popupView?.layer.position.y == (_self.navigationController?.view.layoutMargins.top)! {
+                            _self.popupView?.layer.position.y = _self.tableView.layoutMargins.top - (_self.popupView?.bounds.height)!
+                            if _self.popupView?.layer.position.y == _self.tableView.layoutMargins.top - (_self.popupView?.bounds.height)! {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                                     UIView.animate(
                                         withDuration: 0.25,
@@ -198,8 +198,8 @@ final class OffererViewController: UITableViewController {
             popupType: .success,
             text: "Status produk berhasil diperbarui"
         )
-        view.addSubview(popupView!)
-        popupView?.bottomAnchor.constraint(equalTo: view.topAnchor, constant: -100).isActive = true
+        tableView.addSubview(popupView!)
+        popupView?.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -100).isActive = true
         popupView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         popupView?.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor).isActive = true
         popupView?.onDismissButtonTap = { [weak self] in
