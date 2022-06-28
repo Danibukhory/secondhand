@@ -201,10 +201,10 @@ class BuyerElevenViewController: UIViewController {
         return productView
     }()
     
-    private lazy var publishButton: SHDefaultTransparentButton = {
-        let button = SHDefaultTransparentButton()
-        button.setActiveButtonTitle(string: "Menunggu respon penjual")
-        
+    private lazy var publishButton: SHButton = {
+        let button = SHButton(frame: CGRect.zero, title: "Menunggu respon penjual", type: .ghost, size: .regular)
+        button.backgroundColor = UIColor(rgb: 0xD0D0D0)
+        button.tintColor = .white
         return button
     }()
     

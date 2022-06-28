@@ -204,9 +204,8 @@ class PreviewProductViewController: UIViewController {
         return productView
     }()
     
-    private lazy var publishButton: SHDefaultButton = {
-        let button = SHDefaultButton()
-        button.setActiveButtonTitle(string: "Terbitkan")
+    private lazy var publishButton: SHButton = {
+        let button = SHButton(frame: CGRect.zero, title: "Terbitkan", type: .filled, size: .regular)
         
         return button
     }()

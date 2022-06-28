@@ -201,9 +201,8 @@ class BuyerSixViewController: UIViewController {
         return productView
     }()
     
-    private lazy var publishButton: SHDefaultButton = {
-        let button = SHDefaultButton()
-        button.setActiveButtonTitle(string: "Saya Tertarik dan ingin Nego")
+    private lazy var publishButton: SHButton = {
+        let button = SHButton(frame: CGRect.zero, title: "Saya Tertarik dan ingin Nego", type: .filled, size: .regular)
         
         return button
     }()
