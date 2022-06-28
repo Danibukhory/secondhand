@@ -42,12 +42,15 @@
 		7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */; };
 		7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */; };
 		7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */; };
+		E90C4BAF2869FB7D00C64528 /* ProductListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C4BAE2869FB7D00C64528 /* ProductListViewController.swift */; };
+		E90C4BB12869FB9200C64528 /* RecomendationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C4BB02869FB9200C64528 /* RecomendationListViewController.swift */; };
+		E90C4BB42869FBBD00C64528 /* SellingListPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C4BB32869FBBD00C64528 /* SellingListPageViewController.swift */; };
+		E90C4BB62869FBCB00C64528 /* SoldOutListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E90C4BB52869FBCB00C64528 /* SoldOutListViewController.swift */; };
 		E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27202859AEE30090A5CC /* SHTextfield.swift */; };
 		E95E27232859B01C0090A5CC /* UIView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95E27222859B01C0090A5CC /* UIView+Extensions.swift */; };
 		E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FC3285A1B5E008F0615 /* MainTabBarController.swift */; };
 		E9B46FCA285A1C23008F0615 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FC9285A1C23008F0615 /* NotificationViewController.swift */; };
 		E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FCB285A1C35008F0615 /* SellingViewController.swift */; };
-		E9B46FCE285A1C40008F0615 /* SellingListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FCD285A1C40008F0615 /* SellingListViewController.swift */; };
 		E9B46FD4285A3354008F0615 /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9B46FD3285A3354008F0615 /* String+Extensions.swift */; };
 		E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3352858AC3900489969 /* SignInViewController.swift */; };
 		E9C1F3392858AC4C00489969 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9C1F3382858AC4C00489969 /* SignUpViewController.swift */; };
@@ -91,12 +94,15 @@
 		7BCE01AE285B5D7D00FF94BA /* ProductDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailViewController.swift; sourceTree = "<group>"; };
 		7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHCustomTextFieldForm.swift; sourceTree = "<group>"; };
 		7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
+		E90C4BAE2869FB7D00C64528 /* ProductListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductListViewController.swift; sourceTree = "<group>"; };
+		E90C4BB02869FB9200C64528 /* RecomendationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecomendationListViewController.swift; sourceTree = "<group>"; };
+		E90C4BB32869FBBD00C64528 /* SellingListPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellingListPageViewController.swift; sourceTree = "<group>"; };
+		E90C4BB52869FBCB00C64528 /* SoldOutListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoldOutListViewController.swift; sourceTree = "<group>"; };
 		E95E27202859AEE30090A5CC /* SHTextfield.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHTextfield.swift; sourceTree = "<group>"; };
 		E95E27222859B01C0090A5CC /* UIView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extensions.swift"; sourceTree = "<group>"; };
 		E9B46FC3285A1B5E008F0615 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		E9B46FC9285A1C23008F0615 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		E9B46FCB285A1C35008F0615 /* SellingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellingViewController.swift; sourceTree = "<group>"; };
-		E9B46FCD285A1C40008F0615 /* SellingListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellingListViewController.swift; sourceTree = "<group>"; };
 		E9B46FD3285A3354008F0615 /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		E9C1F3352858AC3900489969 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		E9C1F3382858AC4C00489969 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -265,6 +271,17 @@
 			path = "Product Detail";
 			sourceTree = "<group>";
 		};
+		E90C4BAD2869FB3C00C64528 /* SellingList */ = {
+			isa = PBXGroup;
+			children = (
+				E90C4BAE2869FB7D00C64528 /* ProductListViewController.swift */,
+				E90C4BB02869FB9200C64528 /* RecomendationListViewController.swift */,
+				E90C4BB32869FBBD00C64528 /* SellingListPageViewController.swift */,
+				E90C4BB52869FBCB00C64528 /* SoldOutListViewController.swift */,
+			);
+			path = SellingList;
+			sourceTree = "<group>";
+		};
 		E9B46FC0285A1A01008F0615 /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
@@ -306,14 +323,6 @@
 			path = Selling;
 			sourceTree = "<group>";
 		};
-		E9B46FC7285A1BC4008F0615 /* SellingList */ = {
-			isa = PBXGroup;
-			children = (
-				E9B46FCD285A1C40008F0615 /* SellingListViewController.swift */,
-			);
-			path = SellingList;
-			sourceTree = "<group>";
-		};
 		E9B46FC8285A1BDD008F0615 /* Account */ = {
 			isa = PBXGroup;
 			children = (
@@ -342,11 +351,11 @@
 		E9C1F3322858ABC700489969 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				E90C4BAD2869FB3C00C64528 /* SellingList */,
 				383095DB28646FA600EDFDAB /* RenewTransactionStatus */,
 				384B04EB2862425300949209 /* OfferAccepted */,
 				382F59602860AFF6009F0BB5 /* Offerer */,
 				E9B46FC8285A1BDD008F0615 /* Account */,
-				E9B46FC7285A1BC4008F0615 /* SellingList */,
 				E9B46FC6285A1BA9008F0615 /* Selling */,
 				E9B46FC5285A1B8B008F0615 /* Notification */,
 				E9B46FC2285A1AFD008F0615 /* TabBar */,
@@ -453,9 +462,9 @@
 				6EAAC82228622226008AC66E /* AccountTableViewController.swift in Sources */,
 				38D0CC3728634BF300561C17 /* SHModalViewController.swift in Sources */,
 				382F59622860B00E009F0BB5 /* OffererViewController.swift in Sources */,
+				E90C4BB12869FB9200C64528 /* RecomendationListViewController.swift in Sources */,
 				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
-				E9B46FD0285A1C4B008F0615 /* AccountViewController.swift in Sources */,
 				383095DD28646FD300EDFDAB /* RenewTransactionStatusViewController.swift in Sources */,
 				38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */,
 				383095E02864A7EC00EDFDAB /* TransactionStatusCell.swift in Sources */,
@@ -477,13 +486,15 @@
 				3895B75C285B6FEA00202609 /* NotificationCell.swift in Sources */,
 				E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */,
 				38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */,
-				E9B46FCE285A1C40008F0615 /* SellingListViewController.swift in Sources */,
 				E9B46FCA285A1C23008F0615 /* NotificationViewController.swift in Sources */,
 				384B04EA2862278A00949209 /* SHPopupView.swift in Sources */,
+				E90C4BB62869FBCB00C64528 /* SoldOutListViewController.swift in Sources */,
 				7BCE01AF285B5D7D00FF94BA /* ProductDetailViewController.swift in Sources */,
 				38940C722859EB44000DD541 /* HomeProductCell.swift in Sources */,
 				382F59672860CF04009F0BB5 /* OffererProductCell.swift in Sources */,
+				E90C4BB42869FBBD00C64528 /* SellingListPageViewController.swift in Sources */,
 				38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */,
+				E90C4BAF2869FB7D00C64528 /* ProductListViewController.swift in Sources */,
 				384B04ED2862427500949209 /* OfferAcceptedViewController.swift in Sources */,
 				E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */,
 			);
