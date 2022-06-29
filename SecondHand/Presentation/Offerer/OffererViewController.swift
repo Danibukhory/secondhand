@@ -99,23 +99,8 @@ final class OffererViewController: UITableViewController {
                 guard let _self = self else { return }
                 switch cell.rejectButton.currentAttributedTitle?.string {
                 case "Tolak":
+                    _self.popupView?.isPresenting = true
                     _self.popupView?.backgroundColor = .systemRed
-                    UIView.animate(
-                        withDuration: 0.5,
-                        delay: 0,
-                        usingSpringWithDamping: 0.7,
-                        initialSpringVelocity: 18,
-                        options: .layoutSubviews
-                    ) {
-                        _self.popupView?.layer.position.y = _self.tableView.layoutMargins.top - (_self.popupView?.bounds.height)!
-                        if _self.popupView?.layer.position.y == _self.tableView.layoutMargins.top - (_self.popupView?.bounds.height)! {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-                                    _self.popupView?.layer.position.y = -150
-                                }
-                            }
-                        }
-                    }
                 case "Status":
                     let viewController = RenewTransactionStatusViewController()
                     viewController.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) - 60)
@@ -123,26 +108,7 @@ final class OffererViewController: UITableViewController {
                     viewController.modalPresentationStyle = .overCurrentContext
                     viewController.onSendButtonTap = {
                         _self.popupView?.backgroundColor = UIColor(rgb: 0x73CA5C)
-                        UIView.animate(
-                            withDuration: 0.5,
-                            delay: 0.5,
-                            usingSpringWithDamping: 0.7,
-                            initialSpringVelocity: 18,
-                            options: .layoutSubviews
-                        ) {
-                            _self.popupView?.layer.position.y = _self.tableView.layoutMargins.top - (_self.popupView?.bounds.height)!
-                            if _self.popupView?.layer.position.y == _self.tableView.layoutMargins.top - (_self.popupView?.bounds.height)! {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                    UIView.animate(
-                                        withDuration: 0.25,
-                                        delay: 0,
-                                        options: .curveEaseOut
-                                    ) {
-                                        _self.popupView?.layer.position.y = -150
-                                    }
-                                }
-                            }
-                        }
+                        _self.popupView?.isPresenting = true
                     }
                     _self.tabBarController?.navigationController?.present(viewController, animated: false)
                 default:
@@ -199,14 +165,11 @@ final class OffererViewController: UITableViewController {
             text: "Status produk berhasil diperbarui"
         )
         tableView.addSubview(popupView!)
-        popupView?.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -100).isActive = true
-        popupView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        popupView?.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor).isActive = true
         popupView?.onDismissButtonTap = { [weak self] in
             guard let _self = self else { return }
-            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-                _self.popupView?.layer.position.y = -150
-            }
+            _self.popupView?.widthAnchor.constraint(equalTo: (_self.navigationController?.navigationBar.layoutMarginsGuide.widthAnchor)!).isActive = true
+            _self.popupView?.centerXAnchor.constraint(equalTo: (_self.navigationController?.navigationBar.centerXAnchor)!).isActive = true
+            _self.popupView?.isPresenting = false
         }
     }
     

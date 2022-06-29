@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class NotificationCell: UITableViewCell {
     
@@ -14,6 +15,17 @@ final class NotificationCell: UITableViewCell {
     var notificationContentLabel = UILabel()
     var notificationTimeLabel = UILabel()
     var notificationBadge = UIView()
+    var isRead: Bool = false {
+        didSet {
+            if isRead {
+                widthNotificationBadgeConstraint?.constant = 0
+                contentView.layoutIfNeeded()
+            } else {
+                widthNotificationBadgeConstraint?.constant = 8
+            }
+        }
+    }
+    var widthNotificationBadgeConstraint: NSLayoutConstraint?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -29,16 +41,15 @@ final class NotificationCell: UITableViewCell {
         notificationCategoryLabel.attributedText = nil
         notificationContentLabel.attributedText = nil
         notificationTimeLabel.attributedText = nil
-        notificationBadge.removeFromSuperview()
     }
     
     private func defineLayout() {
+        contentView.addSubview(notificationBadge)
         contentView.addSubviews(
             notificationImageView,
             notificationCategoryLabel,
             notificationContentLabel,
-            notificationTimeLabel,
-            notificationBadge
+            notificationTimeLabel
         )
         contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(
             notificationImageView,
@@ -64,6 +75,7 @@ final class NotificationCell: UITableViewCell {
         notificationBadge.backgroundColor = UIColor(rgb: 0xFA2C5A)
         
         let margin = contentView.layoutMarginsGuide
+        widthNotificationBadgeConstraint = notificationBadge.widthAnchor.constraint(equalToConstant: 8)
         NSLayoutConstraint.activate([
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
             
@@ -80,29 +92,29 @@ final class NotificationCell: UITableViewCell {
             notificationContentLabel.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
             
             notificationTimeLabel.topAnchor.constraint(equalTo: notificationImageView.topAnchor),
-            notificationTimeLabel.trailingAnchor.constraint(equalTo: margin.trailingAnchor, constant: -16),
+            notificationTimeLabel.trailingAnchor.constraint(equalTo: notificationBadge.leadingAnchor, constant: -8),
             
             notificationBadge.topAnchor.constraint(equalTo: notificationImageView.topAnchor, constant: 2),
             notificationBadge.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             notificationBadge.heightAnchor.constraint(equalToConstant: 8),
-            notificationBadge.widthAnchor.constraint(equalTo: notificationBadge.heightAnchor),
+            widthNotificationBadgeConstraint!
         ])
     }
     
-    func fill() {
-        notificationImageView.image = UIImage(named: "img-home-product-placeholder-1")
-        notificationCategoryLabel.setTitle(text: "Penawaran produk", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
-        notificationContentLabel.setTitle(text: "Apple Watch Series 6\nRp 5.999.999\nDitawar Rp 10.000", size: 14, weight: .regular, color: UIColor.black)
-        notificationTimeLabel.setTitle(text: "16 Jun, 09:41", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
-    }
-    
-    func removeNotificationBadge() {
-        notificationBadge.alpha = 0
-        notificationBadge.removeFromSuperview()
-        UIView.animate(withDuration: 0.15, delay: 0, options: .layoutSubviews) {
-            self.contentView.layoutIfNeeded()
+    func fill(with data: SHNotificationResponse) {
+        if let url = URL(string: data.imageURL) {
+            notificationImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
+            notificationImageView.kf.indicatorType = .activity
         }
-
+        switch data.status {
+        case "bid":
+            notificationCategoryLabel.setTitle(text: "Penawaran produk", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        default:
+            notificationCategoryLabel.setTitle(text: "not available", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        }
+        
+        notificationContentLabel.setTitle(text: "\(data.productID)", size: 14, weight: .regular, color: UIColor.black)
+        notificationTimeLabel.setTitle(text: "16 Jun, 09:41", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
     }
 }
 
