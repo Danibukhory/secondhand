@@ -9,6 +9,15 @@ import UIKit
 
 final class BuyerTenViewController: SHModalViewController {
     
+    private lazy var handleBar: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor(rgb: 0xC4C4C4)
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 3
+        return view
+    }()
+    
     private lazy var headerLabel: UILabel = {
         let label = UILabel()
         label.text = "Masukkan Harga Tawarmu"
@@ -104,6 +113,7 @@ final class BuyerTenViewController: SHModalViewController {
     
     private func setupSubViews() {
         containerView.addSubviews(
+            handleBar,
             headerLabel,
             detailLabel,
             productItem,
@@ -121,7 +131,12 @@ final class BuyerTenViewController: SHModalViewController {
     private func defineLayout() {
         
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 40),
+            handleBar.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
+            handleBar.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            handleBar.heightAnchor.constraint(equalToConstant: 6),
+            handleBar.widthAnchor.constraint(equalToConstant: 60),
+            
+            headerLabel.topAnchor.constraint(equalTo: handleBar.bottomAnchor, constant: 18),
             headerLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 32),
             
             detailLabel.topAnchor.constraint(equalTo: headerLabel.bottomAnchor, constant: 16),
