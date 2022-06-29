@@ -15,6 +15,34 @@ final class SHPopupView: UIView {
     typealias OnDismissButtonTap = () -> Void
     var onDismissButtonTap: OnDismissButtonTap?
     
+    var topAnchorConstraint: NSLayoutYAxisAnchor?
+    var isPresenting: Bool = false {
+        didSet {
+            if isPresenting {
+                UIView.animate(
+                    withDuration: 0.5,
+                    delay: 0,
+                    usingSpringWithDamping: 0.7,
+                    initialSpringVelocity: 18,
+                    options: .layoutSubviews
+                ) {
+                    self.topAnchorConstraint = self.superview!.layoutMarginsGuide.topAnchor
+                    self.layer.position.y = 0
+                    if self.topAnchorConstraint == self.superview!.layoutMarginsGuide.topAnchor {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                            self.isPresenting = false
+                        }
+                    }
+                }
+            } else {
+                topAnchorConstraint = nil
+                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
+                    self.layer.position.y = -150
+                }
+            }
+        }
+    }
+    
     enum PopupType {
         case success
         case failed
@@ -61,12 +89,13 @@ final class SHPopupView: UIView {
             dismissButton.widthAnchor.constraint(equalTo: dismissButton.heightAnchor),
             dismissButton.leadingAnchor.constraint(equalTo: popupTextLabel.trailingAnchor, constant: 16),
             dismissButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -24),
-            dismissButton.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            dismissButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
         ])
     }
     
     @objc private func dismissTapped() {
         onDismissButtonTap?()
+        self.isPresenting = false
     }
     
 }

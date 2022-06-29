@@ -9,7 +9,7 @@ import UIKit
 
 final class NotificationViewController: UITableViewController {
     
-    var numberOfNotifications: Int = 10
+    var notifications: [SHNotificationResponse] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,23 +18,26 @@ final class NotificationViewController: UITableViewController {
         title = "Notifikasi"
         navigationController?.navigationBar.useSHLargeTitle()
         view.backgroundColor = .systemBackground
+        loadNotification()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return numberOfNotifications
+        return notifications.count
     }
     
     override func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
+        let row = indexPath.row
+        let notification = notifications[row]
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "\(NotificationCell.self)",
             for: indexPath
         ) as? NotificationCell else {
             return UITableViewCell()
         }
-        cell.fill()
+        cell.fill(with: notification)
         return cell
     }
     
@@ -47,6 +50,7 @@ final class NotificationViewController: UITableViewController {
         _ tableView: UITableView,
         leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
+        let row = indexPath.row
         let item = UIContextualAction(
             style: .destructive,
             title: "Delete"
@@ -61,11 +65,11 @@ final class NotificationViewController: UITableViewController {
                 style: .destructive
             ) { [weak self] _ in
                 guard let _self = self else { return }
-                _self.numberOfNotifications -= 1
                 _self.tableView.deleteRows(
                     at: [indexPath],
                     with: .top
                 )
+                _self.notifications.remove(at: row)
                 DispatchQueue.main.asyncAfter(
                     deadline: .now() + 1
                 ) {
@@ -94,7 +98,7 @@ final class NotificationViewController: UITableViewController {
         _ tableView: UITableView,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(NotificationCell.self)", for: indexPath) as? NotificationCell else {
+        guard let cell = tableView.cellForRow(at: indexPath) as? NotificationCell else {
             return nil
         }
         let item = UIContextualAction(
@@ -110,9 +114,7 @@ final class NotificationViewController: UITableViewController {
                 title: "Mark As Read",
                 style: .default
             ) { _ in
-                cell.removeNotificationBadge()
-                tableView.beginUpdates()
-                tableView.endUpdates()
+                cell.isRead = true
                 completion(true)
             }
             
@@ -131,6 +133,15 @@ final class NotificationViewController: UITableViewController {
         item.backgroundColor = .systemCyan
         let swipeActions = UISwipeActionsConfiguration(actions: [item])
         return swipeActions
+    }
+    
+    private func loadNotification() {
+        let api = SecondHandAPI()
+        api.getNotifications { [weak self] result, error in
+            guard let _self = self else { return }
+            _self.notifications = result ?? []
+            _self.tableView.reloadData()
+        }
     }
     
 

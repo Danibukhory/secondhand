@@ -16,36 +16,36 @@ final class MainTabBarController: UITabBarController {
         
         homeViewController.tabBarItem = UITabBarItem(
             title: "Home",
-            image: UIImage(named: "img-sh-home-inactive"),
-            selectedImage: UIImage(named: "img-sh-home-active")
+            image: UIImage(named: "img-sh-home-inactive")?.withRenderingMode(.alwaysTemplate),
+            selectedImage: UIImage(named: "img-sh-home-active")?.withRenderingMode(.alwaysTemplate)
         )
         
         let notificationViewController = NotificationViewController()
         notificationViewController.tabBarItem = UITabBarItem(
             title: "Notification",
-            image: UIImage(named: "img-sh-bell-inactive"),
-            selectedImage: UIImage(named: "img-sh-bell-active")
+            image: UIImage(named: "img-sh-bell-inactive")?.withRenderingMode(.alwaysTemplate),
+            selectedImage: UIImage(named: "img-sh-bell-active")?.withRenderingMode(.alwaysTemplate)
         )
         
         let sellingViewController = SellingViewController()
         sellingViewController.tabBarItem = UITabBarItem(
             title: "Jual",
-            image: UIImage(named: "img-sh-plus-circle"),
-            selectedImage: UIImage(named: "img-sh-plus-circle")
+            image: UIImage(named: "img-sh-plus-circle")?.withRenderingMode(.alwaysTemplate),
+            selectedImage: UIImage(named: "img-sh-plus-circle")?.withRenderingMode(.alwaysTemplate)
         )
-        
-        let sellingListViewController = SellingListViewController()
+                
+        let sellingListViewController = SellingListPageViewController()
         sellingListViewController.tabBarItem = UITabBarItem(
             title: "Daftar Jual",
-            image: UIImage(named: "img-sh-list-inactive"),
-            selectedImage: UIImage(named: "img-sh-list-active")
+            image: UIImage(named: "img-sh-list-inactive")?.withRenderingMode(.alwaysTemplate),
+            selectedImage: UIImage(named: "img-sh-list-active")?.withRenderingMode(.alwaysTemplate)
         )
         
         let accountViewController = AccountTableViewController()
         accountViewController.tabBarItem = UITabBarItem(
             title: "Akun",
-            image: UIImage(named: "img-sh-user-inactive"),
-            selectedImage: UIImage(named: "img-sh-user-active")
+            image: UIImage(named: "img-sh-user-inactive")?.withRenderingMode(.alwaysTemplate),
+            selectedImage: UIImage(named: "img-sh-user-active")?.withRenderingMode(.alwaysTemplate)
         )
         
         let viewControllers: [UINavigationController] = [
