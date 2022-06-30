@@ -6,4 +6,5 @@ target 'SecondHand' do
   # Pods for SecondHand
   pod 'Alamofire'
   pod 'Kingfisher'
+  pod 'iOSDropDown'
 end
