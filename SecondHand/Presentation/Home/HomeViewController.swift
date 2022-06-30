@@ -22,6 +22,7 @@ final class HomeViewController: UITableViewController {
         super.viewDidLoad()
         setupGestureRecognizers()
         setupSearchTableView()
+        loadProducts()
         tableView.register(HomeHeaderCell.self, forCellReuseIdentifier: "\(HomeHeaderCell.self)")
         tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
         tableView.backgroundColor = UIColor(rgb: 0xFFE9C9)
@@ -116,6 +117,11 @@ final class HomeViewController: UITableViewController {
         tapRecognizer.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapRecognizer)
         tableView.keyboardDismissMode = .onDrag
+    }
+    
+    private func loadProducts() {
+        let api = SecondHandAPI()
+//        api.ge
     }
     
     @objc private func hideKeyboard() {

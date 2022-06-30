@@ -17,7 +17,7 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
     var gradientLayer = CAGradientLayer()
     var collectionLabel = UILabel()
     var collectionView: UICollectionView?
-    var flowLayout = UICollectionViewFlowLayout()
+    var flowLayout = CategorySelectorFlowLayout()
     var searchImageView: UIImageView = {
         let searchImage = UIImage(systemName: "magnifyingglass")
         let searchImageView = UIImageView(image: searchImage)
@@ -191,7 +191,7 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         ) as? CategorySelectorCollectionCell else {
             return UICollectionViewCell()
         }
-        self.flowLayout.itemSize = CGSize(width: cell.frame.width, height: 50)
+//        self.flowLayout.itemSize = CGSize(width: cell.frame.width, height: 50)
         cell.onCellTap = {
             if cell.isCellSelected {
                 cell.categoryView.backgroundColor = UIColor(rgb: 0x7126B5)
@@ -210,10 +210,13 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let cellWidth: CGFloat = 120
-            let cellHeight: CGFloat = 44
-            let size = CGSize(width: cellWidth, height: cellHeight)
-            return size
+            guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else {
+                return CGSize(width: 120, height: 44)
+            }
+//            let cellWidth: CGFloat = 120
+//            let cellHeight: CGFloat = 44
+//            let size = CGSize(width: cellWidth, height: cellHeight)
+            return CGSize(width: cell.frame.width, height: cell.frame.height)
     }
     
     func collectionView(

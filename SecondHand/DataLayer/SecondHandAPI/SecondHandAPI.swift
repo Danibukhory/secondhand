@@ -35,4 +35,29 @@ struct SecondHandAPI {
             }
         }
     }
+    
+    func getSellerItemDetail(
+        itemId: String,
+        _ completionHandler: @escaping (SHSellerProductResponse?, AFError?) -> Void
+    ) {
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        AF.request(
+            baseUrl + "buyer/product/\(itemId)",
+            method: .get,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable(of: SHSellerProductResponse.self) { (response) in
+            switch response.result {
+            case let .success(data):
+                completionHandler(data, nil)
+            case let .failure(error):
+                completionHandler(nil, error)
+                print(String(describing: error))
+            }
+        }
+    }
 }
