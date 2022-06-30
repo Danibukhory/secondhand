@@ -62,7 +62,7 @@ extension HomeProductCell: UICollectionViewDataSource, UICollectionViewDelegate,
         ) as? HomeProductCollectionCell else {
             return UICollectionViewCell()
         }
-        cell.fill(with: products[item])
+//        cell.fill(with: products[item])
         return cell
     }
     
