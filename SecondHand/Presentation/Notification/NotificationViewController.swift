@@ -37,7 +37,9 @@ final class NotificationViewController: UITableViewController {
         ) as? NotificationCell else {
             return UITableViewCell()
         }
-        cell.fill(with: notification)
+        DispatchQueue.main.async {
+            cell.fill(with: notification)
+        }
         return cell
     }
     

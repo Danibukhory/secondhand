@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class HomeProductCollectionCell: UICollectionViewCell {
     
@@ -32,8 +33,18 @@ final class HomeProductCollectionCell: UICollectionViewCell {
     }
     
     private func defineLayout() {
-        contentView.addSubviews(productImageView, productNameLabel, productCategoryLabel, productPriceLabel)
-        contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(productImageView, productNameLabel, productCategoryLabel, productPriceLabel)
+        contentView.addSubviews(
+            productImageView,
+            productNameLabel,
+            productCategoryLabel,
+            productPriceLabel
+        )
+        contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(
+            productImageView,
+            productNameLabel,
+            productCategoryLabel,
+            productPriceLabel
+        )
         contentView.layer.cornerRadius = 8
         contentView.clipsToBounds = true
         contentView.backgroundColor = .systemBackground
@@ -48,12 +59,6 @@ final class HomeProductCollectionCell: UICollectionViewCell {
         productImageView.contentMode = .scaleAspectFill
         productImageView.clipsToBounds = true
         productImageView.layer.cornerRadius = 4
-        
-        productNameLabel.setTitle(text: "Name Placeholder", size: 14, weight: .regular)
-        
-        productCategoryLabel.setTitle(text: "Category Placeholder", size: 10, weight: .regular, color: .secondaryLabel)
-        
-        productPriceLabel.setTitle(text: "Rp 199.000", size: 14, weight: .regular)
         
         NSLayoutConstraint.activate([
             productImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -82,6 +87,30 @@ final class HomeProductCollectionCell: UICollectionViewCell {
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 206),
             contentView.widthAnchor.constraint(greaterThanOrEqualToConstant: 156)
         ])
+    }
+    
+    func fill(with data: SHBuyerProductResponse) {
+        if let url = URL(string: data.imageURL) {
+            productImageView.kf.setImage(with: url)
+        }
+        productNameLabel.setTitle(
+            text: data.name,
+            size: 14,
+            weight: .regular,
+            color: .black
+        )
+        productCategoryLabel.setTitle(
+            text: data.categories[0].name,
+            size: 10,
+            weight: .regular,
+            color: .secondaryLabel
+        )
+        productPriceLabel.setTitle(
+            text: data.basePrice.convertToCurrency(),
+            size: 14,
+            weight: .regular,
+            color: .black
+        )
     }
 }
 

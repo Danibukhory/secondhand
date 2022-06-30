@@ -12,6 +12,7 @@ final class HomeProductCell: UITableViewCell {
     var collectionView: UICollectionView?
     var flowLayout = UICollectionViewFlowLayout()
     private let screenRect: CGRect = UIScreen.main.bounds
+    var products: [SHBuyerProductResponse] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -61,12 +62,7 @@ extension HomeProductCell: UICollectionViewDataSource, UICollectionViewDelegate,
         ) as? HomeProductCollectionCell else {
             return UICollectionViewCell()
         }
-        switch item % 2 {
-        case 0:
-            cell.productImageView.image = UIImage(named: "img-home-product-placeholder-1")
-        default:
-            cell.productImageView.image = UIImage(named: "img-home-product-placeholder-2")
-        }
+        cell.fill(with: products[item])
         return cell
     }
     

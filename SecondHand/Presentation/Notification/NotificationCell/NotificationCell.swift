@@ -37,10 +37,11 @@ final class NotificationCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        notificationImageView.image = nil
-        notificationCategoryLabel.attributedText = nil
-        notificationContentLabel.attributedText = nil
-        notificationTimeLabel.attributedText = nil
+        super.prepareForReuse()
+//        notificationImageView.image = nil
+//        notificationCategoryLabel.attributedText = nil
+//        notificationContentLabel.attributedText = nil
+//        notificationTimeLabel.attributedText = nil
     }
     
     private func defineLayout() {
@@ -102,19 +103,55 @@ final class NotificationCell: UITableViewCell {
     }
     
     func fill(with data: SHNotificationResponse) {
-        if let url = URL(string: data.imageURL) {
+        if let url = URL(string: data.imageURL ?? "") {
             notificationImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
             notificationImageView.kf.indicatorType = .activity
         }
         switch data.status {
         case "bid":
-            notificationCategoryLabel.setTitle(text: "Penawaran produk", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+            notificationCategoryLabel.setTitle(
+                text: "Penawaran produk",
+                size: 10,
+                weight: .regular,
+                color: UIColor(rgb: 0x8A8A8A)
+            )
         default:
-            notificationCategoryLabel.setTitle(text: "not available", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+            notificationCategoryLabel.setTitle(
+                text: "not available",
+                size: 10,
+                weight: .regular,
+                color: UIColor(rgb: 0x8A8A8A)
+            )
         }
         
-        notificationContentLabel.setTitle(text: "\(data.productID)", size: 14, weight: .regular, color: UIColor.black)
-        notificationTimeLabel.setTitle(text: "16 Jun, 09:41", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        let api = SecondHandAPI()
+        api.getSellerItemDetail(itemId: "\(data.productID)") { [weak self] result, error in
+            guard let _self = self,
+                  let productName = result?.name
+            else { return }
+            _self.notificationContentLabel.setTitle(
+                text: productName + "\n\(data.bidPrice.convertToCurrency())",
+                size: 14,
+                weight: .regular,
+                color: .black
+            )
+            
+        }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        let date = dateFormatter.date(from: String(data.transactionDate.prefix(19)))
+        
+        let dateStringFormatter = DateFormatter()
+        dateStringFormatter.dateFormat = "dd MMM, HH:mm"
+        let dateString = dateStringFormatter.string(from: date ?? Date())
+        notificationTimeLabel.setTitle(
+            text: dateString,
+            size: 10,
+            weight: .regular,
+            color: UIColor(rgb: 0x8A8A8A)
+        )
     }
 }
 

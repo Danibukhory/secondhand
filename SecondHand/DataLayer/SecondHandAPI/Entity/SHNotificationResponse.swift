@@ -14,7 +14,7 @@ struct SHNotificationResponse: Codable {
     let sellerName: String
     let buyerName: String
     let receiverID: Int
-    let imageURL: String
+    let imageURL: String?
     let read: Bool
     let createdAt, updatedAt: String
 
