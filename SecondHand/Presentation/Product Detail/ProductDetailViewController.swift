@@ -108,10 +108,10 @@ final class KategoriTextField: SHCustomTextFieldForm {
 
     private lazy var dropDown: SHDropDownTextField = {
         let  dropDown = SHDropDownTextField()
-
         dropDown.optionArray = ["Option 1", "Option 2", "Option 3"]
         dropDown.setPlaceholder(placeholder: "Pilih Kategori")
         dropDown.translatesAutoresizingMaskIntoConstraints = false
+        
         return dropDown
     }()
     
@@ -149,7 +149,6 @@ final class DeskripsiTextField: SHCustomTextFieldForm {
     lazy var deskripsiTextFieldView: SHLongRoundedTextfield = {
         let textField = SHLongRoundedTextfield()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "Contoh: Jalan Ikan Hiu 33"
         return textField
     }()
     
@@ -288,7 +287,6 @@ final class FotoProdukViewCell : SHCustomTextFieldForm, PHPickerViewControllerDe
         ])
         for photoFromLibrary in photosFromLibrary {
             photoFromLibrary.translatesAutoresizingMaskIntoConstraints = false
-            print("lewat juga")
             photoPlace.addSubviews(photoFromLibrary)
             
             NSLayoutConstraint.activate([

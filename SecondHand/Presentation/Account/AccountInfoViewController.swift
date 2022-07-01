@@ -325,7 +325,6 @@ class AlamatTextField: UITableViewCell {
     lazy var customTextField: SHLongRoundedTextfield = {
         let textField = SHLongRoundedTextfield()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.setPlaceholder(placeholder: placeHolderCustom)
         return textField
     }()
     
