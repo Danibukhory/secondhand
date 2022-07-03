@@ -84,6 +84,8 @@ class AccountTableViewController: UITableViewController {
                 let viewController = UINavigationController(rootViewController: SignInViewController())
                 viewController.modalPresentationStyle = .fullScreen
                 navigationController?.present(viewController, animated: true)
+                
+                tabBarController?.selectedIndex = 0
             }
         }
     }
