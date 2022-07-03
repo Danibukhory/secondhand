@@ -113,9 +113,14 @@ final class SignInViewController: UIViewController {
                     
                     if _self.signInData.id != 0 {
                         UserDefaults.standard.set(true, forKey: "isLogin")
-                        self?.dismiss(animated: true)
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            _self.dismiss(animated: true)
+                        }
                     }
                 }
+                
+                // still need improvement about alert and flow!
                 
                 setupAlert(title: "Success", message: "Success Sign In", style: .alert)
                 
