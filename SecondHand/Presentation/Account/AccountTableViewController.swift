@@ -9,8 +9,7 @@ import UIKit
 
 class AccountTableViewController: UITableViewController {
        
-    
-    
+
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +86,6 @@ class AccountTableViewController: UITableViewController {
                 navigationController?.present(viewController, animated: true)
             }
         }
-        
     }
 }
     final class ProfileViewCell: UITableViewCell {

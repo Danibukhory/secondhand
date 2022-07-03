@@ -101,8 +101,45 @@ struct SecondHandAPI {
         }
     }
     
-    func signUp() {
+    func signUp(
+        username: String,
+        email: String,
+        password: String,
+        completion: @escaping (SignUpResponse?, AFError?) -> Void
+    ) {
         
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        
+        let parameters: [String: String] = [
+            "full_name": username,
+            "email" : email,
+            "password" : password,
+            "phone_number":"",
+            "address":"",
+            "image":"",
+            "city":"",
+        ]
+ 
+        AF.request(
+            baseUrl + "auth/register",
+            method: .post,
+            parameters: parameters,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable(of: SignUpResponse.self) { (response) in
+            debugPrint(response)
+            switch response.result {
+            case let .success(data):
+                completion(data,nil)
+            case let .failure(error):
+                completion(nil,error)
+                debugPrint(error.localizedDescription)
+            }
+        }
     }
     
 }
