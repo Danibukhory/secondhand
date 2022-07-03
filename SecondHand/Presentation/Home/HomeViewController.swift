@@ -18,6 +18,8 @@ final class HomeViewController: UITableViewController {
     
     private typealias rowType = HomeViewCellRowType
     
+    private var signInData: SignInResponse = SignInResponse()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGestureRecognizers()
@@ -35,6 +37,7 @@ final class HomeViewController: UITableViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
+        handleAuth()
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -117,6 +120,15 @@ final class HomeViewController: UITableViewController {
         tapRecognizer.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapRecognizer)
         tableView.keyboardDismissMode = .onDrag
+    }
+    
+    private func handleAuth() {
+        let isLogin = UserDefaults.standard.bool(forKey: "isLogin")
+        if !isLogin {
+            let viewController = UINavigationController(rootViewController: SignInViewController())
+            viewController.modalPresentationStyle = .fullScreen
+            navigationController?.present(viewController, animated: true)
+        }
     }
     
     private func loadProducts() {

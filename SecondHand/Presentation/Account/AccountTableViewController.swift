@@ -72,6 +72,23 @@ class AccountTableViewController: UITableViewController {
             }
         
         }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let row = indexPath.row
+        
+        if row == 3 {
+            UserDefaults.standard.set(false, forKey: "isLogin")
+            let isLogin = UserDefaults.standard.bool(forKey: "isLogin")
+            if !isLogin {
+                let viewController = UINavigationController(rootViewController: SignInViewController())
+                viewController.modalPresentationStyle = .fullScreen
+                navigationController?.present(viewController, animated: true)
+            }
+        }
+        
+    }
 }
     final class ProfileViewCell: UITableViewCell {
         

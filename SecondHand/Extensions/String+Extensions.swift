@@ -9,7 +9,7 @@ import Foundation
 
 extension String {
     func isValidPassword(_ text: String) -> Bool {
-        if text.count >= 8 {
+        if text.count >= 5 {
             return true
         } else {
             return false
