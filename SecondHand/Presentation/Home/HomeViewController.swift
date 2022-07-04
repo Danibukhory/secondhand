@@ -15,6 +15,7 @@ enum HomeViewCellRowType: Int {
 final class HomeViewController: UITableViewController {
     
     var searchTableView = UITableView()
+    var products: [SHSellerProductResponse] = []
     
     private typealias rowType = HomeViewCellRowType
     
@@ -25,6 +26,7 @@ final class HomeViewController: UITableViewController {
         loadProducts()
         tableView.register(HomeHeaderCell.self, forCellReuseIdentifier: "\(HomeHeaderCell.self)")
         tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "loadingCell")
         tableView.backgroundColor = UIColor(rgb: 0xFFE9C9)
         tableView.separatorStyle = .none
         
@@ -40,9 +42,9 @@ final class HomeViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch tableView {
         case searchTableView:
-            return 20
+            return 40
         default:
-            return 10
+            return 2
         }
     }
     
@@ -80,7 +82,12 @@ final class HomeViewController: UITableViewController {
                     withIdentifier: "\(HomeProductCell.self)",
                     for: indexPath
                 ) as? HomeProductCell else {
-                    return UITableViewCell()
+                    let loadingCell = tableView.dequeueReusableCell(withIdentifier: "loadingCell", for: indexPath)
+                    loadingCell.contentView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+                    return loadingCell
+                }
+                cell.onProductLoad = {
+                    self.tableView.reloadData()
                 }
                 return cell
             default:
@@ -121,7 +128,11 @@ final class HomeViewController: UITableViewController {
     
     private func loadProducts() {
         let api = SecondHandAPI()
-//        api.ge
+        api.getSellerProducts { [weak self] result, error in
+            guard let _self = self else { return }
+            _self.products = result ?? []
+            _self.tableView.reloadData()
+        }
     }
     
     @objc private func hideKeyboard() {

@@ -10,6 +10,7 @@ import UIKit
 final class NotificationViewController: UITableViewController {
     
     var notifications: [SHNotificationResponse] = []
+//    var products: [SHBuyerProductResponse] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,8 +38,9 @@ final class NotificationViewController: UITableViewController {
         ) as? NotificationCell else {
             return UITableViewCell()
         }
-        DispatchQueue.main.async {
-            cell.fill(with: notification)
+        cell.fill(with: notification)
+        if notification.read ?? false {
+            cell.isRead = true
         }
         return cell
     }
@@ -67,11 +69,11 @@ final class NotificationViewController: UITableViewController {
                 style: .destructive
             ) { [weak self] _ in
                 guard let _self = self else { return }
+                _self.notifications.remove(at: row)
                 _self.tableView.deleteRows(
                     at: [indexPath],
                     with: .top
                 )
-                _self.notifications.remove(at: row)
                 DispatchQueue.main.asyncAfter(
                     deadline: .now() + 1
                 ) {
@@ -103,6 +105,7 @@ final class NotificationViewController: UITableViewController {
         guard let cell = tableView.cellForRow(at: indexPath) as? NotificationCell else {
             return nil
         }
+        let row = indexPath.row
         let item = UIContextualAction(
             style: .normal,
             title: "Mark As Read"
@@ -117,6 +120,9 @@ final class NotificationViewController: UITableViewController {
                 style: .default
             ) { _ in
                 cell.isRead = true
+                let notificationId = self.notifications[row].id
+                let api = SecondHandAPI()
+                api.setNotificationAsRead(notificationId: "\(notificationId)")
                 completion(true)
             }
             
@@ -141,10 +147,29 @@ final class NotificationViewController: UITableViewController {
         let api = SecondHandAPI()
         api.getNotifications { [weak self] result, error in
             guard let _self = self else { return }
-            _self.notifications = result ?? []
+            _self.notifications = result?.sorted(by: {$0.transactionDate > $1.transactionDate}) ?? []
+//            _self.loadProducts()
             _self.tableView.reloadData()
         }
     }
     
-
+//    private func loadProducts() {
+//        let group = DispatchGroup()
+//        defer {
+//            group.notify(queue: .main) {
+//                self.tableView.reloadData()
+//            }
+//        }
+//        let api = SecondHandAPI()
+//        for notification in notifications {
+//            group.enter()
+//            api.getBuyerProductDetail(itemId: "\(notification.productID)") { [weak self] result, error in
+//                guard let _self = self,
+//                      let _result = result
+//                else { return }
+//                _self.products.append(_result)
+//                group.leave()
+//            }
+//        }
+//    }
 }

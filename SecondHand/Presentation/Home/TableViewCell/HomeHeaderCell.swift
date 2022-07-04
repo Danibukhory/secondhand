@@ -16,8 +16,13 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
     var promoImageView = UIImageView()
     var gradientLayer = CAGradientLayer()
     var collectionLabel = UILabel()
-    var collectionView: UICollectionView?
-    var flowLayout = CategorySelectorFlowLayout()
+    var collectionView: UICollectionView!
+    var flowLayout: UICollectionViewFlowLayout = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        flowLayout.minimumInteritemSpacing = 16
+        return flowLayout
+    }()
     var searchImageView: UIImageView = {
         let searchImage = UIImage(systemName: "magnifyingglass")
         let searchImageView = UIImageView(image: searchImage)
@@ -89,15 +94,15 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         collectionLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionLabel.setTitle(text: "Telusuri Kategori", size: 14, weight: .medium)
 
-        flowLayout.scrollDirection = .horizontal
-        flowLayout.minimumInteritemSpacing = 16
+        
         collectionView = UICollectionView(layout: flowLayout)
-        collectionView?.translatesAutoresizingMaskIntoConstraints = false
-        collectionView?.showsHorizontalScrollIndicator = false
-        collectionView?.dataSource = self
-        collectionView?.delegate = self
-        collectionView?.backgroundColor = .clear
-        collectionView?.register(CategorySelectorCollectionCell.self, forCellWithReuseIdentifier: "\(CategorySelectorCollectionCell.self)")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.allowsMultipleSelection = false
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        collectionView.register(CategorySelectorCollectionCell.self, forCellWithReuseIdentifier: "\(CategorySelectorCollectionCell.self)")
         contentView.addSubview(collectionView!)
         
         NSLayoutConstraint.activate([
@@ -120,13 +125,13 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
             collectionLabel.topAnchor.constraint(equalTo: promoImageView.bottomAnchor, constant: 20),
             collectionLabel.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             
-            collectionView!.centerXAnchor.constraint(equalTo: margin.centerXAnchor),
-            collectionView!.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-            collectionView!.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            collectionView!.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            collectionView!.topAnchor.constraint(equalTo: collectionLabel.bottomAnchor, constant: 10),
-            collectionView!.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
-            collectionView!.heightAnchor.constraint(equalToConstant: 40),
+            collectionView.centerXAnchor.constraint(equalTo: margin.centerXAnchor),
+            collectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: collectionLabel.bottomAnchor, constant: 10),
+            collectionView.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 40),
             
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 10)
         ])
@@ -157,15 +162,18 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategorySelectorCollectionCell.self)", for: indexPath) as? CategorySelectorCollectionCell else { return }
-        cell.categoryView.backgroundColor = UIColor(rgb: 0x7126B5)
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else { return }
+        cell.contentView.backgroundColor = UIColor(rgb: 0x7126B5)
         cell.categoryLabel.textColor = .systemBackground
         cell.searchImageView.tintColor = .systemBackground
     }
     
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(CategorySelectorCollectionCell.self)", for: indexPath) as? CategorySelectorCollectionCell else { return }
-        cell.categoryView.backgroundColor = UIColor(rgb: 0xE2D4f0)
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didDeselectItemAt indexPath: IndexPath
+    ) {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else { return }
+        cell.contentView.backgroundColor = UIColor(rgb: 0xE2D4f0)
         cell.categoryLabel.textColor = .label
         cell.searchImageView.tintColor = .label
     }
@@ -191,18 +199,6 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         ) as? CategorySelectorCollectionCell else {
             return UICollectionViewCell()
         }
-//        self.flowLayout.itemSize = CGSize(width: cell.frame.width, height: 50)
-        cell.onCellTap = {
-            if cell.isCellSelected {
-                cell.categoryView.backgroundColor = UIColor(rgb: 0x7126B5)
-                cell.searchImageView.tintColor = .systemBackground
-                cell.categoryLabel.textColor = .systemBackground
-            } else {
-                cell.categoryView.backgroundColor = UIColor(rgb: 0xE2D4F0)
-                cell.searchImageView.tintColor = .label
-                cell.categoryLabel.textColor = .label
-            }
-        }
         return cell
     }
     
@@ -213,10 +209,10 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
             guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else {
                 return CGSize(width: 120, height: 44)
             }
-//            let cellWidth: CGFloat = 120
-//            let cellHeight: CGFloat = 44
-//            let size = CGSize(width: cellWidth, height: cellHeight)
-            return CGSize(width: cell.frame.width, height: cell.frame.height)
+            return CGSize(
+                width: cell.searchImageView.frame.width + cell.categoryLabel.frame.width + 10,
+                height: cell.frame.height
+            )
     }
     
     func collectionView(

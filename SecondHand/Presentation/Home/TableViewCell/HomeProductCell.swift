@@ -9,13 +9,27 @@ import UIKit
 
 final class HomeProductCell: UITableViewCell {
     
-    var collectionView: UICollectionView?
-    var flowLayout = UICollectionViewFlowLayout()
+    typealias OnProductLoad = () -> Void
+    var onProductLoad: OnProductLoad?
+    
+    var collectionView: UICollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.minimumLineSpacing = 16
+        flowLayout.minimumInteritemSpacing = 16
+        flowLayout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: -16, right: 16)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: flowLayout)
+        collectionView.register(HomeProductCollectionCell.self, forCellWithReuseIdentifier: "\(HomeProductCollectionCell.self)")
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.isScrollEnabled = false
+        return collectionView
+    }()
+    
     private let screenRect: CGRect = UIScreen.main.bounds
     var products: [SHBuyerProductResponse] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        loadProducts()
         defineLayout()
     }
     
@@ -24,33 +38,52 @@ final class HomeProductCell: UITableViewCell {
     }
     
     private func defineLayout() {
-        flowLayout.minimumLineSpacing = 16
-        flowLayout.minimumInteritemSpacing = 16
-        flowLayout.sectionInset = UIEdgeInsets(top: 16, left: 16, bottom: -16, right: 16)
-        collectionView = UICollectionView(layout: flowLayout)
-        collectionView?.register(HomeProductCollectionCell.self, forCellWithReuseIdentifier: "\(HomeProductCollectionCell.self)")
-        collectionView?.translatesAutoresizingMaskIntoConstraints = false
-        collectionView?.isScrollEnabled = false
-        collectionView?.dataSource = self
-        collectionView?.delegate = self
-        contentView.addSubview(collectionView!)
+        contentView.addSubview(collectionView)
+        collectionView.dataSource = self
+        collectionView.delegate = self
         
         NSLayoutConstraint.activate([
-            collectionView!.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            collectionView!.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            collectionView!.heightAnchor.constraint(equalTo: contentView.heightAnchor),
-            collectionView!.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            collectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
-            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 920),
+            contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
         ])
-        
+    }
+    
+    private func loadProducts() {
+        let api = SecondHandAPI()
+        let group = DispatchGroup()
+        defer {
+            group.notify(queue: .main) { [weak self] in
+                guard let _self = self else { return }
+                let numberOfItems = _self.products.count
+                if numberOfItems % 2 != 0 {
+                    let rows = (numberOfItems + 1) / 2
+                    _self.collectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: CGFloat((206 + 16) * rows) + 16).isActive = true
+                } else {
+                    let rows = numberOfItems / 2
+                    _self.collectionView.heightAnchor.constraint(greaterThanOrEqualToConstant: CGFloat((206 + 16) * rows) + 16).isActive = true
+                }
+                _self.collectionView.reloadData()
+                _self.onProductLoad?()
+            }
+        }
+        group.enter()
+        api.getBuyerProducts { [weak self] result, error in
+            guard let _self = self else { return }
+            _self.products = result ?? []
+            group.leave()
+        }
     }
 }
 
 extension HomeProductCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 8
+        return products.count
     }
     
     
@@ -62,18 +95,26 @@ extension HomeProductCell: UICollectionViewDataSource, UICollectionViewDelegate,
         ) as? HomeProductCollectionCell else {
             return UICollectionViewCell()
         }
-//        cell.fill(with: products[item])
+        cell.fill(with: products[item])
         return cell
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
         var width: CGFloat = 0
         let height: CGFloat = 206
-        
         let screenWidth: CGFloat = screenRect.width
         width = (screenWidth - 48) / 2
         
         return CGSize(width: width, height: height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let item = indexPath.item
+        print("pressed item \(item)")
     }
     
     
