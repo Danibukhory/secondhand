@@ -27,6 +27,8 @@ final class AccountInfoViewController: UITableViewController {
         tableView.separatorStyle = .none
     }
     
+
+    
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 6

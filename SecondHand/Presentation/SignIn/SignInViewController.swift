@@ -9,6 +9,10 @@ import UIKit
 
 final class SignInViewController: UIViewController {
     
+    let signManager = SecondHandAPI.shared
+    
+    private var signInData: SignInResponse = SignInResponse()
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -29,6 +33,7 @@ final class SignInViewController: UIViewController {
         let textField = SHRoundedTextfield()
         textField.setPlaceholder(placeholder: "Email")
         textField.addTarget(self, action: #selector(handleEmailTextChange), for: .editingChanged)
+        textField.autocapitalizationType = .none
         return textField
     }()
     
@@ -44,6 +49,7 @@ final class SignInViewController: UIViewController {
         let textField = SHRoundedTextfield()
         textField.setPlaceholder(placeholder: "Password")
         textField.isSecureTextEntry = true
+        textField.autocapitalizationType = .none
         textField.setForPasswordTextfield()
         textField.addTarget(self, action: #selector(handlePasswordTextChange), for: .editingChanged)
         return textField
@@ -51,7 +57,8 @@ final class SignInViewController: UIViewController {
         
     private lazy var signInButton: SHButton = {
         let button = SHButton(frame: CGRect(), title: "Masuk", type: .filled, size: .regular)
-        button.addTarget(self, action: #selector(moveToMainView), for: .touchUpInside)
+//        button.addTarget(self, action: #selector(moveToMainView), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleSignInButton), for: .touchUpInside)
         return button
     }()
     
@@ -97,8 +104,26 @@ final class SignInViewController: UIViewController {
 
         default:
             if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
+                
+                signManager.signIn(email: emailText, password: passwordText) { [weak self] result, error in
+                    guard let _self = self else {
+                        return
+                    }
+                    _self.signInData.id = result?.id
+                    
+                    if _self.signInData.id != 0 {
+                        UserDefaults.standard.set(true, forKey: "isLogin")
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            _self.dismiss(animated: true)
+                        }
+                    }
+                }
+                
+                // still need improvement about alert and flow!
+                
                 setupAlert(title: "Success", message: "Success Sign In", style: .alert)
-
+                
             } else {
                 setupAlert(title: "Error", message: "Password is not valid", style: .alert)
             }
@@ -106,6 +131,12 @@ final class SignInViewController: UIViewController {
     }
     
     @objc func moveToMainView() {
+        let viewController = MainTabBarController()
+        navigationController?.pushViewController(viewController, animated: true)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    private func goToMainView() {
         let viewController = MainTabBarController()
         navigationController?.pushViewController(viewController, animated: true)
         navigationController?.setNavigationBarHidden(true, animated: false)
@@ -142,6 +173,8 @@ final class SignInViewController: UIViewController {
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)
     }
+    
+    
     
     
     private func configure() {

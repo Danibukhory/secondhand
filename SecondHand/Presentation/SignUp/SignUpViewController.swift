@@ -9,6 +9,8 @@ import UIKit
 
 final class SignUpViewController: UIViewController {
     
+    let apiManager = SecondHandAPI.shared
+    
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -27,6 +29,7 @@ final class SignUpViewController: UIViewController {
     
     private lazy var usernameTextField: SHRoundedTextfield = {
         let textField = SHRoundedTextfield()
+        textField.autocapitalizationType = .none
         textField.setPlaceholder(placeholder: "Username")
         return textField
     }()
@@ -42,6 +45,7 @@ final class SignUpViewController: UIViewController {
     private lazy var emailTextField: SHRoundedTextfield = {
         let textField = SHRoundedTextfield()
         textField.setPlaceholder(placeholder: "Email")
+        textField.autocapitalizationType = .none
         textField.addTarget(self, action: #selector(handleEmailTextChange), for: .editingChanged)
         return textField
     }()
@@ -58,6 +62,7 @@ final class SignUpViewController: UIViewController {
         let textField = SHRoundedTextfield()
         textField.setPlaceholder(placeholder: "Password")
         textField.isSecureTextEntry = true
+        textField.autocapitalizationType = .none
         textField.setForPasswordTextfield()
         textField.addTarget(self, action: #selector(handlePasswordTextChange), for: .editingChanged)
         return textField
@@ -121,9 +126,20 @@ final class SignUpViewController: UIViewController {
         default:
             if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
                 setupAlert(title: "Success", message: "Success Registered Please Sign In!", style: .alert)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                    self.moveToSignInPage()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                    self.moveToSignInPage()
+//                }
+                
+                apiManager.signUp(username: usernameText, email: emailText, password: passwordText) { [weak self] response, error in
+                    guard let _self = self else {
+                        return
+                    }
+                    
+                    if response != nil {
+                        _self.moveToSignInPage()
+                    }
                 }
+                
             } else {
                 setupAlert(title: "Failed", message: "Email or Password is invalid", style: .alert)
             }

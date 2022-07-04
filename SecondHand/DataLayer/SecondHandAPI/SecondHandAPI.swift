@@ -9,8 +9,11 @@ import Foundation
 import Alamofire
 
 struct SecondHandAPI {
+    static let shared = SecondHandAPI()
     let baseUrl: String = "https://market-final-project.herokuapp.com/"
     let accessToken: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTY0ODczNzh9.NSe3O_3zwRw7YxDjn9vmsBDzahvEWLEDMZ8dx1LN_H4"
+    
+    
     
     func getNotifications(
         _ completionHandler: @escaping ([SHNotificationResponse]?, AFError?) -> Void
@@ -60,4 +63,83 @@ struct SecondHandAPI {
             }
         }
     }
+    
+    
+    func signIn(
+        email: String,
+        password: String,
+        completion: @escaping (SignInResponse?, AFError?) -> Void
+    )   {
+        
+  
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        
+        let parameters: [String: String] = [
+            "email" : email,
+            "password" : password
+        ]
+ 
+        AF.request(
+            baseUrl + "auth/login",
+            method: .post,
+            parameters: parameters,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable(of: SignInResponse.self) { (response) in
+//            debugPrint(response)
+            switch response.result {
+            case let .success(data):
+                completion(data,nil)
+            case let .failure(error):
+                completion(nil,error)
+                debugPrint(error.localizedDescription)
+            }
+        }
+    }
+    
+    func signUp(
+        username: String,
+        email: String,
+        password: String,
+        completion: @escaping (SignUpResponse?, AFError?) -> Void
+    ) {
+        
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        
+        let parameters: [String: String] = [
+            "full_name": username,
+            "email" : email,
+            "password" : password,
+            "phone_number":"",
+            "address":"",
+            "image":"",
+            "city":"",
+        ]
+ 
+        AF.request(
+            baseUrl + "auth/register",
+            method: .post,
+            parameters: parameters,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable(of: SignUpResponse.self) { (response) in
+            debugPrint(response)
+            switch response.result {
+            case let .success(data):
+                completion(data,nil)
+            case let .failure(error):
+                completion(nil,error)
+                debugPrint(error.localizedDescription)
+            }
+        }
+    }
+    
 }
