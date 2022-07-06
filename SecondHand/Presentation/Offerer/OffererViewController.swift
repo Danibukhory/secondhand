@@ -10,6 +10,8 @@ import UIKit
 final class OffererViewController: UITableViewController {
     
     var popupView: SHPopupView?
+    var user: SHUserResponse
+    var product: SHNotificationProductResponse
     
     enum OffererViewCellSectionType: Int {
         case offerer = 0
@@ -17,6 +19,16 @@ final class OffererViewController: UITableViewController {
     }
     
     private typealias sectionType = OffererViewCellSectionType
+    
+    init(user: SHUserResponse, product: SHNotificationProductResponse) {
+        self.user = user
+        self.product = product
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -84,7 +96,7 @@ final class OffererViewController: UITableViewController {
             ) as? OffererDetailCell else {
                 return UITableViewCell()
             }
-            cell.fill()
+            cell.fill(with: user)
             cell.selectionStyle = .none
             return cell
             
@@ -116,12 +128,13 @@ final class OffererViewController: UITableViewController {
                 }
             }
                 
-            cell.onAcceptButtonTap = {
+            cell.onAcceptButtonTap = { [weak self] in
+                guard let _self = self else { return }
                 let viewController = OfferAcceptedViewController()
                 let buyerCell = tableView.dequeueReusableCell(withIdentifier: "\(OffererDetailCell.self)") as! OffererDetailCell
                 let productNameText = cell.productNameLabel.attributedText
                 let productValueText = cell.offerValueLabel.attributedText
-                buyerCell.fill()
+                buyerCell.fill(with: _self.user)
                 viewController.buyerImageView.image = buyerCell.offererImageView.image
                 viewController.buyerNameLabel = buyerCell.offererNameLabel
                 viewController.buyerCityLabel = buyerCell.offererCityLabel
@@ -130,7 +143,7 @@ final class OffererViewController: UITableViewController {
                 viewController.productValueLabel.attributedText = productValueText
                 viewController.modalPresentationStyle = .overCurrentContext
                 viewController.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) + 30)
-                self.tabBarController?.navigationController?.present(viewController, animated: false, completion: {
+                _self.tabBarController?.navigationController?.present(viewController, animated: false, completion: {
                     cell.rejectButton.setActiveButtonTitle(string: "Status")
                     cell.acceptButton.setActiveButtonTitle(string: "Hubungi")
                 })

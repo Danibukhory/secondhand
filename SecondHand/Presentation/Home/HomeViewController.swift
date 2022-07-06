@@ -89,8 +89,9 @@ final class HomeViewController: UITableViewController {
                     loadingCell.contentView.heightAnchor.constraint(equalToConstant: 400).isActive = true
                     return loadingCell
                 }
-                cell.onProductLoad = {
-                    self.tableView.reloadData()
+                cell.onProductLoad = { [weak self] in
+                    guard let _self = self else { return }
+                    _self.tableView.reloadData()
                 }
                 return cell
             default:

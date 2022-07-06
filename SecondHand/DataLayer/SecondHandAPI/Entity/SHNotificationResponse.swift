@@ -8,18 +8,19 @@
 import Foundation
 
 struct SHNotificationResponse: Codable {
-    let id, productID: Int
+    let id, productID: Int?
     let productName, basePrice: String?
-    let bidPrice: Int
+    let bidPrice: Int?
     let imageURL: String?
-    let transactionDate: String
-    let status: OfferStatus?
-    let sellerName: String
-    let buyerName: String
-    let receiverID: Int
+    let transactionDate: String?
+    let status: String?
+    let sellerName: String?
+    let buyerName: String?
+    let receiverID: Int?
     let read: Bool?
-    let createdAt, updatedAt: String
-    let product: Product?
+    let createdAt, updatedAt: String?
+    let product: SHNotificationProductResponse?
+    let user: SHUserResponse?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -35,11 +36,12 @@ struct SHNotificationResponse: Codable {
         case receiverID = "receiver_id"
         case read, createdAt, updatedAt
         case product = "Product"
+        case user = "User"
     }
 }
 
 // MARK: - Product
-struct Product: Codable {
+struct SHNotificationProductResponse: Codable {
     let id: Int
     let name: String
     let description: String?
@@ -48,7 +50,7 @@ struct Product: Codable {
     let imageName: String?
     let location: String
     let userID: Int
-    let status: ProductAvailabilityStatus?
+    let status: String?
     let createdAt, updatedAt: String
 
     enum CodingKeys: String, CodingKey {
@@ -68,9 +70,9 @@ enum ProductAvailabilityStatus: String, Codable {
     case sold = "sold"
 }
 
-enum OfferStatus: String, Codable {
-    case accepted = "accepted"
-    case acceptedDeclined = "accepted/declined"
-    case bid = "bid"
-    case declined = "declined"
-}
+//enum OfferStatus: String, Codable {
+//    case accepted = "accepted"
+//    case acceptedDeclined = "accepted/declined"
+//    case bid = "bid"
+//    case declined = "declined"
+//}

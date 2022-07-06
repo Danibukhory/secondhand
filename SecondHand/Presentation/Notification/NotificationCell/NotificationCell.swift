@@ -133,30 +133,30 @@ final class NotificationCell: UITableViewCell {
                 notificationImageView.kf.indicatorType = .activity
             }
             switch data.status {
-            case .accepted:
+            case "accepted":
                 notificationCategoryLabel.setTitle(
                     text: "Penawaran diterima",
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
                 )
-            case .bid:
+            case "bid":
                 notificationCategoryLabel.setTitle(
                     text: "Penawaran produk",
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
                 )
-            case .declined:
+            case "declined":
                 notificationCategoryLabel.setTitle(
                     text: "Penawaran ditolak",
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
                 )
-            case .acceptedDeclined:
+            case "create":
                 notificationCategoryLabel.setTitle(
-                    text: "Penawaran belum direspon",
+                    text: "Produk berhasil diterbitkan",
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
@@ -165,8 +165,15 @@ final class NotificationCell: UITableViewCell {
                 layoutSubviews()
             }
             
+//            notificationCategoryLabel.setTitle(
+//                text: data.status ?? "Status not available",
+//                size: 10,
+//                weight: .regular,
+//                color: UIColor(rgb: 0x8A8A8A)
+//            )
+            
             notificationContentLabel.setTitle(
-                text: "\(data.productName ?? "product has no name")\n\(data.bidPrice.convertToCurrency())",
+                text: "\(data.productName ?? "product has no name")\n\(data.bidPrice?.convertToCurrency() ?? data.product?.description ?? "")",
                 size: 14,
                 weight: .regular,
                 color: .black
@@ -176,8 +183,10 @@ final class NotificationCell: UITableViewCell {
             dateFormatter.locale = Locale(identifier: "en_US_POSIX")
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
             dateFormatter.timeZone = .autoupdatingCurrent
-            let date = dateFormatter.date(from: String(data.transactionDate.prefix(19)))
-            
+            var date: Date?
+            if data.transactionDate != nil {
+                date = dateFormatter.date(from: String(data.transactionDate!.prefix(19)))
+            }
             let dateStringFormatter = DateFormatter()
             dateStringFormatter.dateFormat = "dd MMM, HH:mm"
             let dateString = dateStringFormatter.string(from: date ?? Date())

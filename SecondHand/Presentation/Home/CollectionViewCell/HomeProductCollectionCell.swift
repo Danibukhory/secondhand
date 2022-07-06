@@ -15,13 +15,13 @@ final class HomeProductCollectionCell: UICollectionViewCell {
     var productCategoryLabel = UILabel()
     var productPriceLabel = UILabel()
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        productImageView.image = nil
-        productNameLabel.attributedText = nil
-        productCategoryLabel.attributedText = nil
-        productPriceLabel.attributedText = nil
-    }
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        productImageView.image = nil
+//        productNameLabel.attributedText = nil
+//        productCategoryLabel.attributedText = nil
+//        productPriceLabel.attributedText = nil
+//    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

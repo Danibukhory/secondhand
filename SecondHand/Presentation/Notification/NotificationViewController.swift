@@ -10,7 +10,6 @@ import UIKit
 final class NotificationViewController: UITableViewController {
     
     var notifications: [SHNotificationResponse] = []
-//    var products: [SHBuyerProductResponse] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,7 +45,13 @@ final class NotificationViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewController = OffererViewController()
+        let row = indexPath.row
+        let notification = notifications[row]
+        guard let user = notification.user,
+              let product = notification.product
+        else { return }
+        let viewController = OffererViewController(user: user, product: product)
+        
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -122,7 +127,7 @@ final class NotificationViewController: UITableViewController {
                 cell.isRead = true
                 let notificationId = self.notifications[row].id
                 let api = SecondHandAPI()
-                api.setNotificationAsRead(notificationId: "\(notificationId)")
+                api.setNotificationAsRead(notificationId: "\(notificationId ?? 0)")
                 completion(true)
             }
             
@@ -147,29 +152,8 @@ final class NotificationViewController: UITableViewController {
         let api = SecondHandAPI()
         api.getNotifications { [weak self] result, error in
             guard let _self = self else { return }
-            _self.notifications = result?.sorted(by: {$0.transactionDate > $1.transactionDate}) ?? []
-//            _self.loadProducts()
+            _self.notifications = result?.sorted(by: {$0.transactionDate ?? "" < $1.transactionDate ?? ""}) ?? []
             _self.tableView.reloadData()
         }
     }
-    
-//    private func loadProducts() {
-//        let group = DispatchGroup()
-//        defer {
-//            group.notify(queue: .main) {
-//                self.tableView.reloadData()
-//            }
-//        }
-//        let api = SecondHandAPI()
-//        for notification in notifications {
-//            group.enter()
-//            api.getBuyerProductDetail(itemId: "\(notification.productID)") { [weak self] result, error in
-//                guard let _self = self,
-//                      let _result = result
-//                else { return }
-//                _self.products.append(_result)
-//                group.leave()
-//            }
-//        }
-//    }
 }
