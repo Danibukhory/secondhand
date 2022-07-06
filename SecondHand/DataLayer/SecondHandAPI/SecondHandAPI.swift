@@ -142,4 +142,83 @@ struct SecondHandAPI {
         }
     }
     
+    func postProductAsSeller(with name: String, description desc: String, basePrice price: Int, category catg: Int, location loc: String, productPicture image: UIImage) {
+           let requestUrl = "seller/product"
+           
+           guard let imageData = image.jpegData(compressionQuality: 0.3) else {return}
+               
+           let headers: HTTPHeaders = [
+               "access_token" : accessToken,
+               "Content-Type" : "multipart/form-data",
+           ]
+           
+           AF.upload(multipartFormData: { (multiPartFormData) in
+               multiPartFormData.append(name.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "name")
+               multiPartFormData.append(desc.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "description")
+               multiPartFormData.append("\(price)".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "base_price")
+               multiPartFormData.append("\(catg)".description.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "category_ids")
+               multiPartFormData.append(loc.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "location")
+               multiPartFormData.append(imageData, withName: "image", fileName: "\(name).jpg", mimeType: "image/jpeg")
+               
+           }, to: baseUrl + requestUrl, headers: headers)
+           .uploadProgress(queue: .main) { progress in
+               print("Upload Progress: \(progress.fractionCompleted)")
+           }
+           .responseJSON { data in
+               print(data.debugDescription)
+           }
+       }
+       
+       func putAccountDetail(with name: String, city cty: String, phoneNumber phone: Int, address add: String, accountPicture image: UIImage) {
+           let requestUrl = "auth/user"
+           
+           guard let imageData = image.jpegData(compressionQuality: 0.3) else {return}
+               
+           let headers: HTTPHeaders = [
+               "access_token" : accessToken,
+               "Content-Type" : "multipart/form-data",
+           ]
+           
+           AF.upload(multipartFormData: { (multiPartFormData) in
+               multiPartFormData.append(name.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "full_name")
+               multiPartFormData.append(add.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "address")
+               multiPartFormData.append("\(phone)".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "phone_number")
+               multiPartFormData.append(cty.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "city")
+               multiPartFormData.append("".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "email")
+               multiPartFormData.append("".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "password")
+               multiPartFormData.append(imageData, withName: "image", fileName: "\(name).jpg", mimeType: "image/jpeg")
+
+           }, to: baseUrl + requestUrl, method: .put, headers: headers)
+           .uploadProgress(queue: .main) { progress in
+               print("Upload Progress: \(progress.fractionCompleted)")
+           }
+           .responseJSON { data in
+               print(data.debugDescription)
+           }
+       }
+       
+       func postBuyerOrder(id itemID: Int, bidPrice price: Int) {
+           let requestUrl = "buyer/order"
+                       
+           let headers: HTTPHeaders = [
+               "access_token" : accessToken,
+               "Content-Type" : "application/json",
+           ]
+           
+           let parameter: [String: Any] = [
+               "product_id": itemID,
+               "bid_price":  price
+           ]
+       
+           AF.request(baseUrl + requestUrl, method: .post, parameters: parameter, headers: headers)
+               .responseDecodable { (response: AFDataResponse<Data>) in
+                   switch response.result{
+                   case .success(let value):
+                       print(value.debugDescription)
+                   case .failure(let value):
+                       print(value.errorDescription)
+                   }
+           }
+       }
+    
 }

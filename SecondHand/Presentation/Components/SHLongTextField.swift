@@ -1,47 +1,16 @@
-//
-//  SHTextfield.swift
-//  SecondHand
-//
-//  Created by Raden Dimas on 15/06/22.
-//
 
 import UIKit
 
-final class SHLongRoundedTextfield: UITextField {
-    var textPadding = UIEdgeInsets(
-        top: 0,
-        left: 20,
-        bottom: 0,
-        right: 20
-    )
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+final class SHLongRoundedTextfield: UITextView, UITextViewDelegate {
+
+    override init(frame: CGRect, textContainer: NSTextContainer?) {
+        super.init(frame: frame, textContainer: textContainer)
+        self.delegate = self
         configure()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
-        let rect = super.textRect(forBounds: bounds)
-        return rect.inset(by: textPadding)
-    }
-    
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        let rect = super.editingRect(forBounds: bounds)
-        return rect.inset(by: textPadding)
-    }
-    
-    override func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-        let rect = super.rightViewRect(forBounds: bounds)
-        return rect.offsetBy(dx: -24, dy: 0)
-    }
-
-    override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
-        let rect = super.clearButtonRect(forBounds: bounds)
-        return rect.offsetBy(dx: -24, dy: 0)
     }
     
     private func configure() {
@@ -52,15 +21,30 @@ final class SHLongRoundedTextfield: UITextField {
         layer.cornerRadius = 16
         clipsToBounds = true
         backgroundColor = .systemBackground
-        clearButtonMode = .whileEditing
+        
+        self.textColor = .lightGray
+        self.text = "Contoh: Jalan Ikan Hiu 33"
+        self.isScrollEnabled = false
+        self.textContainerInset = UIEdgeInsets(top: 12, left: 16, bottom: 16, right: 16)
+        
         
         NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: 80)
+            self.heightAnchor.constraint(greaterThanOrEqualToConstant: 80)
         ])
     }
     
-    public func setPlaceholder(placeholder: String) {
-        self.placeholder = placeholder
+    func textViewDidBeginEditing (_ textView: UITextView) {
+        if self.textColor == UIColor.lightGray && self.isFirstResponder {
+            self.text = nil
+            self.textColor = .black
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if self.text.isEmpty || self.text == "" {
+                self.textColor = .lightGray
+                self.text = "Contoh: Jalan Ikan Hiu 33"
+        }
     }
     
 }
