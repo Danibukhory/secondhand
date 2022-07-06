@@ -237,4 +237,28 @@ struct SecondHandAPI {
             }
         }
     }
+    
+    func getProductCategories(
+    _ completionHandler: @escaping ([SHCategoryResponse]?, AFError?) -> Void
+    ) {
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        AF.request(
+            baseUrl + "seller/category",
+            method: .get,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable(of: [SHCategoryResponse].self) { (response) in
+            switch response.result {
+            case let .success(data):
+                completionHandler(data, nil)
+            case let .failure(error):
+                completionHandler(nil, error)
+                print(String(describing: error))
+            }
+        }
+    }
 }

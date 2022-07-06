@@ -32,6 +32,15 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         searchImageView.widthAnchor.constraint(equalTo: searchImageView.heightAnchor).isActive = true
         return searchImageView
     }()
+    var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.startAnimating()
+        indicator.hidesWhenStopped = true
+        indicator.style = .medium
+        return indicator
+    }()
+    var selectorCategories: [SHCategoryResponse] = []
     
     typealias OnSearchBarTap = () -> Void
     var onSearchBarTap: OnSearchBarTap?
@@ -39,10 +48,14 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
     typealias OnDismissButtonTap = () -> Void
     var onDismissButtonTap: OnDismissButtonTap?
     
+    typealias OnCategorySelectorLoad = () -> Void
+    var onCategorySelectorLoad: OnCategorySelectorLoad?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         addGradient()
         defineLayout()
+        loadCategories()
     }
     
     required init?(coder: NSCoder) {
@@ -65,12 +78,7 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
     func defineLayout() {
         let margin = contentView.layoutMarginsGuide
         
-        contentView.addSubview(searchBar)
-        contentView.addSubview(promoLabel)
-        contentView.addSubview(discountLabel)
-        contentView.addSubview(discountValueLabel)
-        contentView.addSubview(promoImageView)
-        contentView.addSubview(collectionLabel)
+        contentView.addSubviews(searchBar, promoLabel, discountLabel, discountValueLabel, promoImageView, collectionLabel, loadingIndicator)
         
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.placeholder = "Cari di SecondHand"
@@ -94,7 +102,6 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         collectionLabel.translatesAutoresizingMaskIntoConstraints = false
         collectionLabel.setTitle(text: "Telusuri Kategori", size: 14, weight: .medium)
 
-        
         collectionView = UICollectionView(layout: flowLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -133,6 +140,9 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
             collectionView.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 40),
             
+            loadingIndicator.topAnchor.constraint(equalTo: collectionLabel.bottomAnchor, constant: 10),
+            loadingIndicator.centerXAnchor.constraint(equalTo: margin.centerXAnchor),
+            
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 10)
         ])
         
@@ -154,6 +164,16 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         onSearchBarTap?()
     }
     
+    func loadCategories() {
+        let api = SecondHandAPI()
+        api.getProductCategories { [weak self] result, error in
+            guard let _self = self else { return }
+            _self.selectorCategories = result ?? []
+            _self.collectionView.reloadData()
+            _self.onCategorySelectorLoad?()
+        }
+    }
+    
 }
 
 extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -164,8 +184,9 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
     ) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else { return }
         cell.contentView.backgroundColor = UIColor(rgb: 0x7126B5)
-        cell.categoryLabel.textColor = .systemBackground
-        cell.searchImageView.tintColor = .systemBackground
+        cell.categoryLabel.textColor = .white
+        cell.searchImageView.tintColor = .white
+        print(indexPath.item, indexPath.section)
     }
     
     func collectionView(
@@ -182,7 +203,7 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return 50
+        return selectorCategories.count
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -193,12 +214,15 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         _ collectionView: UICollectionView,
         cellForItemAt indexPath: IndexPath
     ) -> UICollectionViewCell {
+        let item = indexPath.item
+        let category = selectorCategories[item]
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "\(CategorySelectorCollectionCell.self)",
             for: indexPath
         ) as? CategorySelectorCollectionCell else {
             return UICollectionViewCell()
         }
+        cell.categoryLabel.setTitle(text: category.name ?? "", size: 14, weight: .regular, color: .black)
         return cell
     }
     
@@ -206,7 +230,7 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath) -> CGSize {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else {
+            guard let cell = collectionViewLayout.collectionView?.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else {
                 return CGSize(width: 120, height: 44)
             }
             return CGSize(

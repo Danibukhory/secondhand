@@ -34,7 +34,21 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
         return layoutAttributes
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        if self.isSelected {
+            contentView.backgroundColor = UIColor(rgb: 0x7126B5)
+            categoryLabel.textColor = .white
+            searchImageView.tintColor = .white
+        } else {
+            contentView.backgroundColor = UIColor(rgb: 0xE2D4F0)
+            categoryLabel.textColor = .black
+            searchImageView.tintColor = .black
+        }
+    }
+    
     private func defineLayout() {
+        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(searchImageView, categoryLabel)
         contentView.backgroundColor = UIColor(rgb: 0xE2D4F0)
         contentView.clipsToBounds = true
@@ -47,7 +61,6 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
         
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.numberOfLines = 1
-        categoryLabel.setTitle(text: "Text Test Text Test", size: 14, weight: .regular)
         
         NSLayoutConstraint.activate([
             contentView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10),

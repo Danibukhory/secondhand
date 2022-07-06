@@ -23,9 +23,18 @@ final class HomeProductCell: UITableViewCell {
         collectionView.isScrollEnabled = false
         return collectionView
     }()
+    var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.startAnimating()
+        indicator.hidesWhenStopped = true
+        indicator.style = .medium
+        return indicator
+    }()
     
     private let screenRect: CGRect = UIScreen.main.bounds
     var products: [SHBuyerProductResponse] = []
+    var displayedProducts: [SHBuyerProductResponse] = []
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -38,7 +47,7 @@ final class HomeProductCell: UITableViewCell {
     }
     
     private func defineLayout() {
-        contentView.addSubview(collectionView)
+        contentView.addSubviews(collectionView, loadingIndicator)
         collectionView.dataSource = self
         collectionView.delegate = self
         
@@ -48,6 +57,9 @@ final class HomeProductCell: UITableViewCell {
             collectionView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            
+            loadingIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 50)
         ])

@@ -78,6 +78,11 @@ final class HomeViewController: UITableViewController {
                     _self.searchTableView.fadeOut()
                     _self.tableView.isScrollEnabled = true
                 }
+                cell.onCategorySelectorLoad = { [weak self] in
+                    guard let _self = self else { return }
+                    _self.tableView.reloadData()
+                    cell.loadingIndicator.stopAnimating()
+                }
                 return cell
                 
             case rowType.product.rawValue:
@@ -92,6 +97,7 @@ final class HomeViewController: UITableViewController {
                 cell.onProductLoad = { [weak self] in
                     guard let _self = self else { return }
                     _self.tableView.reloadData()
+//                    cell.loadingIndicator.stopAnimating()
                 }
                 return cell
             default:
