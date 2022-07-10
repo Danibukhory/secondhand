@@ -15,13 +15,13 @@ final class HomeProductCollectionCell: UICollectionViewCell {
     var productCategoryLabel = UILabel()
     var productPriceLabel = UILabel()
     
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        productImageView.image = nil
-//        productNameLabel.attributedText = nil
-//        productCategoryLabel.attributedText = nil
-//        productPriceLabel.attributedText = nil
-//    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        productImageView.image = nil
+        productNameLabel.attributedText = nil
+        productCategoryLabel.attributedText = nil
+        productPriceLabel.attributedText = nil
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -92,7 +92,8 @@ final class HomeProductCollectionCell: UICollectionViewCell {
     func fill(with data: SHBuyerProductResponse) {
         let urlString = data.imageURL
         if let url = URL(string: urlString ?? "") {
-            productImageView.kf.setImage(with: url, options: [.cacheOriginalImage, .transition(.fade(0.2))])
+            productImageView.kf.indicatorType = .activity
+            productImageView.kf.setImage(with: url, options: [.transition(.fade(0.2)), .cacheOriginalImage])
         }
         productNameLabel.setTitle(
             text: data.name ?? "",

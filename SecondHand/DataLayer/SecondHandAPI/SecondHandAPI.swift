@@ -13,6 +13,13 @@ struct SecondHandAPI {
     let baseUrl: String = "https://market-final-project.herokuapp.com/"
     let accessToken: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTY5Mjg0OTJ9.I0quR9tEyYK9FKIxWJrurgvez8zLIJCRH6B-4Sti37o"
     
+    enum notificationProductStatus: String {
+        case accepted = "accepted"
+        case bid = "bid"
+        case declined = "declined"
+        case create = "create"
+    }
+    
     func getNotifications(
         _ completionHandler: @escaping ([SHNotificationResponse]?, AFError?) -> Void
     ) {
@@ -260,5 +267,26 @@ struct SecondHandAPI {
                 print(String(describing: error))
             }
         }
+    }
+    
+    func patchSellerProductStatus(
+        to status: notificationProductStatus,
+        productId : String
+    ) {
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        let parameters: Parameters = [
+            "status" : status.rawValue
+        ]
+        AF.request(
+            baseUrl + "seller/category/\(productId)",
+            method: .get,
+            parameters: parameters,
+            headers: headers
+        )
+        .validate()
+        .resume()
     }
 }

@@ -10,7 +10,8 @@ import UIKit
 final class NotificationViewController: UITableViewController {
     
     var notifications: [SHNotificationResponse] = []
-
+    let refControl = UIRefreshControl()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.backgroundColor = .white
@@ -18,7 +19,14 @@ final class NotificationViewController: UITableViewController {
         title = "Notifikasi"
         navigationController?.navigationBar.useSHLargeTitle()
         view.backgroundColor = .systemBackground
+        setupRefreshControl()
         loadNotification()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -47,10 +55,9 @@ final class NotificationViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
         let notification = notifications[row]
-        guard let user = notification.user,
-              let product = notification.product
-        else { return }
-        let viewController = OffererViewController(user: user, product: product)
+        guard let user = notification.user else { return }
+        let viewController = OffererViewController(user: user, notification: notification)
+        viewController.buyerName = notification.buyerName
         
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -152,8 +159,22 @@ final class NotificationViewController: UITableViewController {
         let api = SecondHandAPI()
         api.getNotifications { [weak self] result, error in
             guard let _self = self else { return }
-            _self.notifications = result?.sorted(by: {$0.transactionDate ?? "" < $1.transactionDate ?? ""}) ?? []
-            _self.tableView.reloadData()
+            DispatchQueue.main.async {
+                _self.notifications = result?.sorted(by: {$0.transactionDate ?? "" > $1.transactionDate ?? ""}) ?? []
+                _self.tableView.reloadData()
+            }
+        }
+        self.refControl.endRefreshing()
+    }
+    
+    private func setupRefreshControl() {
+        refControl.addTarget(self, action: #selector(refreshNotification), for: .valueChanged)
+        self.refreshControl = refControl
+    }
+    
+    @objc private func refreshNotification() {
+        DispatchQueue.main.async {
+            self.loadNotification()
         }
     }
 }

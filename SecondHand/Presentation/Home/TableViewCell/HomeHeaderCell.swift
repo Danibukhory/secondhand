@@ -21,6 +21,7 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumInteritemSpacing = 16
+        flowLayout.itemSize = UICollectionViewFlowLayout.automaticSize
         return flowLayout
     }()
     var searchImageView: UIImageView = {
@@ -50,6 +51,12 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
     
     typealias OnCategorySelectorLoad = () -> Void
     var onCategorySelectorLoad: OnCategorySelectorLoad?
+    
+    typealias OnCategorySelectorTap = (SHCategoryResponse) -> Void
+    var onCategorySelectorTap: OnCategorySelectorTap?
+    
+    typealias OnSearchBarTextChange = (String) -> Void
+    var onSearchBarTextChange: OnSearchBarTextChange?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -84,7 +91,9 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         searchBar.placeholder = "Cari di SecondHand"
         searchBar.rightView = searchImageView
         searchBar.rightViewMode = .unlessEditing
+        searchBar.addTarget(self, action: #selector(handleSearchBarTextChange), for: .editingChanged)
         searchBar.delegate = self
+        searchBar.returnKeyType = .done
         
         promoLabel.translatesAutoresizingMaskIntoConstraints = false
         promoLabel.setTitle(text: "Bulan Ramadhan\nBanyak Diskon!", size: 20, weight: .bold)
@@ -164,11 +173,19 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         onSearchBarTap?()
     }
     
+    @objc private func handleSearchBarTextChange() {
+        guard let text = searchBar.text
+        else { return }
+        onSearchBarTextChange?(text)
+    }
+    
     func loadCategories() {
         let api = SecondHandAPI()
         api.getProductCategories { [weak self] result, error in
             guard let _self = self else { return }
+            let allCategory = SHCategoryResponse(id: nil, name: "Semua")
             _self.selectorCategories = result ?? []
+            _self.selectorCategories.insert(allCategory, at: 0)
             _self.collectionView.reloadData()
             _self.onCategorySelectorLoad?()
         }
@@ -182,10 +199,12 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         _ collectionView: UICollectionView,
         didSelectItemAt indexPath: IndexPath
     ) {
+//        collectionView.deselectItem(at: indexPath, animated: true)
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else { return }
-        cell.contentView.backgroundColor = UIColor(rgb: 0x7126B5)
-        cell.categoryLabel.textColor = .white
-        cell.searchImageView.tintColor = .white
+        cell.selectedState()
+        let item = indexPath.item
+        let category = selectorCategories[item]
+        onCategorySelectorTap?(category)
         print(indexPath.item, indexPath.section)
     }
     
@@ -194,9 +213,7 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         didDeselectItemAt indexPath: IndexPath
     ) {
         guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else { return }
-        cell.contentView.backgroundColor = UIColor(rgb: 0xE2D4f0)
-        cell.categoryLabel.textColor = .label
-        cell.searchImageView.tintColor = .label
+        cell.deselectedState()
     }
     
     func collectionView(
@@ -222,7 +239,13 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         ) as? CategorySelectorCollectionCell else {
             return UICollectionViewCell()
         }
-        cell.categoryLabel.setTitle(text: category.name ?? "", size: 14, weight: .regular, color: .black)
+        cell.categoryLabel.setTitle(
+            text: category.name ?? "",
+            size: 14,
+            weight: .regular,
+            color: .black
+        )
+        if cell.isSelected { cell.selectedState() } else { cell.deselectedState() }
         return cell
     }
     
@@ -230,13 +253,10 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath) -> CGSize {
-            guard let cell = collectionViewLayout.collectionView?.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else {
-                return CGSize(width: 120, height: 44)
+            guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else {
+                return CGSize(width: 150, height: 40)
             }
-            return CGSize(
-                width: cell.searchImageView.frame.width + cell.categoryLabel.frame.width + 10,
-                height: cell.frame.height
-            )
+            return cell.intrinsicContentSize
     }
     
     func collectionView(
@@ -248,4 +268,3 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
 
 }
-

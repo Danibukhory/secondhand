@@ -14,6 +14,7 @@
 		382F59672860CF04009F0BB5 /* OffererProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382F59662860CF04009F0BB5 /* OffererProductCell.swift */; };
 		383095DD28646FD300EDFDAB /* RenewTransactionStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383095DC28646FD300EDFDAB /* RenewTransactionStatusViewController.swift */; };
 		383095E02864A7EC00EDFDAB /* TransactionStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383095DF2864A7EC00EDFDAB /* TransactionStatusCell.swift */; };
+		38349B76287A7EDF001E98F0 /* HomeSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38349B75287A7EDF001E98F0 /* HomeSearchResultCell.swift */; };
 		384B04EA2862278A00949209 /* SHPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B04E92862278A00949209 /* SHPopupView.swift */; };
 		384B04ED2862427500949209 /* OfferAcceptedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B04EC2862427500949209 /* OfferAcceptedViewController.swift */; };
 		3858177A286D802400748254 /* SHBuyerProductResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38581779286D802400748254 /* SHBuyerProductResponse.swift */; };
@@ -73,6 +74,7 @@
 		382F59662860CF04009F0BB5 /* OffererProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffererProductCell.swift; sourceTree = "<group>"; };
 		383095DC28646FD300EDFDAB /* RenewTransactionStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenewTransactionStatusViewController.swift; sourceTree = "<group>"; };
 		383095DF2864A7EC00EDFDAB /* TransactionStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStatusCell.swift; sourceTree = "<group>"; };
+		38349B75287A7EDF001E98F0 /* HomeSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSearchResultCell.swift; sourceTree = "<group>"; };
 		384B04E92862278A00949209 /* SHPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHPopupView.swift; sourceTree = "<group>"; };
 		384B04EC2862427500949209 /* OfferAcceptedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferAcceptedViewController.swift; sourceTree = "<group>"; };
 		38581779286D802400748254 /* SHBuyerProductResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHBuyerProductResponse.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 			children = (
 				38940C712859EB44000DD541 /* HomeProductCell.swift */,
 				38940C6D2859EB08000DD541 /* HomeHeaderCell.swift */,
+				38349B75287A7EDF001E98F0 /* HomeSearchResultCell.swift */,
 			);
 			path = TableViewCell;
 			sourceTree = "<group>";
@@ -573,6 +576,7 @@
 				38940C742859EB5B000DD541 /* HomeProductCollectionCell.swift in Sources */,
 				3858177A286D802400748254 /* SHBuyerProductResponse.swift in Sources */,
 				7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */,
+				38349B76287A7EDF001E98F0 /* HomeSearchResultCell.swift in Sources */,
 				6EAAC82228622226008AC66E /* AccountTableViewController.swift in Sources */,
 				38D0CC3728634BF300561C17 /* SHModalViewController.swift in Sources */,
 				382F59622860B00E009F0BB5 /* OffererViewController.swift in Sources */,

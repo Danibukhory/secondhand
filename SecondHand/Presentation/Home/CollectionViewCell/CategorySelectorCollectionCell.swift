@@ -36,19 +36,10 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        if self.isSelected {
-            contentView.backgroundColor = UIColor(rgb: 0x7126B5)
-            categoryLabel.textColor = .white
-            searchImageView.tintColor = .white
-        } else {
-            contentView.backgroundColor = UIColor(rgb: 0xE2D4F0)
-            categoryLabel.textColor = .black
-            searchImageView.tintColor = .black
-        }
     }
     
     private func defineLayout() {
-        contentView.translatesAutoresizingMaskIntoConstraints = false
+//        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(searchImageView, categoryLabel)
         contentView.backgroundColor = UIColor(rgb: 0xE2D4F0)
         contentView.clipsToBounds = true
@@ -76,6 +67,18 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
             
             contentView.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
         ])
+    }
+    
+    func selectedState() {
+        contentView.backgroundColor = UIColor(rgb: 0x7126B5)
+        categoryLabel.textColor = .white
+        searchImageView.tintColor = .white
+    }
+    
+    func deselectedState() {
+        contentView.backgroundColor = UIColor(rgb: 0xE2D4F0)
+        categoryLabel.textColor = .black
+        searchImageView.tintColor = .black
     }
     
 }

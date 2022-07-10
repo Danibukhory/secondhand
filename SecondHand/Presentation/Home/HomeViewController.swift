@@ -15,19 +15,32 @@ enum HomeViewCellRowType: Int {
 final class HomeViewController: UITableViewController {
     
     var searchTableView = UITableView()
-    var products: [SHSellerProductResponse] = []
+    var products: [SHBuyerProductResponse] = []
+    var displayedSearchedProducts: [SHBuyerProductResponse] = []
     
     private typealias rowType = HomeViewCellRowType
     
     private var signInData: SignInResponse = SignInResponse()
     
+    var scrollToBottomButton: UIButton = {
+        let button = UIButton(configuration: .filled())
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "arrow.down"), for: .normal)
+        button.tintColor = UIColor(rgb: 0x7126B5)
+        return button
+    }()
+    
+    var isOnTop: Bool = true
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGestureRecognizers()
         setupSearchTableView()
-        loadProducts()
+//        loadProducts()
+        prepareScrollButton()
         tableView.register(HomeHeaderCell.self, forCellReuseIdentifier: "\(HomeHeaderCell.self)")
         tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
+        searchTableView.register(HomeSearchResultCell.self, forCellReuseIdentifier: "\(HomeSearchResultCell.self)")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "loadingCell")
         tableView.backgroundColor = UIColor(rgb: 0xFFE9C9)
         tableView.separatorStyle = .none
@@ -45,7 +58,7 @@ final class HomeViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch tableView {
         case searchTableView:
-            return 40
+            return displayedSearchedProducts.count
         default:
             return 2
         }
@@ -55,7 +68,14 @@ final class HomeViewController: UITableViewController {
         let row = indexPath.row
         switch tableView {
         case searchTableView:
-            return UITableViewCell()
+            guard let searchCell = tableView.dequeueReusableCell(
+                withIdentifier: "\(HomeSearchResultCell.self)",
+                for: indexPath
+            ) as? HomeSearchResultCell else {
+                return UITableViewCell()
+            }
+            searchCell.fill(with: displayedSearchedProducts[row])
+            return searchCell
         default:
             switch row {
             case rowType.header.rawValue:
@@ -69,7 +89,6 @@ final class HomeViewController: UITableViewController {
                     guard let _self = self else { return }
                     _self.view.bringSubviewToFront(_self.searchTableView)
                     _self.searchTableView.fadeIn()
-                    _self.searchTableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
                     _self.tableView.isScrollEnabled = false
                 }
                 cell.onDismissButtonTap = { [weak self] in
@@ -79,9 +98,55 @@ final class HomeViewController: UITableViewController {
                     _self.tableView.isScrollEnabled = true
                 }
                 cell.onCategorySelectorLoad = { [weak self] in
+                    guard self != nil else { return }
+                    DispatchQueue.main.async {
+                        let _indexPath = IndexPath(item: 0, section: 0)
+                        guard let collectionCell = cell.collectionView.cellForItem(at: _indexPath)
+                                as? CategorySelectorCollectionCell else { return }
+                        cell.collectionView.selectItem(at: _indexPath, animated: true, scrollPosition: .centeredVertically)
+                        collectionCell.selectedState()
+                        cell.loadingIndicator.stopAnimating()
+                    }
+                    cell.collectionView.alpha = 0
+                    cell.collectionView.fadeIn()
+                }
+                cell.onCategorySelectorTap = { [weak self] _category in
+                    guard self != nil,
+                          let productCell = tableView.cellForRow(
+                            at: IndexPath(row: 1, section: 0)
+                          ) as? HomeProductCell
+                    else { return }
+                    if _category.name == "Semua" {
+                        productCell.displayedProducts = productCell.products
+                    } else {
+                        let filteredProducts: [SHBuyerProductResponse] = productCell.products.filter { product in
+                            return product.categories.contains(where: {$0?.name == _category.name})
+                        }
+                        productCell.displayedProducts = filteredProducts
+                    }
+                    productCell.collectionView.reloadData()
+                    productCell.collectionView.fadeOut()
+                    productCell.collectionView.fadeIn()
+                    productCell.sorterButton.setActiveButtonTitle(string: "Urutkan berdasarkan: acak")
+//                    _self.tableView.reloadData()
+                }
+                cell.onSearchBarTextChange = { [weak self] searchText in
                     guard let _self = self else { return }
-                    _self.tableView.reloadData()
-                    cell.loadingIndicator.stopAnimating()
+                    if searchText.isEmpty {
+                        _self.displayedSearchedProducts = []
+                    } else {
+                        let filteredProducts: [SHBuyerProductResponse] = _self.products.filter { product in
+                            if let name = product.name?.lowercased() {
+                                return name.contains(searchText.lowercased())
+                            } else {
+                                return false
+                            }
+                        }
+                        _self.displayedSearchedProducts = filteredProducts
+                    }
+                    _self.searchTableView.reloadData()
+                    _self.searchTableView.fadeOut()
+                    _self.searchTableView.fadeIn()
                 }
                 return cell
                 
@@ -94,16 +159,37 @@ final class HomeViewController: UITableViewController {
                     loadingCell.contentView.heightAnchor.constraint(equalToConstant: 400).isActive = true
                     return loadingCell
                 }
+                cell.selectionStyle = .none
                 cell.onProductLoad = { [weak self] in
                     guard let _self = self else { return }
-                    _self.tableView.reloadData()
-//                    cell.loadingIndicator.stopAnimating()
+//                    _self.tableView.reloadData()
+                    _self.products = cell.products
+                    cell.loadingIndicator.stopAnimating()
+                    cell.collectionView.fadeOut()
+                    cell.collectionView.fadeIn()
+                    cell.sorterButton.fadeIn()
                 }
                 return cell
             default:
                 return UITableViewCell()
             }
         }
+    }
+    
+    override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        scrollToBottomButton.fadeOut()
+    }
+    
+    override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if !decelerate {
+            scrollToBottomButton.fadeIn()
+        } else {
+            scrollToBottomButton.fadeOut()
+        }
+    }
+    
+    override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        scrollToBottomButton.fadeIn()
     }
     
     private func setupSearchTableView() {
@@ -134,6 +220,7 @@ final class HomeViewController: UITableViewController {
         tapRecognizer.cancelsTouchesInView = false
         tableView.addGestureRecognizer(tapRecognizer)
         tableView.keyboardDismissMode = .onDrag
+        tabBarController?.navigationController?.isNavigationBarHidden = true
     }
     
     private func handleAuth() {
@@ -145,12 +232,36 @@ final class HomeViewController: UITableViewController {
         }
     }
     
-    private func loadProducts() {
-        let api = SecondHandAPI()
-        api.getSellerProducts { [weak self] result, error in
-            guard let _self = self else { return }
-            _self.products = result ?? []
-            _self.tableView.reloadData()
+//    private func loadProducts() {
+//        let api = SecondHandAPI()
+//        api.getSellerProducts { [weak self] result, error in
+//            guard let _self = self else { return }
+//            _self.products = result ?? []
+//            _self.tableView.reloadData()
+//        }
+//    }
+    
+    private func prepareScrollButton() {
+        view.addSubview(scrollToBottomButton)
+        NSLayoutConstraint.activate([
+            scrollToBottomButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20),
+            scrollToBottomButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            scrollToBottomButton.heightAnchor.constraint(equalToConstant: 40),
+            scrollToBottomButton.widthAnchor.constraint(equalToConstant: 40)
+        ])
+        scrollToBottomButton.addTarget(self, action: #selector(onScrollButtonTap), for: .touchUpInside)
+    }
+    
+    @objc func onScrollButtonTap() {
+        if isOnTop {
+            tableView.scrollToRow(at: IndexPath(row: 1, section: 0), at: .bottom, animated: true)
+            isOnTop = false
+            scrollToBottomButton.setImage(UIImage(systemName: "arrow.up"), for: .normal)
+        }
+        else {
+            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .bottom, animated: true)
+            isOnTop = true
+            scrollToBottomButton.setImage(UIImage(systemName: "arrow.down"), for: .normal)
         }
     }
     

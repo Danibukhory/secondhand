@@ -10,6 +10,13 @@ import Kingfisher
 
 final class NotificationCell: UITableViewCell {
     
+    enum notificationProductStatus: String {
+        case accepted = "accepted"
+        case bid = "bid"
+        case declined = "declined"
+        case create = "create"
+    }
+    
     var notificationImageView = UIImageView()
     var notificationCategoryLabel = UILabel()
     var notificationContentLabel = UILabel()
@@ -40,6 +47,7 @@ final class NotificationCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        notificationTimeLabel.attributedText = nil
 //        loadingBackground.fadeOut()
 //        loadingIndicator.stopAnimating()
     }
@@ -124,45 +132,47 @@ final class NotificationCell: UITableViewCell {
     func fill(with data: SHNotificationResponse) {
         loadingBackground.fadeIn()
         loadingIndicator.startAnimating()
-        DispatchQueue.main.async { [self] in
+        typealias status = notificationProductStatus
+        DispatchQueue.main.async { [weak self] in
+            guard let _self = self else { return }
+            _self.notificationImageView.kf.indicatorType = .activity
             if let url = URL(string: data.imageURL ?? "") {
-                notificationImageView.kf.setImage(
+                _self.notificationImageView.kf.setImage(
                     with: url,
-                    options: [.transition(.fade(0.25)), .cacheOriginalImage]
+                    options: [.transition(.fade(0.25))]
                 )
-                notificationImageView.kf.indicatorType = .activity
             }
             switch data.status {
-            case "accepted":
-                notificationCategoryLabel.setTitle(
+            case status.accepted.rawValue:
+                _self.notificationCategoryLabel.setTitle(
                     text: "Penawaran diterima",
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
                 )
-            case "bid":
-                notificationCategoryLabel.setTitle(
+            case status.bid.rawValue:
+                _self.notificationCategoryLabel.setTitle(
                     text: "Penawaran produk",
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
                 )
-            case "declined":
-                notificationCategoryLabel.setTitle(
+            case status.declined.rawValue:
+                _self.notificationCategoryLabel.setTitle(
                     text: "Penawaran ditolak",
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
                 )
-            case "create":
-                notificationCategoryLabel.setTitle(
+            case status.create.rawValue:
+                _self.notificationCategoryLabel.setTitle(
                     text: "Produk berhasil diterbitkan",
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
                 )
             default:
-                layoutSubviews()
+                _self.layoutSubviews()
             }
             
 //            notificationCategoryLabel.setTitle(
@@ -172,30 +182,20 @@ final class NotificationCell: UITableViewCell {
 //                color: UIColor(rgb: 0x8A8A8A)
 //            )
             
-            notificationContentLabel.setTitle(
+            _self.notificationContentLabel.setTitle(
                 text: "\(data.productName ?? "product has no name")\n\(data.bidPrice?.convertToCurrency() ?? data.product?.description ?? "")",
                 size: 14,
                 weight: .regular,
                 color: .black
             )
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            dateFormatter.timeZone = .autoupdatingCurrent
-            var date: Date?
-            if data.transactionDate != nil {
-                date = dateFormatter.date(from: String(data.transactionDate!.prefix(19)))
+            if let _date = data.transactionDate {
+                _self.notificationTimeLabel.setTitle(
+                    text: _date.convertToDateString(dateFormat: "dd MMM, HH:mm"),
+                    size: 10,
+                    weight: .regular,
+                    color: UIColor(rgb: 0x8A8A8A)
+                )
             }
-            let dateStringFormatter = DateFormatter()
-            dateStringFormatter.dateFormat = "dd MMM, HH:mm"
-            let dateString = dateStringFormatter.string(from: date ?? Date())
-            notificationTimeLabel.setTitle(
-                text: dateString,
-                size: 10,
-                weight: .regular,
-                color: UIColor(rgb: 0x8A8A8A)
-            )
         }
         loadingIndicator.stopAnimating()
         loadingBackground.fadeOut()

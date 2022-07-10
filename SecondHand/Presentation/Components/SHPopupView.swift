@@ -19,26 +19,12 @@ final class SHPopupView: UIView {
     var isPresenting: Bool = false {
         didSet {
             if isPresenting {
-                UIView.animate(
-                    withDuration: 0.5,
-                    delay: 0,
-                    usingSpringWithDamping: 0.7,
-                    initialSpringVelocity: 18,
-                    options: .layoutSubviews
-                ) {
-                    self.topAnchorConstraint = self.superview!.layoutMarginsGuide.topAnchor
-                    self.layer.position.y = 0
-                    if self.topAnchorConstraint == self.superview!.layoutMarginsGuide.topAnchor {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                            self.isPresenting = false
-                        }
-                    }
+                self.fadeIn()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    self.isPresenting = false
                 }
             } else {
-                topAnchorConstraint = nil
-                UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut) {
-                    self.layer.position.y = -150
-                }
+                fadeOut()
             }
         }
     }
@@ -50,6 +36,7 @@ final class SHPopupView: UIView {
     
     init(frame: CGRect, popupType: PopupType, text: String) {
         super.init(frame: frame)
+        self.alpha = 0
         self.popupTextLabel.setTitle(text: text, size: 14, weight: .medium, color: .white)
         switch popupType {
         case .success:

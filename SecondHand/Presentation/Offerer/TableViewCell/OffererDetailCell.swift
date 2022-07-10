@@ -85,15 +85,15 @@ final class OffererDetailCell: UITableViewCell {
         if let imageUrl = URL(string: data.imageURL ?? "") {
             offererImageView.kf.setImage(
                 with: imageUrl,
-                options: [.cacheOriginalImage, .transition(.fade(0.2))]
+                options: [.transition(.fade(0.2))]
             )
         }
-        offererNameLabel.setTitle(
-            text: data.fullName ?? "Name not available",
-            size: 14,
-            weight: .medium,
-            color: .black
-        )
+//        offererNameLabel.setTitle(
+//            text: data.fullName ?? "Name not available",
+//            size: 14,
+//            weight: .medium,
+//            color: .black
+//        )
         offererCityLabel.setTitle(
             text: data.city ?? "Domicile not available",
             size: 10,
