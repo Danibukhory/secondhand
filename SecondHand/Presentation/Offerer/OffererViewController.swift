@@ -10,6 +10,9 @@ import UIKit
 final class OffererViewController: UITableViewController {
     
     var popupView: SHPopupView?
+    var user: SHUserResponse
+    var buyerName: String?
+    var notification: SHNotificationResponse?
     
     enum OffererViewCellSectionType: Int {
         case offerer = 0
@@ -18,14 +21,20 @@ final class OffererViewController: UITableViewController {
     
     private typealias sectionType = OffererViewCellSectionType
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = false
+    init(user: SHUserResponse, notification: SHNotificationResponse?) {
+        self.user = user
+        self.notification = notification
+        super.init(nibName: nil, bundle: nil)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.navigationBar.prefersLargeTitles = true
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.largeTitleDisplayMode = .never
+        navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     override func viewDidLoad() {
@@ -65,7 +74,7 @@ final class OffererViewController: UITableViewController {
         case 0:
             return 1
         case 1:
-            return 3
+            return 1
         default:
             return 0
         }
@@ -84,16 +93,20 @@ final class OffererViewController: UITableViewController {
             ) as? OffererDetailCell else {
                 return UITableViewCell()
             }
-            cell.fill()
+            cell.fill(with: user)
+            cell.offererNameLabel.setTitle(text: buyerName ?? "", size: 14, weight: .medium, color: .black)
             cell.selectionStyle = .none
             return cell
             
         case sectionType.product.rawValue:
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "\(OffererProductCell.self)", for: indexPath
-            ) as? OffererProductCell else {
+            ) as? OffererProductCell,
+                  let _notification = notification
+            else {
                 return UITableViewCell()
             }
+            cell.fill(with: _notification)
             cell.selectionStyle = .none
             cell.onRejectButtonTap = { [weak self] in
                 guard let _self = self else { return }
@@ -101,14 +114,20 @@ final class OffererViewController: UITableViewController {
                 case "Tolak":
                     _self.popupView?.isPresenting = true
                     _self.popupView?.backgroundColor = .systemRed
+                    SecondHandAPI.shared.patchSellerProductStatus(
+                        to: .declined,
+                        productId: "\(_self.notification?.productID ?? 0)"
+                    )
                 case "Status":
                     let viewController = RenewTransactionStatusViewController()
                     viewController.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) - 60)
                     viewController.changeMaximumHeight(to: viewController.defaultHeight)
                     viewController.modalPresentationStyle = .overCurrentContext
                     viewController.onSendButtonTap = {
-                        _self.popupView?.backgroundColor = UIColor(rgb: 0x73CA5C)
-                        _self.popupView?.isPresenting = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            _self.popupView?.backgroundColor = UIColor(rgb: 0x73CA5C)
+                            _self.popupView?.isPresenting = true
+                        }
                     }
                     _self.tabBarController?.navigationController?.present(viewController, animated: false)
                 default:
@@ -116,24 +135,44 @@ final class OffererViewController: UITableViewController {
                 }
             }
                 
-            cell.onAcceptButtonTap = {
+            cell.onAcceptButtonTap = { [weak self] in
+                guard let _self = self else { return }
                 let viewController = OfferAcceptedViewController()
                 let buyerCell = tableView.dequeueReusableCell(withIdentifier: "\(OffererDetailCell.self)") as! OffererDetailCell
                 let productNameText = cell.productNameLabel.attributedText
-                let productValueText = cell.offerValueLabel.attributedText
-                buyerCell.fill()
+                let productValue = _self.notification?.bidPrice
+                buyerCell.fill(with: _self.user)
                 viewController.buyerImageView.image = buyerCell.offererImageView.image
-                viewController.buyerNameLabel = buyerCell.offererNameLabel
+                viewController.buyerNameLabel.setTitle(
+                    text: _self.buyerName ?? "",
+                    size: 14,
+                    weight: .medium,
+                    color: .black
+                )
                 viewController.buyerCityLabel = buyerCell.offererCityLabel
                 viewController.productImageView.image = cell.productImageView.image
                 viewController.productNameLabel.attributedText = productNameText
-                viewController.productValueLabel.attributedText = productValueText
+                viewController.productValueLabel.setTitle(
+                    text: "Ditawar \(productValue?.convertToCurrency() ?? "")",
+                    size: 14,
+                    weight: .regular,
+                    color: .black
+                )
                 viewController.modalPresentationStyle = .overCurrentContext
                 viewController.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) + 30)
-                self.tabBarController?.navigationController?.present(viewController, animated: false, completion: {
+                _self.tabBarController?.navigationController?.present(
+                    viewController,
+                    animated: false,
+                    completion: {
                     cell.rejectButton.setActiveButtonTitle(string: "Status")
                     cell.acceptButton.setActiveButtonTitle(string: "Hubungi")
                 })
+                if cell.acceptButton.attributedTitle(for: .normal)?.string == "Terima" {
+                    SecondHandAPI.shared.patchSellerProductStatus(
+                        to: .accepted,
+                        productId: "\(_self.notification?.productID ?? 0)"
+                    )
+                }
             }
             return cell
             
@@ -164,11 +203,13 @@ final class OffererViewController: UITableViewController {
             popupType: .success,
             text: "Status produk berhasil diperbarui"
         )
-        tableView.addSubview(popupView!)
+        view.addSubview(popupView!)
+        popupView?.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor).isActive = true
+        popupView?.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor).isActive = true
+        popupView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        popupView?.isPresenting = false
         popupView?.onDismissButtonTap = { [weak self] in
             guard let _self = self else { return }
-            _self.popupView?.widthAnchor.constraint(equalTo: (_self.navigationController?.navigationBar.layoutMarginsGuide.widthAnchor)!).isActive = true
-            _self.popupView?.centerXAnchor.constraint(equalTo: (_self.navigationController?.navigationBar.centerXAnchor)!).isActive = true
             _self.popupView?.isPresenting = false
         }
     }

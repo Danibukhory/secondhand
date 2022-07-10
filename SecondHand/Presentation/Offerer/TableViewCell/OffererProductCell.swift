@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class OffererProductCell: UITableViewCell {
     
     var productImageView = UIImageView()
     var offerTypeLabel = UILabel()
     var productNameLabel = UILabel()
-    var offerValueLabel = UILabel()
+    var bidValueLabel = UILabel()
     var offerTimeLabel = UILabel()
     var rejectButton = SHButton(frame: CGRect(), title: "Tolak", type: .bordered, size: .small)
     var acceptButton = SHButton(frame: CGRect(), title: "Terima", type: .filled, size: .small)
@@ -32,34 +33,24 @@ final class OffererProductCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        
-    }
-    
     private func defineLayout() {
-        contentView.addSubviews(productImageView, offerTypeLabel, productNameLabel, offerValueLabel, offerTimeLabel, rejectButton, acceptButton)
-        contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(productImageView, offerTypeLabel, productNameLabel, offerValueLabel, offerTimeLabel, rejectButton, acceptButton)
+        contentView.addSubviews(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, rejectButton, acceptButton)
+        contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, rejectButton, acceptButton)
         contentView.backgroundColor = .white
         
         productImageView.clipsToBounds = true
         productImageView.contentMode = .scaleAspectFill
         productImageView.layer.cornerRadius = 12
         productImageView.clipsToBounds = true
-        productImageView.image = UIImage(named: "img-home-product-placeholder-1")
         
         offerTypeLabel.numberOfLines = 1
-        offerTypeLabel.setTitle(text: "Penawaran produk", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         productNameLabel.numberOfLines = 1
-        productNameLabel.setTitle(text: "Apple Watch Series 6", size: 14, weight: .regular, color: .black)
         
-        offerValueLabel.numberOfLines = 0
-        offerValueLabel.setTitle(text: "Rp 5.999.999\nDitawar Rp 10.000", size: 14, weight: .regular, color: .black)
+        bidValueLabel.numberOfLines = 0
         
         offerTimeLabel.numberOfLines = 1
         offerTimeLabel.textAlignment = .right
-        offerTimeLabel.setTitle(text: "20 Jun, 22.22", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         acceptButton.setActiveButtonTitle(string: "Terima")
         acceptButton.addTarget(self, action: #selector(acceptTapped), for: .touchUpInside)
@@ -84,14 +75,14 @@ final class OffererProductCell: UITableViewCell {
             productNameLabel.leadingAnchor.constraint(equalTo: offerTypeLabel.leadingAnchor),
             productNameLabel.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             
-            offerValueLabel.topAnchor.constraint(equalTo: productNameLabel.bottomAnchor),
-            offerValueLabel.leadingAnchor.constraint(equalTo: offerTypeLabel.leadingAnchor),
-            offerValueLabel.trailingAnchor.constraint(equalTo: productNameLabel.trailingAnchor),
+            bidValueLabel.topAnchor.constraint(equalTo: productNameLabel.bottomAnchor),
+            bidValueLabel.leadingAnchor.constraint(equalTo: offerTypeLabel.leadingAnchor),
+            bidValueLabel.trailingAnchor.constraint(equalTo: productNameLabel.trailingAnchor),
             
             offerTimeLabel.topAnchor.constraint(equalTo: productImageView.topAnchor),
             offerTimeLabel.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             
-            rejectButton.topAnchor.constraint(equalTo: offerValueLabel.bottomAnchor, constant: 16),
+            rejectButton.topAnchor.constraint(equalTo: bidValueLabel.bottomAnchor, constant: 16),
             rejectButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             rejectButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2) - 16 * 2),
             
@@ -100,6 +91,46 @@ final class OffererProductCell: UITableViewCell {
             acceptButton.widthAnchor.constraint(equalTo: rejectButton.widthAnchor),
             acceptButton.bottomAnchor.constraint(equalTo: margin.bottomAnchor)
         ])
+    }
+    
+    func fill(with data: SHNotificationResponse) {
+        if let urlString = URL(string: data.imageURL ?? "") {
+            productImageView.kf.setImage(with: urlString, options: [.transition(.fade(0.2))])
+        }
+        offerTypeLabel.setTitle(
+            text: "Penawaran produk",
+            size: 10,
+            weight: .regular,
+            color: UIColor(rgb: 0x8A8A8A)
+        )
+        productNameLabel.setTitle(
+            text: data.productName ?? "Product name not available",
+            size: 14,
+            weight: .regular,
+            color: .black
+        )
+        let basePriceInt = Int(data.basePrice ?? "")
+        if data.bidPrice != nil {
+            bidValueLabel.setTitle(
+                text: "\(basePriceInt?.convertToCurrency() ?? "")\nDitawar \(data.bidPrice?.convertToCurrency() ?? "bid price not available")",
+                size: 14,
+                weight: .regular,
+                color: .black
+            )
+        } else {
+            bidValueLabel.setTitle(
+                text: "\(basePriceInt?.convertToCurrency() ?? "")",
+                size: 14,
+                weight: .regular,
+                color: .black
+            )
+        }
+        offerTimeLabel.setTitle(
+            text: data.createdAt?.convertToDateString(dateFormat: "dd MMM, HH:mm") ?? "",
+            size: 10,
+            weight: .regular,
+            color: UIColor(rgb: 0x8A8A8A)
+        )
     }
     
     @objc private func rejectTapped() {
