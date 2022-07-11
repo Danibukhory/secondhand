@@ -9,6 +9,10 @@ import UIKit
 
 class BuyerSixViewController: UIViewController {
     
+    private var buyerResponse: SHBuyerProductResponse?
+    private lazy var isOffered: Bool = false
+    private lazy var popUpView: SHPopupView = SHPopupView(frame: CGRect.zero, popupType: .success, text: "Harga tawarmu berhasil dikirim ke penjual")
+    
     let scrollView = UIScrollView()
     let contentView = UIView()
     let contentPhotoView = UIView()
@@ -65,13 +69,13 @@ class BuyerSixViewController: UIViewController {
         
         
         let productName = UILabel()
-        productName.setTitle(text: "Jam Tangan Casio", size: 14, weight: .medium, color: .black)
+        productName.setTitle(text: (buyerResponse?.name ?? "Jam Tangan Gemink"), size: 14, weight: .medium, color: .black)
         
         let productCategory = UILabel()
-        productCategory.setTitle(text: "Aksesoris", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        productCategory.setTitle(text: (buyerResponse?.categories[0].name ?? "Aksesoris"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         let productPrice = UILabel()
-        productPrice.setTitle(text: "Rp. 250.000", size: 14, weight: .medium, color: .black)
+        productPrice.setTitle(text: "Rp. \(buyerResponse?.basePrice ?? 0)", size: 14, weight: .medium, color: .black)
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         productName.translatesAutoresizingMaskIntoConstraints = false
@@ -118,15 +122,16 @@ class BuyerSixViewController: UIViewController {
         
         let imageView = UIImageView()
         imageView.image = UIImage(named: "img-home-product-placeholder-1")
+//        imageView.load(urlString: buyerResponse!.imageURL)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
         
         let sellerName = UILabel()
-        sellerName.setTitle(text: "Nama Penjual", size: 14, weight: .medium, color: .black)
+        sellerName.setTitle(text: "Hermansyah", size: 14, weight: .medium, color: .black)
         
         let sellerCity = UILabel()
-        sellerCity.setTitle(text: "Kota", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        sellerCity.setTitle(text: (buyerResponse?.location ?? "Kota Jakarta"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         sellerName.translatesAutoresizingMaskIntoConstraints = false
@@ -175,6 +180,7 @@ class BuyerSixViewController: UIViewController {
         
         let descDetails = UILabel()
         descDetails.setTitle(text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.", size: 14, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+//        descDetails.setTitle(text: buyerResponse!.welcomeDescription, size: 14, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         descDetails.numberOfLines = 0
         
         
@@ -203,9 +209,26 @@ class BuyerSixViewController: UIViewController {
     
     private lazy var publishButton: SHButton = {
         let button = SHButton(frame: CGRect.zero, title: "Saya Tertarik dan ingin Nego", type: .filled, size: .regular)
+        button.addTarget(self, action: #selector(showModal), for: .touchUpInside)
+        
+        if isOffered {
+            button.backgroundColor = UIColor(rgb: 0xD0D0D0)
+            button.setActiveButtonTitle(string: "Menunggu respon penjual")
+            button.isEnabled = false
+        }
         
         return button
     }()
+    
+    @objc func showModal() {
+        let vc = BuyerTenViewController()
+//        vc.buyerResponse = self.buyerResponse
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.changeDefaultHeight(to: view.frame.height/1.3)
+        vc.delegate = self
+        self.present(vc, animated: false)
+//
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -231,6 +254,7 @@ class BuyerSixViewController: UIViewController {
         )
         
         contentPhotoView.addSubviews(collectionView,backButton)
+        
     }
     
     private func setupScrollView() {
@@ -337,6 +361,27 @@ class BuyerSixViewController: UIViewController {
         ])
         
     }
+    
+}
+
+extension BuyerSixViewController: ItemIsOfferedDelegate {
+    func userDidOfferItem(info: Bool) {
+        self.isOffered = info
+//        self.viewDidLoad()
+        publishButton.backgroundColor = UIColor(rgb: 0xD0D0D0)
+        publishButton.setActiveButtonTitle(string: "Menunggu respon penjual")
+        publishButton.isEnabled = false
+        
+        contentPhotoView.addSubview(popUpView)
+        popUpView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            popUpView.topAnchor.constraint(equalTo: backButton.bottomAnchor, constant: 16),
+            popUpView.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor, constant: 16),
+            popUpView.trailingAnchor.constraint(equalTo: contentPhotoView.trailingAnchor, constant: -16)
+        ])
+    }
+    
     
 }
 

@@ -7,7 +7,14 @@
 
 import UIKit
 
+protocol ItemIsOfferedDelegate: AnyObject {
+    func userDidOfferItem(info:Bool)
+}
+
 final class BuyerTenViewController: SHModalViewController {
+    
+    weak var delegate: ItemIsOfferedDelegate? = nil
+    var buyerResponse: SHBuyerProductResponse?
     
     private lazy var handleBar: UIView = {
         let view = UIView()
@@ -29,7 +36,7 @@ final class BuyerTenViewController: SHModalViewController {
     
     private lazy var detailLabel: UILabel = {
         let label = UILabel()
-        label.text = "Harga tawaranmu akan diketahui penual, jika penjual cocok kamu akan segera dihubungi penjual."
+        label.text = "Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi penjual."
         label.font = UIFont(name: "Poppins-Regular", size: 14)
         label.textColor = UIColor(rgb: 0x8A8A8A)
         label.numberOfLines = 0
@@ -93,6 +100,7 @@ final class BuyerTenViewController: SHModalViewController {
     private lazy var offerTextfield: SHRoundedTextfield = {
         let textfield = SHRoundedTextfield()
         textfield.setPlaceholder(placeholder: "Rp 0,0")
+        textfield.keyboardType = .numberPad
         textfield.translatesAutoresizingMaskIntoConstraints = false
         
         return textfield
@@ -101,9 +109,18 @@ final class BuyerTenViewController: SHModalViewController {
     private lazy var sendButton: SHButton = {
         let button = SHButton(frame: CGRect.zero, title: "Kirim", type: .filled, size: .regular)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
+        button.addTarget(self, action: #selector(dismissThisView), for: .touchUpInside)
         return button
     }()
+    
+    @objc private func dismissThisView() {
+        if offerTextfield.text?.isEmpty == true {
+            offerTextfield.layer.borderColor = UIColor.red.cgColor
+        } else {
+            delegate?.userDidOfferItem(info: true)
+            self.dismiss(animated: true)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
