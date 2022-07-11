@@ -90,23 +90,34 @@ final class HomeProductCollectionCell: UICollectionViewCell {
     }
     
     func fill(with data: SHBuyerProductResponse) {
-        if let url = URL(string: data.imageURL) {
-            productImageView.kf.setImage(with: url)
+        let urlString = data.imageURL
+        if let url = URL(string: urlString ?? "") {
+            productImageView.kf.indicatorType = .activity
+            productImageView.kf.setImage(with: url, options: [.transition(.fade(0.2)), .cacheOriginalImage])
         }
         productNameLabel.setTitle(
-            text: data.name,
+            text: data.name ?? "",
             size: 14,
             weight: .regular,
             color: .black
         )
-        productCategoryLabel.setTitle(
-            text: data.categories[0].name,
-            size: 10,
-            weight: .regular,
-            color: .secondaryLabel
-        )
+        if !data.categories.isEmpty {
+            productCategoryLabel.setTitle(
+                text: data.categories[0]?.name?.capitalized ?? "Not available",
+                size: 10,
+                weight: .regular,
+                color: .secondaryLabel
+            )
+        } else {
+            productCategoryLabel.setTitle(
+                text: "Recommended for you",
+                size: 10,
+                weight: .regular,
+                color: .secondaryLabel
+            )
+        }
         productPriceLabel.setTitle(
-            text: data.basePrice.convertToCurrency(),
+            text: data.basePrice?.convertToCurrency() ?? "",
             size: 14,
             weight: .regular,
             color: .black

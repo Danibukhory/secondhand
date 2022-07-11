@@ -8,6 +8,6 @@
 import Foundation
 
 struct SHCategoryResponse: Codable {
-    let id: Int
-    let name: String
+    let id: Int?
+    let name: String?
 }

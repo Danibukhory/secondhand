@@ -8,28 +8,71 @@
 import Foundation
 
 struct SHNotificationResponse: Codable {
-    let id, productID, bidPrice: Int
-    let transactionDate: String
-    let status: String
-    let sellerName: String
-    let buyerName: String
-    let receiverID: Int
+    let id, productID: Int?
+    let productName, basePrice: String?
+    let bidPrice: Int?
     let imageURL: String?
-    let read: Bool
-    let createdAt, updatedAt: String
+    let transactionDate: String?
+    let status: String?
+    let sellerName: String?
+    let buyerName: String?
+    let receiverID: Int?
+    let read: Bool?
+    let createdAt, updatedAt: String?
+    let product: SHNotificationProductResponse?
+    let user: SHUserResponse?
 
     enum CodingKeys: String, CodingKey {
         case id
         case productID = "product_id"
+        case productName = "product_name"
+        case basePrice = "base_price"
         case bidPrice = "bid_price"
+        case imageURL = "image_url"
         case transactionDate = "transaction_date"
         case status
         case sellerName = "seller_name"
         case buyerName = "buyer_name"
         case receiverID = "receiver_id"
-        case imageURL = "image_url"
         case read, createdAt, updatedAt
+        case product = "Product"
+        case user = "User"
     }
 }
 
-typealias Notifications = [SHNotificationResponse]
+// MARK: - Product
+struct SHNotificationProductResponse: Codable {
+    let id: Int
+    let name: String
+    let description: String?
+    let basePrice: Int
+    let imageURL: String?
+    let imageName: String?
+    let location: String
+    let userID: Int
+    let status: String?
+    let createdAt, updatedAt: String
+
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case description = "description"
+        case basePrice = "base_price"
+        case imageURL = "image_url"
+        case imageName = "image_name"
+        case location
+        case userID = "user_id"
+        case status, createdAt, updatedAt
+    }
+}
+
+enum ProductAvailabilityStatus: String, Codable {
+    case available = "available"
+    case sold = "sold"
+}
+
+//enum OfferStatus: String, Codable {
+//    case accepted = "accepted"
+//    case acceptedDeclined = "accepted/declined"
+//    case bid = "bid"
+//    case declined = "declined"
+//}

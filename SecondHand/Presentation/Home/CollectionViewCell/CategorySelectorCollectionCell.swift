@@ -13,10 +13,6 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
     var searchImageView = UIImageView()
     var categoryLabel = UILabel()
     
-    typealias OnCellTap = () -> Void
-    var onCellTap: OnCellTap?
-    var isCellSelected: Bool = false
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         defineLayout()
@@ -24,11 +20,6 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        contentView.backgroundColor = UIColor(rgb: 0xE2D4F0)
     }
     
     override func preferredLayoutAttributesFitting(
@@ -43,15 +34,16 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
         return layoutAttributes
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+    }
+    
     private func defineLayout() {
+//        contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubviews(searchImageView, categoryLabel)
         contentView.backgroundColor = UIColor(rgb: 0xE2D4F0)
-        
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(onCellTapped))
         contentView.clipsToBounds = true
         contentView.layer.cornerRadius = 12
-        contentView.isUserInteractionEnabled = true
-        contentView.addGestureRecognizer(tapRecognizer)
         
         searchImageView.translatesAutoresizingMaskIntoConstraints = false
         searchImageView.tintColor = .label
@@ -60,7 +52,6 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
         
         categoryLabel.translatesAutoresizingMaskIntoConstraints = false
         categoryLabel.numberOfLines = 1
-        categoryLabel.setTitle(text: "Text Test Text Test", size: 14, weight: .regular)
         
         NSLayoutConstraint.activate([
             contentView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10),
@@ -78,9 +69,16 @@ final class CategorySelectorCollectionCell: UICollectionViewCell {
         ])
     }
     
-    @objc private func onCellTapped() {
-        isCellSelected.toggle()
-        onCellTap?()
+    func selectedState() {
+        contentView.backgroundColor = UIColor(rgb: 0x7126B5)
+        categoryLabel.textColor = .white
+        searchImageView.tintColor = .white
+    }
+    
+    func deselectedState() {
+        contentView.backgroundColor = UIColor(rgb: 0xE2D4F0)
+        categoryLabel.textColor = .black
+        searchImageView.tintColor = .black
     }
     
 }

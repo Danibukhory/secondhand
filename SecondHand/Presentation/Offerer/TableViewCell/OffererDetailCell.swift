@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class OffererDetailCell: UITableViewCell {
     
@@ -80,10 +81,25 @@ final class OffererDetailCell: UITableViewCell {
         ])
     }
     
-    func fill() {
-        offererImageView.image = UIImage(named: "img-sh-offerer-placeholder")
-        offererNameLabel.setTitle(text: "Nama Pembeli", size: 14, weight: .medium, color: .black)
-        offererCityLabel.setTitle(text: "Nama Kota", size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+    func fill(with data: SHUserResponse) {
+        if let imageUrl = URL(string: data.imageURL ?? "") {
+            offererImageView.kf.setImage(
+                with: imageUrl,
+                options: [.transition(.fade(0.2))]
+            )
+        }
+//        offererNameLabel.setTitle(
+//            text: data.fullName ?? "Name not available",
+//            size: 14,
+//            weight: .medium,
+//            color: .black
+//        )
+        offererCityLabel.setTitle(
+            text: data.city ?? "Domicile not available",
+            size: 10,
+            weight: .regular,
+            color: UIColor(rgb: 0x8A8A8A)
+        )
     }
     
 }
