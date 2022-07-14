@@ -6,17 +6,10 @@
 //
 import Foundation
 import UIKit
+import Kingfisher
 
 class AccountTableViewController: UITableViewController {
-       
-
-//    private lazy var titleLabel: UILabel = {
-//        let label = UILabel()
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "Akun Saya"
-//        label.font = UIFont(name:"Poppins-Bold",size:32)
-//        return label
-//    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(ProfileViewCell.self, forCellReuseIdentifier: "\(ProfileViewCell.self)")
@@ -37,14 +30,15 @@ class AccountTableViewController: UITableViewController {
         var config = cell.defaultContentConfiguration()
         switch row {
         case 0:
-            guard let _cell = tableView.dequeueReusableCell(
+            guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: "\(ProfileViewCell.self)",
                 for: indexPath
             ) as? ProfileViewCell
             else {
                 return UITableViewCell()
             }
-            return _cell
+            cell.selectionStyle = .none
+            return cell
             
         case 1:
             config.image = UIImage(named: "img-sh-edit")
@@ -71,15 +65,27 @@ class AccountTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
         
-        if row == 3 {
-            UserDefaults.standard.set(false, forKey: "isLogin")
-            let isLogin = UserDefaults.standard.bool(forKey: "isLogin")
-            if !isLogin {
-                let viewController = UINavigationController(rootViewController: SignInViewController())
-                viewController.modalPresentationStyle = .fullScreen
-                navigationController?.present(viewController, animated: true)
-                tabBarController?.selectedIndex = 0
+        switch row {
+        case 2:
+            let viewController = SettingsViewController(style: .insetGrouped)
+            navigationController?.pushViewController(viewController, animated: true)
+        case 3:
+            let alertController = UIAlertController(title: "Keluar", message: "Apakah anda yakin ingin keluar?", preferredStyle: .alert)
+            let cancel = UIAlertAction(title: "Batal", style: .cancel)
+            let signOut = UIAlertAction(title: "Keluar", style: .destructive) { [weak self] _ in
+                guard let _self = self else { return }
+                _self.navigationController?.popViewController(animated: true)
+                _self.tabBarController?.navigationController?.popViewController(animated: true)
+                UserDefaults.standard.set(false, forKey: "isHomeProductSorterShown")
+                UserDefaults.standard.set(nil, forKey: "accessToken")
+                UserDefaults.standard.set(false, forKey: "isLogin")
+                KingfisherManager.shared.cache.clearCache()
             }
+            alertController.addAction(cancel)
+            alertController.addAction(signOut)
+            self.present(alertController, animated: true)
+        default:
+            return
         }
     }
 }

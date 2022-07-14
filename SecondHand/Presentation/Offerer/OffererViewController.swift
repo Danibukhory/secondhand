@@ -13,6 +13,23 @@ final class OffererViewController: UITableViewController {
     var user: SHUserResponse
     var buyerName: String?
     var notification: SHNotificationResponse?
+    var api = SecondHandAPI.shared
+    var order: SHSellerOrderResponse?
+    var loadingView: UIView = {
+        let _view = UIView()
+        _view.backgroundColor = .white
+        let loadingIndicator = UIActivityIndicatorView()
+        _view.translatesAutoresizingMaskIntoConstraints = false
+        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
+        _view.addSubview(loadingIndicator)
+        loadingIndicator.startAnimating()
+        loadingIndicator.hidesWhenStopped = true
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: _view.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: _view.centerYAnchor)
+        ])
+        return _view
+    }()
     
     enum OffererViewCellSectionType: Int {
         case offerer = 0
@@ -41,6 +58,8 @@ final class OffererViewController: UITableViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         tableView.backgroundColor = .white
+        setupLoadingView()
+        loadOrders()
         setupNavigationBar()
         setupPopupView()
         tableView.register(OffererDetailCell.self, forCellReuseIdentifier: "\(OffererDetailCell.self)")
@@ -109,21 +128,25 @@ final class OffererViewController: UITableViewController {
             cell.fill(with: _notification)
             cell.selectionStyle = .none
             cell.onRejectButtonTap = { [weak self] in
-                guard let _self = self else { return }
+                guard let _self = self,
+                      let _order = self?.order
+                else { return }
                 switch cell.rejectButton.currentAttributedTitle?.string {
                 case "Tolak":
                     _self.popupView?.isPresenting = true
                     _self.popupView?.backgroundColor = .systemRed
-                    SecondHandAPI.shared.patchSellerProductStatus(
-                        to: .declined,
-                        productId: "\(_self.notification?.productID ?? 0)"
-                    )
+                    _self.api.patchSellerOrderStatus(to: .declined, orderId: _order.id)
                 case "Status":
                     let viewController = RenewTransactionStatusViewController()
                     viewController.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) - 60)
                     viewController.changeMaximumHeight(to: viewController.defaultHeight)
                     viewController.modalPresentationStyle = .overCurrentContext
                     viewController.onSendButtonTap = {
+                        if viewController.isCanceled {
+                            _self.api.patchSellerOrderStatus(to: .declined, orderId: _order.id)
+                        } else {
+                            _self.api.patchSellerOrderStatus(to: .accepted, orderId: _order.id)
+                        }
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             _self.popupView?.backgroundColor = UIColor(rgb: 0x73CA5C)
                             _self.popupView?.isPresenting = true
@@ -168,10 +191,10 @@ final class OffererViewController: UITableViewController {
                     cell.acceptButton.setActiveButtonTitle(string: "Hubungi")
                 })
                 if cell.acceptButton.attributedTitle(for: .normal)?.string == "Terima" {
-                    SecondHandAPI.shared.patchSellerProductStatus(
-                        to: .accepted,
-                        productId: "\(_self.notification?.productID ?? 0)"
-                    )
+                    guard let _order = _self.order else { return }
+                    _self.api.patchSellerOrderStatus(to: .accepted, orderId: _order.id)
+                } else {
+                    
                 }
             }
             return cell
@@ -197,6 +220,16 @@ final class OffererViewController: UITableViewController {
         title = "Info Penawar"
     }
     
+    private func setupLoadingView() {
+        view.addSubview(loadingView)
+        NSLayoutConstraint.activate([
+            loadingView.heightAnchor.constraint(equalTo: view.heightAnchor),
+            loadingView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+    
     private func setupPopupView() {
         popupView = SHPopupView(
             frame: CGRect(),
@@ -218,6 +251,23 @@ final class OffererViewController: UITableViewController {
         let tableView = UITableView()
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    private func loadOrders() {
+        api.getSellerOrders { [weak self] result, error in
+            DispatchQueue.main.async {
+                guard let _self = self,
+                      let _result = result
+                else { return }
+                let filteredOrder = _result.filter { order in
+                    return order.productID == _self.notification?.productID && order.price == _self.notification?.bidPrice
+                }
+                guard !filteredOrder.isEmpty else { return }
+                _self.order = filteredOrder[0]
+                _self.loadingView.fadeOut()
+                print(_self.order)
+            }
+        }
     }
 }
 
