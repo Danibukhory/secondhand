@@ -384,7 +384,8 @@ struct SecondHandAPI {
     
     func patchSellerOrderStatus(
         to status: ProductStatus,
-        orderId: Int
+        orderId: Int,
+        _ completionHandler: @escaping (SHPatchedOrderResponse?, AFError?) -> Void
     ) {
         guard let _accessToken = accessToken else { return }
         let headers: HTTPHeaders = [
@@ -404,8 +405,10 @@ struct SecondHandAPI {
         .responseDecodable(of: SHPatchedOrderResponse.self) { (response) in
             switch response.result {
             case let .success(data):
+                completionHandler(data, nil)
                 print("Succesfully updated order status to: \(data.status)")
             case let .failure(error):
+                completionHandler(nil, error)
                 print(error)
             }
         }

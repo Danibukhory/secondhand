@@ -17,12 +17,20 @@ final class OffererProductCell: UITableViewCell {
     var offerTimeLabel = UILabel()
     var rejectButton = SHButton(frame: CGRect(), title: "Tolak", type: .bordered, size: .small)
     var acceptButton = SHButton(frame: CGRect(), title: "Terima", type: .filled, size: .small)
+    var productSoldButton = SHButton(frame: CGRect(), title: "Produk sudah terjual ke pembeli lain", type: .ghost, size: .regular)
+    var offerRejectedButton = SHButton(frame: CGRect(), title: "Penawaran ini sudah anda tolak", type: .ghost, size: .regular)
     
     typealias OnRejectButtonTap = () -> Void
     var onRejectButtonTap: OnRejectButtonTap?
     
     typealias OnAcceptButtonTap = () -> Void
     var onAcceptButtonTap: OnAcceptButtonTap?
+    
+    typealias OnSoldButtonTap = () -> Void
+    var onSoldButtonTap: OnSoldButtonTap?
+    
+    typealias OnOfferRejectedButtonTap = () -> Void
+    var onOfferRejectedButtonTap: OnOfferRejectedButtonTap?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -34,8 +42,8 @@ final class OffererProductCell: UITableViewCell {
     }
     
     private func defineLayout() {
-        contentView.addSubviews(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, rejectButton, acceptButton)
-        contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, rejectButton, acceptButton)
+        contentView.addSubviews(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, rejectButton, acceptButton, productSoldButton, offerRejectedButton)
+        contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, rejectButton, acceptButton, productSoldButton, offerRejectedButton)
         contentView.backgroundColor = .white
         
         productImageView.clipsToBounds = true
@@ -57,6 +65,12 @@ final class OffererProductCell: UITableViewCell {
         
         rejectButton.setActiveButtonTitle(string: "Tolak")
         rejectButton.addTarget(self, action: #selector(rejectTapped), for: .touchUpInside)
+        
+        productSoldButton.alpha = 0
+        productSoldButton.addTarget(self, action: #selector(soldTapped), for: .touchUpInside)
+        
+        offerRejectedButton.alpha = 0
+        offerRejectedButton.addTarget(self, action: #selector(offerRejectedTapped), for: .touchUpInside)
         
         let margin = contentView.layoutMarginsGuide
         NSLayoutConstraint.activate([
@@ -89,7 +103,15 @@ final class OffererProductCell: UITableViewCell {
             acceptButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             acceptButton.topAnchor.constraint(equalTo: rejectButton.topAnchor),
             acceptButton.widthAnchor.constraint(equalTo: rejectButton.widthAnchor),
-            acceptButton.bottomAnchor.constraint(equalTo: margin.bottomAnchor)
+            acceptButton.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
+            
+            productSoldButton.widthAnchor.constraint(equalTo: margin.widthAnchor),
+            productSoldButton.topAnchor.constraint(equalTo: rejectButton.topAnchor),
+            productSoldButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            offerRejectedButton.widthAnchor.constraint(equalTo: margin.widthAnchor),
+            offerRejectedButton.topAnchor.constraint(equalTo: rejectButton.topAnchor),
+            offerRejectedButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
         ])
     }
     
@@ -139,6 +161,14 @@ final class OffererProductCell: UITableViewCell {
     
     @objc private func acceptTapped() {
         onAcceptButtonTap?()
+    }
+    
+    @objc private func soldTapped() {
+        onSoldButtonTap?()
+    }
+    
+    @objc private func offerRejectedTapped() {
+        onOfferRejectedButtonTap?()
     }
     
 }

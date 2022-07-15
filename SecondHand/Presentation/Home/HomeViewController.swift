@@ -145,8 +145,6 @@ final class HomeViewController: UITableViewController {
                         _self.displayedSearchedProducts = filteredProducts
                     }
                     _self.searchTableView.reloadData()
-                    _self.searchTableView.fadeOut()
-                    _self.searchTableView.fadeIn()
                 }
                 return cell
                 
