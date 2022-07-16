@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 enum HomeViewCellRowType: Int {
     case header = 0
@@ -36,7 +37,6 @@ final class HomeViewController: UITableViewController {
         super.viewDidLoad()
         setupGestureRecognizers()
         setupSearchTableView()
-//        loadProducts()
         prepareScrollButton()
         tableView.register(HomeHeaderCell.self, forCellReuseIdentifier: "\(HomeHeaderCell.self)")
         tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
@@ -50,9 +50,10 @@ final class HomeViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         navigationController?.isNavigationBarHidden = true
-        handleAuth()
+        let isSorterButtonShown: Bool = UserDefaults.standard.bool(forKey: "isHomeProductSorterShown")
+        guard let cell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? HomeProductCell else { return }
+        cell.isSorterButtonShown = isSorterButtonShown
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -128,7 +129,6 @@ final class HomeViewController: UITableViewController {
                     productCell.collectionView.fadeOut()
                     productCell.collectionView.fadeIn()
                     productCell.sorterButton.setActiveButtonTitle(string: "Urutkan berdasarkan: acak")
-//                    _self.tableView.reloadData()
                 }
                 cell.onSearchBarTextChange = { [weak self] searchText in
                     guard let _self = self else { return }
@@ -145,8 +145,6 @@ final class HomeViewController: UITableViewController {
                         _self.displayedSearchedProducts = filteredProducts
                     }
                     _self.searchTableView.reloadData()
-                    _self.searchTableView.fadeOut()
-                    _self.searchTableView.fadeIn()
                 }
                 return cell
                 
@@ -162,12 +160,11 @@ final class HomeViewController: UITableViewController {
                 cell.selectionStyle = .none
                 cell.onProductLoad = { [weak self] in
                     guard let _self = self else { return }
-//                    _self.tableView.reloadData()
                     _self.products = cell.products
+                    cell.sorterButton.fadeIn()
                     cell.loadingIndicator.stopAnimating()
                     cell.collectionView.fadeOut()
                     cell.collectionView.fadeIn()
-                    cell.sorterButton.fadeIn()
                 }
                 return cell
             default:
@@ -218,26 +215,18 @@ final class HomeViewController: UITableViewController {
     private func setupGestureRecognizers() {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
         tapRecognizer.cancelsTouchesInView = false
+        searchTableView.addGestureRecognizer(tapRecognizer)
         tableView.addGestureRecognizer(tapRecognizer)
         tableView.keyboardDismissMode = .onDrag
         tabBarController?.navigationController?.isNavigationBarHidden = true
     }
     
-    private func handleAuth() {
-        let isLogin = UserDefaults.standard.bool(forKey: "isLogin")
-        if !isLogin {
-            let viewController = UINavigationController(rootViewController: SignInViewController())
-            viewController.modalPresentationStyle = .fullScreen
-            navigationController?.present(viewController, animated: true)
-        }
-    }
-    
-//    private func loadProducts() {
-//        let api = SecondHandAPI()
-//        api.getSellerProducts { [weak self] result, error in
-//            guard let _self = self else { return }
-//            _self.products = result ?? []
-//            _self.tableView.reloadData()
+//    private func handleAuth() {
+//        let isLogin = UserDefaults.standard.bool(forKey: "isLogin")
+//        if !isLogin {
+//            let viewController = UINavigationController(rootViewController: SignInViewController())
+//            viewController.modalPresentationStyle = .fullScreen
+//            navigationController?.present(viewController, animated: true)
 //        }
 //    }
     

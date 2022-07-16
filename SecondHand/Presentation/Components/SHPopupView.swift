@@ -80,6 +80,10 @@ final class SHPopupView: UIView {
         ])
     }
     
+    func changeTextLabelString(to string: String) {
+        self.popupTextLabel.setTitle(text: string, size: 14, weight: .medium, color: .white)
+    }
+    
     @objc private func dismissTapped() {
         onDismissButtonTap?()
         self.isPresenting = false

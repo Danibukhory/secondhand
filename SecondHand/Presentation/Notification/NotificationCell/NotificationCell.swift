@@ -29,6 +29,7 @@ final class NotificationCell: UITableViewCell {
                 contentView.layoutIfNeeded()
             } else {
                 widthNotificationBadgeConstraint?.constant = 8
+                contentView.layoutIfNeeded()
             }
         }
     }
@@ -45,12 +46,12 @@ final class NotificationCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        notificationTimeLabel.attributedText = nil
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        notificationTimeLabel.attributedText = nil
 //        loadingBackground.fadeOut()
 //        loadingIndicator.stopAnimating()
-    }
+//    }
     
     private func defineLayout() {
         contentView.addSubview(notificationBadge)
@@ -72,15 +73,12 @@ final class NotificationCell: UITableViewCell {
             loadingIndicator
         )
         backgroundColor = .white
-        
         notificationImageView.clipsToBounds = true
         notificationImageView.contentMode = .scaleAspectFill
         notificationImageView.layer.cornerRadius = 12
         
         notificationCategoryLabel.numberOfLines = 1
-        
         notificationContentLabel.numberOfLines = 0
-        
         notificationTimeLabel.numberOfLines = 1
         
         notificationBadge.layer.cornerRadius = 4
@@ -90,7 +88,6 @@ final class NotificationCell: UITableViewCell {
         loadingBackground.backgroundColor = .white
         loadingBackground.alpha = 0
         
-//        loadingIndicator.hidesWhenStopped = true
         loadingIndicator.style = .medium
         loadingIndicator.color = UIColor(rgb: 0x7126B5)
         
@@ -110,6 +107,7 @@ final class NotificationCell: UITableViewCell {
             notificationContentLabel.topAnchor.constraint(equalTo: notificationCategoryLabel.bottomAnchor),
             notificationContentLabel.leadingAnchor.constraint(equalTo: notificationCategoryLabel.leadingAnchor),
             notificationContentLabel.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
+            notificationContentLabel.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             
             notificationTimeLabel.topAnchor.constraint(equalTo: notificationImageView.topAnchor),
             notificationTimeLabel.trailingAnchor.constraint(equalTo: notificationBadge.leadingAnchor, constant: -8),
@@ -175,13 +173,6 @@ final class NotificationCell: UITableViewCell {
                 _self.layoutSubviews()
             }
             
-//            notificationCategoryLabel.setTitle(
-//                text: data.status ?? "Status not available",
-//                size: 10,
-//                weight: .regular,
-//                color: UIColor(rgb: 0x8A8A8A)
-//            )
-            
             _self.notificationContentLabel.setTitle(
                 text: "\(data.productName ?? "product has no name")\n\(data.bidPrice?.convertToCurrency() ?? data.product?.description ?? "")",
                 size: 14,
@@ -195,6 +186,13 @@ final class NotificationCell: UITableViewCell {
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
                 )
+            }
+            if let read = data.read {
+                if read {
+                    self?.isRead = true
+                } else {
+                    self?.isRead = false
+                }
             }
         }
         loadingIndicator.stopAnimating()

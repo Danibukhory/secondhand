@@ -10,12 +10,26 @@ import UIKit
 final class NotificationViewController: UITableViewController {
     
     var notifications: [SHNotificationResponse] = []
-    let refControl = UIRefreshControl()
+    var refControl = UIRefreshControl()
+    var loadingIndicator: UIActivityIndicatorView = {
+        var indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.startAnimating()
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    var isAlreadyLoading: Bool = false {
+        didSet {
+            loadingIndicator.stopAnimating()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupLoadingIndicator()
         navigationController?.navigationBar.backgroundColor = .white
         tableView.register(NotificationCell.self, forCellReuseIdentifier: "\(NotificationCell.self)")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "emptyCell")
         title = "Notifikasi"
         navigationController?.navigationBar.useSHLargeTitle()
         view.backgroundColor = .systemBackground
@@ -30,7 +44,11 @@ final class NotificationViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notifications.count
+        if !notifications.isEmpty {
+            return notifications.count
+        } else {
+            return 1
+        }
     }
     
     override func tableView(
@@ -38,34 +56,51 @@ final class NotificationViewController: UITableViewController {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         let row = indexPath.row
-        let notification = notifications[row]
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: "\(NotificationCell.self)",
-            for: indexPath
-        ) as? NotificationCell else {
-            return UITableViewCell()
+        switch notifications.count {
+        case 0:
+            guard isAlreadyLoading else { return UITableViewCell() }
+            let cell = tableView.dequeueReusableCell(withIdentifier: "emptyCell", for: indexPath)
+            cell.selectionStyle = .none
+            var config = cell.defaultContentConfiguration()
+            config.attributedText = NSAttributedString(string: "Tidak ada notifikasi.", attributes: [.font : UIFont(name: "Poppins-Regular", size: 14)!])
+            cell.contentConfiguration = config
+            return cell
+        default:
+            let notification = notifications[row]
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: "\(NotificationCell.self)",
+                for: indexPath
+            ) as? NotificationCell else {
+                return UITableViewCell()
+            }
+            cell.fill(with: notification)
+            if notification.read ?? false {
+                cell.isRead = true
+            }
+            return cell
         }
-        cell.fill(with: notification)
-        if notification.read ?? false {
-            cell.isRead = true
-        }
-        return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
-        let notification = notifications[row]
-        guard let user = notification.user else { return }
-        let viewController = OffererViewController(user: user, notification: notification)
-        viewController.buyerName = notification.buyerName
-        
-        navigationController?.pushViewController(viewController, animated: true)
+        switch notifications.count {
+        case 0:
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        default:
+            let notification = notifications[row]
+            guard let user = notification.user else { return }
+            let viewController = OffererViewController(user: user, notification: notification)
+            viewController.buyerName = notification.buyerName
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
     
     override func tableView(
         _ tableView: UITableView,
         leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
+        guard !notifications.isEmpty else { return nil }
         let row = indexPath.row
         let item = UIContextualAction(
             style: .destructive,
@@ -118,28 +153,57 @@ final class NotificationViewController: UITableViewController {
             return nil
         }
         let row = indexPath.row
+//        let notification = notifications[row]
+        let read = cell.isRead
+        let actionTitle: String = {
+            if read {
+                return "Tandai belum dibaca"
+            } else {
+                return "Tandai sudah dibaca"
+            }
+        }()
         let item = UIContextualAction(
             style: .normal,
-            title: "Mark As Read"
+            title: actionTitle
         ) { action, view, completion in
+            let api = SecondHandAPI.shared
+            let alertTitle: String = {
+                if read {
+                    return "Tandai Notifikasi Belum Dibaca"
+                } else {
+                    return "Tandai Notifikasi Sudah Dibaca"
+                }
+            }()
+            let alertMessage: String = {
+                if read {
+                    return "Apakah anda yakin ingin menandai notifikasi ini belum dibaca?"
+                } else {
+                    return "Apakah anda yakin ingin menandai notifikasi ini sudah dibaca?"
+                }
+            }()
             let ac = UIAlertController(
-                title: "Mark Notification As Read",
-                message: "Are you sure want to mark this notification as read?",
-                preferredStyle: .alert)
+                title: alertTitle,
+                message: alertMessage,
+                preferredStyle: .alert
+            )
             
             let markAsRead = UIAlertAction(
-                title: "Mark As Read",
+                title: actionTitle,
                 style: .default
             ) { _ in
-                cell.isRead = true
-                let notificationId = self.notifications[row].id
-                let api = SecondHandAPI()
-                api.setNotificationAsRead(notificationId: "\(notificationId ?? 0)")
-                completion(true)
+                if read {
+                    cell.isRead = false
+                    completion(true)
+                } else {
+                    cell.isRead = true
+                    let notificationId = self.notifications[row].id
+                    api.setNotificationAsRead(notificationId: "\(notificationId ?? 0)")
+                    completion(true)
+                }
             }
             
             let cancel = UIAlertAction(
-                title: "Cancel",
+                title: "Batal",
                 style: .cancel
             ) { _ in
                 completion(true)
@@ -161,6 +225,7 @@ final class NotificationViewController: UITableViewController {
             guard let _self = self else { return }
             DispatchQueue.main.async {
                 _self.notifications = result?.sorted(by: {$0.transactionDate ?? "" > $1.transactionDate ?? ""}) ?? []
+                _self.isAlreadyLoading = true
                 _self.tableView.reloadData()
             }
         }
@@ -170,6 +235,14 @@ final class NotificationViewController: UITableViewController {
     private func setupRefreshControl() {
         refControl.addTarget(self, action: #selector(refreshNotification), for: .valueChanged)
         self.refreshControl = refControl
+    }
+    
+    private func setupLoadingIndicator() {
+        view.addSubview(loadingIndicator)
+        NSLayoutConstraint.activate([
+            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingIndicator.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor)
+        ])
     }
     
     @objc private func refreshNotification() {

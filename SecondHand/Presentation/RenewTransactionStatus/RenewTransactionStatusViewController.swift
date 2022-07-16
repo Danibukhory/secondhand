@@ -44,6 +44,8 @@ final class RenewTransactionStatusViewController: SHModalViewController {
         return button
     }()
     
+    var isCanceled: Bool = false
+    
     typealias OnSendButtonTap = () -> Void
     var onSendButtonTap: OnSendButtonTap?
     
@@ -150,6 +152,12 @@ extension RenewTransactionStatusViewController: UITableViewDelegate, UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? TransactionStatusCell else { return }
+        let row = indexPath.row
+        if row == 1 {
+            isCanceled = true
+        } else {
+            isCanceled = false
+        }
         cell.selected()
         sendButton.isEnabled = true
     }
