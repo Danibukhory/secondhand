@@ -53,8 +53,6 @@
 		7B878B7E2875D16D00748772 /* IndonesiaCityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B7D2875D16D00748772 /* IndonesiaCityList.swift */; };
 		7B878B802875D1EB00748772 /* BuyerSixViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B7F2875D1EB00748772 /* BuyerSixViewController.swift */; };
 		7B878B822875D21B00748772 /* BuyerTenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B812875D21B00748772 /* BuyerTenViewController.swift */; };
-		7B878B842875D79100748772 /* SignInResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B832875D79100748772 /* SignInResponse.swift */; };
-		7B878B862875D7C000748772 /* SignUpResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B852875D7C000748772 /* SignUpResponse.swift */; };
 		7B878B88287C44E400748772 /* SellerPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B87287C44E400748772 /* SellerPreviewViewController.swift */; };
 		7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */; };
 		7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */; };
@@ -126,8 +124,6 @@
 		7B878B7D2875D16D00748772 /* IndonesiaCityList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndonesiaCityList.swift; sourceTree = "<group>"; };
 		7B878B7F2875D1EB00748772 /* BuyerSixViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerSixViewController.swift; sourceTree = "<group>"; };
 		7B878B812875D21B00748772 /* BuyerTenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerTenViewController.swift; sourceTree = "<group>"; };
-		7B878B832875D79100748772 /* SignInResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInResponse.swift; sourceTree = "<group>"; };
-		7B878B852875D7C000748772 /* SignUpResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpResponse.swift; sourceTree = "<group>"; };
 		7B878B87287C44E400748772 /* SellerPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerPreviewViewController.swift; sourceTree = "<group>"; };
 		7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHLongTextField.swift; sourceTree = "<group>"; };
 		7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHCustomTextFieldForm.swift; sourceTree = "<group>"; };
@@ -227,8 +223,6 @@
 				38106AA1286C633200B5794A /* SHCategoryResponse.swift */,
 				38581779286D802400748254 /* SHBuyerProductResponse.swift */,
 				3858177B286D809100748254 /* SHUserResponse.swift */,
-				7B878B832875D79100748772 /* SignInResponse.swift */,
-				7B878B852875D7C000748772 /* SignUpResponse.swift */,
 				7B79A3FB2881A21F009D8509 /* SHBuyerOrderResponse.swift */,
 			);
 			path = Entity;
@@ -596,7 +590,6 @@
 				3858177A286D802400748254 /* SHBuyerProductResponse.swift in Sources */,
 				7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */,
 				38349B76287A7EDF001E98F0 /* HomeSearchResultCell.swift in Sources */,
-				7B878B862875D7C000748772 /* SignUpResponse.swift in Sources */,
 				6EAAC82228622226008AC66E /* AccountTableViewController.swift in Sources */,
 				38D0CC3728634BF300561C17 /* SHModalViewController.swift in Sources */,
 				382F59622860B00E009F0BB5 /* OffererViewController.swift in Sources */,
@@ -619,7 +612,6 @@
 				6E78118C28522ED600104FE1 /* SecondHand.xcdatamodeld in Sources */,
 				38822BC4286B3282006B2C6C /* SHNotificationResponse.swift in Sources */,
 				7B878B782875CFB800748772 /* SHLabelView.swift in Sources */,
-				7B878B842875D79100748772 /* SignInResponse.swift in Sources */,
 				6E78118428522ED600104FE1 /* SceneDelegate.swift in Sources */,
 				7B878B822875D21B00748772 /* BuyerTenViewController.swift in Sources */,
 				3895B759285B617100202609 /* UINavigationBar+Extension.swift in Sources */,
