@@ -49,6 +49,21 @@ final class HomeProductCell: UITableViewCell {
         return indicator
     }()
     
+    var isSorterButtonShown: Bool = false {
+        didSet {
+            if isSorterButtonShown {
+                heightSorterButtonConstraint?.constant = 48
+                contentView.layoutIfNeeded()
+            } else {
+                heightSorterButtonConstraint?.constant = 0
+                contentView.layoutIfNeeded()
+            }
+        }
+    }
+    var isSorterButtonInitiallyShown: Bool = UserDefaults.standard.bool(forKey: "isHomeProductSorterShown")
+    
+    var heightSorterButtonConstraint: NSLayoutConstraint?
+    
     private let screenRect: CGRect = UIScreen.main.bounds
     var products: [SHBuyerProductResponse] = []
     var displayedProducts: [SHBuyerProductResponse] = []
@@ -74,10 +89,16 @@ final class HomeProductCell: UITableViewCell {
             options: .displayInline,
             children: self.sortMenuElements()
         )
+        if isSorterButtonInitiallyShown {
+            heightSorterButtonConstraint = sorterButton.heightAnchor.constraint(equalToConstant: 48)
+        } else {
+            heightSorterButtonConstraint = sorterButton.heightAnchor.constraint(equalToConstant: 0)
+        }
         
         NSLayoutConstraint.activate([
             sorterButton.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
             sorterButton.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
+            heightSorterButtonConstraint!,
             
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
@@ -86,14 +107,21 @@ final class HomeProductCell: UITableViewCell {
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             loadingIndicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            loadingIndicator.topAnchor.constraint(equalTo: sorterButton.bottomAnchor, constant: 10),
+            loadingIndicator.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor, constant: 10),
             
             contentView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height),
         ])
     }
     
     private func loadProducts() {
-        let api = SecondHandAPI()
+        let api = SecondHandAPI.shared
+//        api.getBuyerProducts { [weak self] result, error in
+//            guard let _self = self else { return }
+//            _self.products = result ?? []
+//            _self.displayedProducts = _self.products
+//            _self.collectionView.reloadData()
+//            _self.onProductLoad?()
+//        }
         let group = DispatchGroup()
         defer {
             group.notify(queue: .main) { [weak self] in

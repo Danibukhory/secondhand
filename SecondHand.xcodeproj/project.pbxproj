@@ -22,6 +22,7 @@
 		3858177E286D82F400748254 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858177D286D82F400748254 /* Int+Extension.swift */; };
 		38822BC1286AED53006B2C6C /* SecondHandAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38822BC0286AED53006B2C6C /* SecondHandAPI.swift */; };
 		38822BC4286B3282006B2C6C /* SHNotificationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38822BC3286B3282006B2C6C /* SHNotificationResponse.swift */; };
+		3893251D287DC14600151410 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3893251C287DC14600151410 /* SettingsViewController.swift */; };
 		38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C6B2859EAD7000DD541 /* HomeViewController.swift */; };
 		38940C6E2859EB08000DD541 /* HomeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C6D2859EB08000DD541 /* HomeHeaderCell.swift */; };
 		38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940C6F2859EB2F000DD541 /* CategorySelectorCollectionCell.swift */; };
@@ -36,6 +37,7 @@
 		38AB06DE28588D030006342E /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38AB06DA28588D030006342E /* Poppins-Light.ttf */; };
 		38AB06DF28588D030006342E /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38AB06DB28588D030006342E /* Poppins-SemiBold.ttf */; };
 		38AB06E128588D5D0006342E /* SHButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38AB06E028588D5D0006342E /* SHButton.swift */; };
+		38B758F9288056B6007D09B3 /* SHSellerOrderResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38B758F8288056B6007D09B3 /* SHSellerOrderResponse.swift */; };
 		38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */; };
 		38BC0E9028597E4D00AB4281 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38BC0E8F28597E4D00AB4281 /* Poppins-Medium.ttf */; };
 		38D0CC3728634BF300561C17 /* SHModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0CC3628634BF300561C17 /* SHModalViewController.swift */; };
@@ -89,6 +91,7 @@
 		3858177D286D82F400748254 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		38822BC0286AED53006B2C6C /* SecondHandAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondHandAPI.swift; sourceTree = "<group>"; };
 		38822BC3286B3282006B2C6C /* SHNotificationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHNotificationResponse.swift; sourceTree = "<group>"; };
+		3893251C287DC14600151410 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		38940C6B2859EAD7000DD541 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		38940C6D2859EB08000DD541 /* HomeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderCell.swift; sourceTree = "<group>"; };
 		38940C6F2859EB2F000DD541 /* CategorySelectorCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySelectorCollectionCell.swift; sourceTree = "<group>"; };
@@ -103,6 +106,7 @@
 		38AB06DA28588D030006342E /* Poppins-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Light.ttf"; sourceTree = "<group>"; };
 		38AB06DB28588D030006342E /* Poppins-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-SemiBold.ttf"; sourceTree = "<group>"; };
 		38AB06E028588D5D0006342E /* SHButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHButton.swift; sourceTree = "<group>"; };
+		38B758F8288056B6007D09B3 /* SHSellerOrderResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHSellerOrderResponse.swift; sourceTree = "<group>"; };
 		38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		38BC0E8F28597E4D00AB4281 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		38D0CC3628634BF300561C17 /* SHModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHModalViewController.swift; sourceTree = "<group>"; };
@@ -223,9 +227,18 @@
 				38106AA1286C633200B5794A /* SHCategoryResponse.swift */,
 				38581779286D802400748254 /* SHBuyerProductResponse.swift */,
 				3858177B286D809100748254 /* SHUserResponse.swift */,
+				38B758F8288056B6007D09B3 /* SHSellerOrderResponse.swift */,
 				7B79A3FB2881A21F009D8509 /* SHBuyerOrderResponse.swift */,
 			);
 			path = Entity;
+			sourceTree = "<group>";
+		};
+		3893251B287DC13300151410 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				3893251C287DC14600151410 /* SettingsViewController.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		38940C6A2859EAC9000DD541 /* Home */ = {
@@ -435,6 +448,7 @@
 		E9C1F3322858ABC700489969 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				3893251B287DC13300151410 /* Settings */,
 				E90C4BAD2869FB3C00C64528 /* SellingList */,
 				383095DB28646FA600EDFDAB /* RenewTransactionStatus */,
 				384B04EB2862425300949209 /* OfferAccepted */,
@@ -594,6 +608,7 @@
 				38D0CC3728634BF300561C17 /* SHModalViewController.swift in Sources */,
 				382F59622860B00E009F0BB5 /* OffererViewController.swift in Sources */,
 				E90C4BB12869FB9200C64528 /* RecomendationListViewController.swift in Sources */,
+				38B758F9288056B6007D09B3 /* SHSellerOrderResponse.swift in Sources */,
 				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
 				383095DD28646FD300EDFDAB /* RenewTransactionStatusViewController.swift in Sources */,
@@ -641,6 +656,7 @@
 				E90C4BAF2869FB7D00C64528 /* ProductListViewController.swift in Sources */,
 				384B04ED2862427500949209 /* OfferAcceptedViewController.swift in Sources */,
 				E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */,
+				3893251D287DC14600151410 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

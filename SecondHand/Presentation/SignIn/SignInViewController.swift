@@ -8,7 +8,6 @@
 import UIKit
 
 final class SignInViewController: UIViewController {
-    
     let signManager = SecondHandAPI.shared
     
     private var signInData: SignInResponse = SignInResponse()
@@ -33,6 +32,7 @@ final class SignInViewController: UIViewController {
         let textField = SHRoundedTextfield()
         textField.setPlaceholder(placeholder: "Email")
         textField.addTarget(self, action: #selector(handleEmailTextChange), for: .editingChanged)
+        textField.keyboardType = .emailAddress
         textField.autocapitalizationType = .none
         return textField
     }()
@@ -59,6 +59,7 @@ final class SignInViewController: UIViewController {
         let button = SHButton(frame: CGRect(), title: "Masuk", type: .filled, size: .regular)
 //        button.addTarget(self, action: #selector(moveToMainView), for: .touchUpInside)
         button.addTarget(self, action: #selector(handleSignInButton), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
     
@@ -81,8 +82,19 @@ final class SignInViewController: UIViewController {
         return button
     }()
     
+    private lazy var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        indicator.color = .white
+        return indicator
+    }()
+    
+    private lazy var tapGestureRecognizer = UITapGestureRecognizer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        prepareTapRecognizer()
         view.backgroundColor = .systemBackground
         configure()
     }
@@ -92,42 +104,33 @@ final class SignInViewController: UIViewController {
               let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
         else { return }
     
-        switch(emailText.isEmpty,passwordText.isEmpty) {
-        case (true,true):
-            setupAlert(title: "Error", message: "Please Input Username & Password!", style: .alert)
-
-        case (true, false) :
-            setupAlert(title: "Error", message: "Please Input Username!", style: .alert)
-
-        case (false, true) :
-            setupAlert(title: "Error", message: "Please Input Password!", style: .alert)
-
-        default:
-            if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
-                
-                signManager.signIn(email: emailText, password: passwordText) { [weak self] result, error in
-                    guard let _self = self else {
-                        return
-                    }
-                    _self.signInData.id = result?.id
-                    
-                    if _self.signInData.id != 0 {
-                        UserDefaults.standard.set(true, forKey: "isLogin")
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            _self.dismiss(animated: true)
-                        }
-                    }
+        if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
+            loadingIndicator.startAnimating()
+            signInButton.setActiveButtonTitle(string: "")
+            signManager.signIn(email: emailText, password: passwordText) { [weak self] result, error in
+                guard let _self = self else { return }
+                guard let _result = result else {
+                    self?.loadingIndicator.stopAnimating()
+                    self?.signInButton.setActiveButtonTitle(string: "Masuk")
+                    self?.setupAlert(title: "Error", message: "Email atau password salah. Coba lagi.", style: .alert)
+                    return
                 }
-                
-                // still need improvement about alert and flow!
-                
-                setupAlert(title: "Success", message: "Success Sign In", style: .alert)
-                
-            } else {
-                setupAlert(title: "Error", message: "Password is not valid", style: .alert)
+                _self.signInData.id = _result.id
+                if _self.signInData.id != 0 {
+                    UserDefaults.standard.set(_result.accessToken, forKey: "accessToken")
+                    _self.loadingIndicator.stopAnimating()
+                    _self.signInButton.setActiveButtonTitle(string: "Masuk")
+                    UserDefaults.standard.set(true, forKey: "isLogin")
+                    let home = MainTabBarController()
+                    _self.navigationController?.pushViewController(home, animated: true)
+                }
             }
+        } else {
+            setupAlert(title: "Error", message: "Password tidak valid.", style: .alert)
+            loadingIndicator.stopAnimating()
+            signInButton.setActiveButtonTitle(string: "Masuk")
         }
+        
     }
     
     @objc func moveToMainView() {
@@ -143,28 +146,38 @@ final class SignInViewController: UIViewController {
     }
     
     @objc func handleEmailTextChange() {
-        guard let text = emailTextField.text else {
-            return
-        }
+        guard let text = emailTextField.text,
+              let password = passwordTextField.text
+        else { return }
         if text.isValidEmail {
             emailTextField.layer.borderColor = UIColor.systemGreen.cgColor
+            if !password.isEmpty && password.isValidPassword(password) {
+                signInButton.isEnabled = true
+            }
         } else if text.isEmpty {
             emailTextField.layer.borderColor = UIColor.systemGray5.cgColor
+            signInButton.isEnabled = false
         } else {
             emailTextField.layer.borderColor = UIColor.systemRed.cgColor
+            signInButton.isEnabled = false
         }
     }
         
     @objc func handlePasswordTextChange() {
-        guard let text = passwordTextField.text else {
-            return
-        }
+        guard let text = passwordTextField.text,
+              let email = emailTextField.text
+        else { return }
         if text.isValidPassword(text) {
             passwordTextField.layer.borderColor = UIColor.systemGreen.cgColor
-        } else if text.isEmpty{
+            if !email.isEmpty && email.isValidEmail {
+                signInButton.isEnabled = true
+            }
+        } else if text.isEmpty {
             passwordTextField.layer.borderColor = UIColor.systemGray5.cgColor
+            signInButton.isEnabled = false
         } else {
             passwordTextField.layer.borderColor = UIColor.systemRed.cgColor
+            signInButton.isEnabled = false
         }
     }
     
@@ -173,9 +186,6 @@ final class SignInViewController: UIViewController {
         viewController.modalPresentationStyle = .fullScreen
         present(viewController, animated: true, completion: nil)
     }
-    
-    
-    
     
     private func configure() {
         view.addSubviews(
@@ -188,6 +198,7 @@ final class SignInViewController: UIViewController {
             noAccountLabel,
             moveToSignUpPageButton
         )
+        signInButton.addSubview(loadingIndicator)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
@@ -213,6 +224,9 @@ final class SignInViewController: UIViewController {
             signInButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
             signInButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             
+            loadingIndicator.centerXAnchor.constraint(equalTo: signInButton.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor),
+            
             noAccountLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
             noAccountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 75),
             
@@ -222,13 +236,25 @@ final class SignInViewController: UIViewController {
         ])
     }
     
+    private func prepareTapRecognizer() {
+        tapGestureRecognizer.addTarget(self, action: #selector(dismissKeyboard))
+        tapGestureRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+    
+    @objc func dismissKeyboard() {
+        emailTextField.endEditing(true)
+        passwordTextField.endEditing(true)
+        self.setEditing(false, animated: true)
+    }
+    
     private func setupAlert(
         title titleAlert: String,
         message messageAlert: String,
         style styleAlert: UIAlertController.Style)
     {
         let alert = UIAlertController(title: titleAlert, message: messageAlert, preferredStyle: styleAlert)
-        alert.addAction(UIAlertAction(title: "OKE", style: UIAlertAction.Style.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Oke", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

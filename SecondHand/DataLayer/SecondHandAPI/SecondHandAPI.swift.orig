@@ -11,7 +11,11 @@ import Alamofire
 struct SecondHandAPI {
     static let shared = SecondHandAPI()
     let baseUrl: String = "https://market-final-project.herokuapp.com/"
+<<<<<<< HEAD
+    let accessToken: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRhZmZhc0BnbWFpbC5jb20iLCJpYXQiOjE2NTc3NjYzNjV9.MC514MzVoUSfOHttY5R9a8qx2XvxCsjkr7OplYkgPyE"
+=======
     let accessToken: String? = UserDefaults.standard.string(forKey: "accessToken")
+>>>>>>> main
     
     enum ProductStatus: String {
         case accepted = "accepted"
@@ -208,30 +212,113 @@ struct SecondHandAPI {
             }
         }
     }
-func getUserDetails(
-_ completionHandler: @escaping (SHUserResponse?, AFError?) -> Void
-) {
-guard let _accessToken = accessToken else { return }
-let headers: HTTPHeaders = [
-"access_token" : _accessToken,
-]
-AF.request(
-baseUrl + "auth/user",
-method: .get,
-headers: headers
-)
-.validate()
-.responseDecodable(of: SHUserResponse.self) { (response) in
-switch response.result {
-case let .success(data):
-completionHandler(data, nil)
-case let .failure(error):
-completionHandler(nil, error)
-print(String(describing: error))
-}
-}
-}
+    
+<<<<<<< HEAD
+    func getUserDetails(
+        _ completionHandler: @escaping (SHUserResponse?, AFError?) -> Void
+    ) {
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+        ]
+        AF.request(
+            baseUrl + "auth/user",
+            method: .get,
+            headers: headers
+        )
+            .validate()
+            .responseDecodable(of: SHUserResponse.self) { (response) in
+                switch response.result {
+                case let .success(data):
+                    completionHandler(data, nil)
+                case let .failure(error):
+                    completionHandler(nil, error)
+                    print(String(describing: error))
+                }
+            }
+    }
+    
+    func postProductAsSeller(with name: String, description desc: String, basePrice price: Int, category catg: Int, location loc: String, productPicture image: UIImage) {
+           let requestUrl = "seller/product"
+           
+           guard let imageData = image.jpegData(compressionQuality: 0.3) else {return}
+               
+           let headers: HTTPHeaders = [
+               "access_token" : accessToken,
+               "Content-Type" : "multipart/form-data",
+           ]
+           
+           AF.upload(multipartFormData: { (multiPartFormData) in
+               multiPartFormData.append(name.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "name")
+               multiPartFormData.append(desc.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "description")
+               multiPartFormData.append("\(price)".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "base_price")
+               multiPartFormData.append("\(catg)".description.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "category_ids")
+               multiPartFormData.append(loc.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "location")
+               multiPartFormData.append(imageData, withName: "image", fileName: "\(name).jpg", mimeType: "image/jpeg")
+               
+           }, to: baseUrl + requestUrl, headers: headers)
+           .uploadProgress(queue: .main) { progress in
+               print("Upload Progress: \(progress.fractionCompleted)")
+           }
+           .responseJSON { data in
+               print(data.debugDescription)
+           }
+       }
+       
+       func putAccountDetail(with name: String, city cty: String, phoneNumber phone: Int, address add: String, accountPicture image: UIImage) {
+           let requestUrl = "auth/user"
+           
+           guard let imageData = image.jpegData(compressionQuality: 0.3) else {return}
+               
+           let headers: HTTPHeaders = [
+               "access_token" : accessToken,
+               "Content-Type" : "multipart/form-data",
+           ]
+           
+           AF.upload(multipartFormData: { (multiPartFormData) in
+               multiPartFormData.append(name.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "full_name")
+               multiPartFormData.append(add.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "address")
+               multiPartFormData.append("\(phone)".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "phone_number")
+               multiPartFormData.append(cty.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "city")
+               multiPartFormData.append("".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "email")
+               multiPartFormData.append("".data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "password")
+               multiPartFormData.append(imageData, withName: "image", fileName: "\(name).jpg", mimeType: "image/jpeg")
 
+           }, to: baseUrl + requestUrl, method: .put, headers: headers)
+           .uploadProgress(queue: .main) { progress in
+               print("Upload Progress: \(progress.fractionCompleted)")
+           }
+           .responseJSON { data in
+               print(data.debugDescription)
+           }
+       }
+       
+    func postBuyerOrder(id itemID: Int, bidPrice price: Int, _ completionHandler: @escaping (AFDataResponse<Data>)-> Void) {
+           let requestUrl = "buyer/order"
+                       
+           let headers: HTTPHeaders = [
+               "access_token" : accessToken,
+               "accept"       : "body",
+               "Content-Type" : "application/json",
+           ]
+           
+           let parameter: [String:Any] = [
+               "product_id": itemID,
+               "bid_price":  price
+           ]
+       
+           AF.request(baseUrl + requestUrl, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
+               .responseDecodable { (response: AFDataResponse<Data>) in
+//                   switch response.result {
+//                   case let .success(data):
+//                       completionHandler(data, nil)
+//                   case let .failure(error):
+//                       completionHandler(nil, error)
+//                       print(String(describing: error))
+//                   }
+                   completionHandler(response)
+           }
+       }
+=======
     func postProductAsSeller(
         with name: String,
         description desc: String,
@@ -300,7 +387,7 @@ print(String(describing: error))
         }
     }
        
-    func postBuyerOrder(id itemID: Int, bidPrice price: Int, _ completionHandler: @escaping (AFDataResponse<Data>) -> Void) {
+    func postBuyerOrder(id itemID: Int, bidPrice price: Int) {
         let requestUrl = "buyer/order"
         guard let _accessToken = accessToken else { return }
         let headers: HTTPHeaders = [
@@ -315,16 +402,21 @@ print(String(describing: error))
         
         AF.request(baseUrl + requestUrl, method: .post, parameters: parameter, headers: headers)
             .responseDecodable { (response: AFDataResponse<Data>) in
-                completionHandler(response)
+                switch response.result{
+                case .success(let value):
+                    print(value.debugDescription)
+                case .failure(let value):
+                    print(value.errorDescription)
+                }
             }
     }
+>>>>>>> main
     
     func getBuyerOrders(_ completionHandler: @escaping ([SHBuyerOrderResponse]?, AFError?) -> Void) {
         let requestUrl = "buyer/order"
-        guard let _accessToken = accessToken else { return }
 
         let headers: HTTPHeaders = [
-            "access_token" : _accessToken,
+            "access_token" : accessToken,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         AF.request(

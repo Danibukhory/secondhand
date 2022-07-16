@@ -253,11 +253,8 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         sizeForItemAt indexPath: IndexPath) -> CGSize {
-            guard let cell = collectionView.cellForItem(at: indexPath) as? CategorySelectorCollectionCell else {
-                return CGSize(width: 150, height: 40)
-            }
-            return cell.intrinsicContentSize
-    }
+            return CGSize(width: 150, height: 40)
+        }
     
     func collectionView(
         _ collectionView: UICollectionView
