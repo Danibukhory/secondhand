@@ -7,10 +7,14 @@
 
 import UIKit
 
+
 final class HomeProductCell: UITableViewCell {
-    
+        
     typealias OnProductLoad = () -> Void
     var onProductLoad: OnProductLoad?
+    
+    typealias DidSelectProduct = (SHBuyerProductResponse) -> Void
+    var didSelectProduct: DidSelectProduct?
     
     var sorterButton: SHButton = {
         let button = SHButton(
@@ -217,6 +221,9 @@ extension HomeProductCell: UICollectionViewDataSource, UICollectionViewDelegate,
     ) {
         let item = indexPath.item
         print("pressed item \(item)")
+        
+        let product = displayedProducts[item]
+        didSelectProduct?(product)
     }
     
 }

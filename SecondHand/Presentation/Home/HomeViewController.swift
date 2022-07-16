@@ -7,13 +7,14 @@
 
 import UIKit
 
+
 enum HomeViewCellRowType: Int {
     case header = 0
     case product = 1
 }
 
 final class HomeViewController: UITableViewController {
-    
+        
     var searchTableView = UITableView()
     var products: [SHBuyerProductResponse] = []
     var displayedSearchedProducts: [SHBuyerProductResponse] = []
@@ -169,10 +170,32 @@ final class HomeViewController: UITableViewController {
                     cell.collectionView.fadeIn()
                     cell.sorterButton.fadeIn()
                 }
+                cell.didSelectProduct = { [weak self] product in
+                    guard let _self = self else { return }
+                    let buyerSixVC = BuyerSixViewController()
+                    buyerSixVC.buyerResponse = product
+                    buyerSixVC.modalPresentationStyle = .overCurrentContext
+                    _self.tabBarController?.navigationController?.present(buyerSixVC, animated: true)
+                }
+                
                 return cell
             default:
                 return UITableViewCell()
             }
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch tableView {
+        case searchTableView:
+            let item = indexPath.item
+            let product = displayedSearchedProducts[item]
+            let buyerSixVC = BuyerSixViewController()
+            buyerSixVC.buyerResponse = product
+            buyerSixVC.modalPresentationStyle = .overCurrentContext
+            self.tabBarController?.navigationController?.present(buyerSixVC, animated: true)
+        default:
+            break
         }
     }
     
@@ -284,4 +307,5 @@ final class HomeViewController: UITableViewController {
     }
     
 }
+
 

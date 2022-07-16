@@ -10,9 +10,12 @@ import PhotosUI
 
 
 final class DetailProductViewController: UIViewController {
+    private var userResponse: SHUserResponse?
     private lazy var scrollView = UIScrollView()
     private lazy var containerView = UIView()
+    private lazy var categoryName: String = ""
     private lazy var category: Int = 0
+    private lazy var apiCall = SecondHandAPI()
     
     private lazy var productName = SHLabelView(frame: CGRect.zero, title: "Nama Produk")
     private lazy var productPrice = SHLabelView(frame: CGRect.zero, title: "Harga Produk")
@@ -83,8 +86,13 @@ final class DetailProductViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = "Lengkapi Detail Produk"
+        self.navigationItem.title = "Jual"
+        self.navigationController?.isNavigationBarHidden = false
+
         view.backgroundColor = .white
-        
+        getUserData { response in
+            self.userResponse = response
+        }
         setupSubviews()
         defineLayout()
     }
@@ -116,15 +124,81 @@ final class DetailProductViewController: UIViewController {
 
         categoryDropdown.setPlaceholder(placeholder: "Pilih Kategori")
         categoryDropdown.arrowColor = UIColor(rgb: 0x8A8A8A)
-        categoryDropdown.optionArray = ["Hobi", "Aksesoris", "Kendaraan"]
-        categoryDropdown.optionIds = [1,2,3]
+        getCategories()
         categoryDropdown.didSelect { selectedText, index, id in
+            self.categoryName = selectedText
             self.category = id
         }
     
         buttonPreview.backgroundColor = .white
         buttonPublish.addTarget(self, action: #selector(publishButtonTapped), for: .touchUpInside)
-        buttonPreview.addTarget(self, action: #selector(publishButtonTapped), for: .touchUpInside)
+        buttonPreview.addTarget(self, action: #selector(previewButtonTapped), for: .touchUpInside)
+        
+    }
+    
+    private func getUserData(completion: @escaping ((SHUserResponse) -> ())) {
+        let apiCall = SecondHandAPI()
+        let group = DispatchGroup()
+        var userResponse: SHUserResponse? = nil
+        defer {
+            group.notify(queue: .main) {
+                completion(userResponse!)
+            }
+        }
+        group.enter()
+        apiCall.getUserDetails { data, error in
+            userResponse = data
+            group.leave()
+        }
+    }
+    
+    private func getCategories() {
+    
+        apiCall.getProductCategories { responses, error in
+            var listName: [String] = []
+            var listInd: [Int] = []
+            for response in responses ?? [] {
+                listName.append(response.name!)
+                listInd.append(response.id!)
+            }
+            self.categoryDropdown.optionArray = listName
+            self.categoryDropdown.optionIds = listInd
+        }
+    }
+    
+    @objc private func previewButtonTapped() {
+        if (nameTextfield.text?.isEmpty == true) {
+            nameTextfield.layer.borderColor = UIColor.red.cgColor
+            nameTextfield.layer.borderWidth = 1
+        }
+        if (priceTextfield.text?.isEmpty == true) {
+            priceTextfield.layer.borderColor = UIColor.red.cgColor
+            priceTextfield.layer.borderWidth = 1
+        }
+        if (descTextfield.text == "Contoh: Jalan Ikan Hiu 33") {
+            descTextfield.layer.borderColor = UIColor.red.cgColor
+            descTextfield.layer.borderWidth = 1
+        }
+        if (categoryDropdown.text?.isEmpty == true) {
+            categoryDropdown.layer.borderColor = UIColor.red.cgColor
+            categoryDropdown.layer.borderWidth = 1
+        }
+        
+        if (nameTextfield.text?.isEmpty == false), (priceTextfield.text?.isEmpty == false), (descTextfield.text?.isEmpty == false), (categoryDropdown.text?.isEmpty == false), (photosFromLibrary.count > 0) {
+
+            let previewViewController = SellerPreviewViewController()
+            previewViewController.imageData = self.photosFromLibrary[0].image
+            previewViewController.productName = self.nameTextfield.text!
+            previewViewController.productPrice = self.priceTextfield.text!
+            previewViewController.productDesc = self.descTextfield.text!
+            previewViewController.productCategory = self.categoryName
+            previewViewController.productCategoryID = self.category
+            previewViewController.userResponse = self.userResponse!
+            
+            previewViewController.modalPresentationStyle = .overCurrentContext
+            self.present(previewViewController, animated: true)
+            
+        }
         
     }
     
@@ -274,4 +348,9 @@ extension DetailProductViewController: PHPickerViewControllerDelegate {
         imv.layer.cornerRadius = 12
         return imv
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = true
+    }
 }
+

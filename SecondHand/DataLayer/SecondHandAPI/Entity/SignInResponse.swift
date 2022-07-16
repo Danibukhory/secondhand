@@ -19,6 +19,4 @@ struct SignInResponse: Codable {
         case email
         case accessToken = "access_token"
     }
-    
-    
 }

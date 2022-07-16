@@ -33,3 +33,5 @@ struct SignUpResponse: Codable {
     }
     
 }
+
+

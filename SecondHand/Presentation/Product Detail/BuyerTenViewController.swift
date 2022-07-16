@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Kingfisher
 
 protocol ItemIsOfferedDelegate: AnyObject {
-    func userDidOfferItem(info:Bool)
+    func userDidOfferItem(info:Bool, code:Int?)
 }
 
 final class BuyerTenViewController: SHModalViewController {
@@ -47,7 +48,8 @@ final class BuyerTenViewController: SHModalViewController {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "img-home-product-placeholder-1")
+        let url = URL(string: buyerResponse?.imageURL ?? "")
+        imageView.kf.setImage(with: url)
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +59,7 @@ final class BuyerTenViewController: SHModalViewController {
     
     private lazy var productName: UILabel = {
         let label = UILabel()
-        label.text = "Jam Tangan Casio"
+        label.text = buyerResponse?.name
         label.font = UIFont(name: "Poppins-Medium", size: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -66,7 +68,7 @@ final class BuyerTenViewController: SHModalViewController {
     
     private lazy var productPrice: UILabel = {
         let label = UILabel()
-        label.text = "Rp. 250.000"
+        label.text = (buyerResponse?.basePrice ?? 0).convertToCurrency()
         label.font = UIFont(name: "Poppins-Medium", size: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -117,7 +119,13 @@ final class BuyerTenViewController: SHModalViewController {
         if offerTextfield.text?.isEmpty == true {
             offerTextfield.layer.borderColor = UIColor.red.cgColor
         } else {
-            delegate?.userDidOfferItem(info: true)
+            let apiCall = SecondHandAPI()
+            guard let offer = offerTextfield.text else { return }
+            apiCall.postBuyerOrder(id: buyerResponse?.id ?? 0, bidPrice: Int(offer) ?? 0) { [weak self] response in
+                guard let _self = self else { return }
+                _self.delegate?.userDidOfferItem(info: true, code: response.response?.statusCode)
+            }
+//            delegate?.userDidOfferItem(info: true)
             self.dismiss(animated: true)
         }
     }

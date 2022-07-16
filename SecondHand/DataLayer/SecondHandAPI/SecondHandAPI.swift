@@ -11,7 +11,7 @@ import Alamofire
 struct SecondHandAPI {
     static let shared = SecondHandAPI()
     let baseUrl: String = "https://market-final-project.herokuapp.com/"
-    let accessToken: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTY5Mjg0OTJ9.I0quR9tEyYK9FKIxWJrurgvez8zLIJCRH6B-4Sti37o"
+    let accessToken: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRhZmZhc0BnbWFpbC5jb20iLCJpYXQiOjE2NTc3NjYzNjV9.MC514MzVoUSfOHttY5R9a8qx2XvxCsjkr7OplYkgPyE"
     
     enum notificationProductStatus: String {
         case accepted = "accepted"
@@ -219,6 +219,29 @@ struct SecondHandAPI {
         }
     }
     
+    func getUserDetails(
+        _ completionHandler: @escaping (SHUserResponse?, AFError?) -> Void
+    ) {
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+        ]
+        AF.request(
+            baseUrl + "auth/user",
+            method: .get,
+            headers: headers
+        )
+            .validate()
+            .responseDecodable(of: SHUserResponse.self) { (response) in
+                switch response.result {
+                case let .success(data):
+                    completionHandler(data, nil)
+                case let .failure(error):
+                    completionHandler(nil, error)
+                    print(String(describing: error))
+                }
+            }
+    }
+    
     func postProductAsSeller(with name: String, description desc: String, basePrice price: Int, category catg: Int, location loc: String, productPicture image: UIImage) {
            let requestUrl = "seller/product"
            
@@ -274,29 +297,56 @@ struct SecondHandAPI {
            }
        }
        
-       func postBuyerOrder(id itemID: Int, bidPrice price: Int) {
+    func postBuyerOrder(id itemID: Int, bidPrice price: Int, _ completionHandler: @escaping (AFDataResponse<Data>)-> Void) {
            let requestUrl = "buyer/order"
                        
            let headers: HTTPHeaders = [
                "access_token" : accessToken,
+               "accept"       : "body",
                "Content-Type" : "application/json",
            ]
            
-           let parameter: [String: Any] = [
+           let parameter: [String:Any] = [
                "product_id": itemID,
                "bid_price":  price
            ]
        
-           AF.request(baseUrl + requestUrl, method: .post, parameters: parameter, headers: headers)
+           AF.request(baseUrl + requestUrl, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
                .responseDecodable { (response: AFDataResponse<Data>) in
-                   switch response.result{
-                   case .success(let value):
-                       print(value.debugDescription)
-                   case .failure(let value):
-                       print(value.errorDescription)
-                   }
+//                   switch response.result {
+//                   case let .success(data):
+//                       completionHandler(data, nil)
+//                   case let .failure(error):
+//                       completionHandler(nil, error)
+//                       print(String(describing: error))
+//                   }
+                   completionHandler(response)
            }
        }
+    
+    func getBuyerOrders(_ completionHandler: @escaping ([SHBuyerOrderResponse]?, AFError?) -> Void) {
+        let requestUrl = "buyer/order"
+
+        let headers: HTTPHeaders = [
+            "access_token" : accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        AF.request(
+            baseUrl + requestUrl,
+            method: .get,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable (of: [SHBuyerOrderResponse].self) { (response) in
+            switch response.result {
+            case let .success(data):
+                completionHandler(data, nil)
+            case let .failure(error):
+                completionHandler(nil, error)
+                print(String(describing: error))
+            }
+        }
+    }
     
     
     func setNotificationAsRead(
