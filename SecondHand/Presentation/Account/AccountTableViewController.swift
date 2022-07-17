@@ -8,7 +8,16 @@ import Foundation
 import UIKit
 import Kingfisher
 
-class AccountTableViewController: UITableViewController {
+class AccountTableViewController: UITableViewController {       
+
+//    private lazy var titleLabel: UILabel = {
+//        let label = UILabel()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        label.text = "Akun Saya"
+//        label.font = UIFont(name:"Poppins-Bold",size:32)
+//        return label
+//    }()
+    private lazy var popUpView: SHPopupView = SHPopupView(frame: CGRect.zero, popupType: .success, text: "Berhasil merubah akun")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +74,22 @@ class AccountTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
         
+        if row == 1 {
+            let vc = CompleteAccountViewController()
+            vc.delegate = self
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+        
+        if row == 3 {
+            UserDefaults.standard.set(false, forKey: "isLogin")
+            let isLogin = UserDefaults.standard.bool(forKey: "isLogin")
+            if !isLogin {
+                let viewController = UINavigationController(rootViewController: SignInViewController())
+                viewController.modalPresentationStyle = .fullScreen
+                navigationController?.present(viewController, animated: true)
+                tabBarController?.selectedIndex = 0
+            }
+        }
         switch row {
         case 2:
             let viewController = SettingsViewController(style: .insetGrouped)
@@ -86,6 +111,21 @@ class AccountTableViewController: UITableViewController {
             self.present(alertController, animated: true)
         default:
             return
+        }
+    }
+}
+extension AccountTableViewController: DidClickSaveButtonAction {
+    func didClickButton(info: Bool) {
+        if info {
+            view.addSubview(popUpView)
+            popUpView.translatesAutoresizingMaskIntoConstraints = false
+            popUpView.isPresenting.toggle()
+            
+            NSLayoutConstraint.activate([
+                popUpView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 50),
+                popUpView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 16),
+                popUpView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor, constant: -16)
+            ])
         }
     }
 }

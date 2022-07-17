@@ -6,8 +6,16 @@
 //
 
 import UIKit
+import Kingfisher
+
+protocol ItemIsOfferedDelegate: AnyObject {
+    func userDidOfferItem(info:Bool, code:Int?)
+}
 
 final class BuyerTenViewController: SHModalViewController {
+    
+    weak var delegate: ItemIsOfferedDelegate? = nil
+    var buyerResponse: SHBuyerProductResponse?
     
     private lazy var handleBar: UIView = {
         let view = UIView()
@@ -29,7 +37,7 @@ final class BuyerTenViewController: SHModalViewController {
     
     private lazy var detailLabel: UILabel = {
         let label = UILabel()
-        label.text = "Harga tawaranmu akan diketahui penual, jika penjual cocok kamu akan segera dihubungi penjual."
+        label.text = "Harga tawaranmu akan diketahui penjual, jika penjual cocok kamu akan segera dihubungi penjual."
         label.font = UIFont(name: "Poppins-Regular", size: 14)
         label.textColor = UIColor(rgb: 0x8A8A8A)
         label.numberOfLines = 0
@@ -40,7 +48,8 @@ final class BuyerTenViewController: SHModalViewController {
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "img-home-product-placeholder-1")
+        let url = URL(string: buyerResponse?.imageURL ?? "")
+        imageView.kf.setImage(with: url)
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -50,7 +59,7 @@ final class BuyerTenViewController: SHModalViewController {
     
     private lazy var productName: UILabel = {
         let label = UILabel()
-        label.text = "Jam Tangan Casio"
+        label.text = buyerResponse?.name
         label.font = UIFont(name: "Poppins-Medium", size: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -59,7 +68,7 @@ final class BuyerTenViewController: SHModalViewController {
     
     private lazy var productPrice: UILabel = {
         let label = UILabel()
-        label.text = "Rp. 250.000"
+        label.text = (buyerResponse?.basePrice ?? 0).convertToCurrency()
         label.font = UIFont(name: "Poppins-Medium", size: 14)
         label.translatesAutoresizingMaskIntoConstraints = false
         
@@ -93,6 +102,7 @@ final class BuyerTenViewController: SHModalViewController {
     private lazy var offerTextfield: SHRoundedTextfield = {
         let textfield = SHRoundedTextfield()
         textfield.setPlaceholder(placeholder: "Rp 0,0")
+        textfield.keyboardType = .numberPad
         textfield.translatesAutoresizingMaskIntoConstraints = false
         
         return textfield
@@ -101,9 +111,24 @@ final class BuyerTenViewController: SHModalViewController {
     private lazy var sendButton: SHButton = {
         let button = SHButton(frame: CGRect.zero, title: "Kirim", type: .filled, size: .regular)
         button.translatesAutoresizingMaskIntoConstraints = false
-        
+        button.addTarget(self, action: #selector(dismissThisView), for: .touchUpInside)
         return button
     }()
+    
+    @objc private func dismissThisView() {
+        if offerTextfield.text?.isEmpty == true {
+            offerTextfield.layer.borderColor = UIColor.red.cgColor
+        } else {
+            let apiCall = SecondHandAPI()
+            guard let offer = offerTextfield.text else { return }
+            apiCall.postBuyerOrder(id: buyerResponse?.id ?? 0, bidPrice: Int(offer) ?? 0) { [weak self] response in
+                guard let _self = self else { return }
+                _self.delegate?.userDidOfferItem(info: true, code: response.response?.statusCode)
+            }
+//            delegate?.userDidOfferItem(info: true)
+            self.dismiss(animated: true)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

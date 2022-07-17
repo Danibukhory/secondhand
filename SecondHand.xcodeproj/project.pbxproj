@@ -47,6 +47,7 @@
 		6E78118E28522ED900104FE1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6E78118D28522ED900104FE1 /* Assets.xcassets */; };
 		6E78119128522ED900104FE1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6E78118F28522ED900104FE1 /* LaunchScreen.storyboard */; };
 		6EAAC82228622226008AC66E /* AccountTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6EAAC82128622226008AC66E /* AccountTableViewController.swift */; };
+		7B79A3FC2881A21F009D8509 /* SHBuyerOrderResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B79A3FB2881A21F009D8509 /* SHBuyerOrderResponse.swift */; };
 		7B878B762875CF9800748772 /* CompleteAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B752875CF9800748772 /* CompleteAccountViewController.swift */; };
 		7B878B782875CFB800748772 /* SHLabelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B772875CFB800748772 /* SHLabelView.swift */; };
 		7B878B7A2875D03E00748772 /* DetailProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B792875D03E00748772 /* DetailProductViewController.swift */; };
@@ -54,6 +55,7 @@
 		7B878B7E2875D16D00748772 /* IndonesiaCityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B7D2875D16D00748772 /* IndonesiaCityList.swift */; };
 		7B878B802875D1EB00748772 /* BuyerSixViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B7F2875D1EB00748772 /* BuyerSixViewController.swift */; };
 		7B878B822875D21B00748772 /* BuyerTenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B812875D21B00748772 /* BuyerTenViewController.swift */; };
+		7B878B88287C44E400748772 /* SellerPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B878B87287C44E400748772 /* SellerPreviewViewController.swift */; };
 		7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */; };
 		7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */; };
 		7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */; };
@@ -118,6 +120,7 @@
 		6E78119028522ED900104FE1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6E78119228522ED900104FE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6EAAC82128622226008AC66E /* AccountTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountTableViewController.swift; sourceTree = "<group>"; };
+		7B79A3FB2881A21F009D8509 /* SHBuyerOrderResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHBuyerOrderResponse.swift; sourceTree = "<group>"; };
 		7B878B752875CF9800748772 /* CompleteAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompleteAccountViewController.swift; sourceTree = "<group>"; };
 		7B878B772875CFB800748772 /* SHLabelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHLabelView.swift; sourceTree = "<group>"; };
 		7B878B792875D03E00748772 /* DetailProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailProductViewController.swift; sourceTree = "<group>"; };
@@ -125,6 +128,7 @@
 		7B878B7D2875D16D00748772 /* IndonesiaCityList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndonesiaCityList.swift; sourceTree = "<group>"; };
 		7B878B7F2875D1EB00748772 /* BuyerSixViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerSixViewController.swift; sourceTree = "<group>"; };
 		7B878B812875D21B00748772 /* BuyerTenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyerTenViewController.swift; sourceTree = "<group>"; };
+		7B878B87287C44E400748772 /* SellerPreviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellerPreviewViewController.swift; sourceTree = "<group>"; };
 		7BCE01AB285A4E2400FF94BA /* SHLongTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHLongTextField.swift; sourceTree = "<group>"; };
 		7BCE01B0285B614300FF94BA /* SHCustomTextFieldForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHCustomTextFieldForm.swift; sourceTree = "<group>"; };
 		7BCE01B2285C188400FF94BA /* UIImageView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extensions.swift"; sourceTree = "<group>"; };
@@ -224,6 +228,7 @@
 				38581779286D802400748254 /* SHBuyerProductResponse.swift */,
 				3858177B286D809100748254 /* SHUserResponse.swift */,
 				38B758F8288056B6007D09B3 /* SHSellerOrderResponse.swift */,
+				7B79A3FB2881A21F009D8509 /* SHBuyerOrderResponse.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -357,6 +362,7 @@
 				7B878B792875D03E00748772 /* DetailProductViewController.swift */,
 				7B878B7F2875D1EB00748772 /* BuyerSixViewController.swift */,
 				7B878B812875D21B00748772 /* BuyerTenViewController.swift */,
+				7B878B87287C44E400748772 /* SellerPreviewViewController.swift */,
 			);
 			path = "Product Detail";
 			sourceTree = "<group>";
@@ -606,6 +612,7 @@
 				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
 				383095DD28646FD300EDFDAB /* RenewTransactionStatusViewController.swift in Sources */,
+				7B878B88287C44E400748772 /* SellerPreviewViewController.swift in Sources */,
 				7B878B7C2875D0A000748772 /* SHDropDownTextField.swift in Sources */,
 				38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */,
 				7B878B762875CF9800748772 /* CompleteAccountViewController.swift in Sources */,
@@ -633,6 +640,7 @@
 				382F59652860CEED009F0BB5 /* OffererDetailCell.swift in Sources */,
 				38106AA0286C62BB00B5794A /* SHSellerProductResponse.swift in Sources */,
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
+				7B79A3FC2881A21F009D8509 /* SHBuyerOrderResponse.swift in Sources */,
 				3895B75C285B6FEA00202609 /* NotificationCell.swift in Sources */,
 				3858177E286D82F400748254 /* Int+Extension.swift in Sources */,
 				E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */,

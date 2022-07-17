@@ -8,8 +8,14 @@
 import UIKit
 import PhotosUI
 
+protocol DidClickSaveButtonAction: AnyObject {
+    func didClickButton(info: Bool)
+}
 
 final class CompleteAccountViewController: UIViewController {
+    
+    weak var delegate: DidClickSaveButtonAction?
+    
     private lazy var scrollView = UIScrollView()
     private lazy var containerView = UIView()
     
@@ -28,7 +34,7 @@ final class CompleteAccountViewController: UIViewController {
         return textfield
     }()
     
-    private lazy var buttonSave = SHButton(frame: CGRect.zero, title: "Terbitkan", type: .filled, size: .regular)
+    private lazy var buttonSave = SHButton(frame: CGRect.zero, title: "Simpan", type: .filled, size: .regular)
     private lazy var photosFromLibrary: [UIImageView] = []
     
     private lazy var photoIcon: UIImageView = {
@@ -65,10 +71,15 @@ final class CompleteAccountViewController: UIViewController {
         super.viewDidLoad()
         self.title = "Lengkapi Info Akun"
         view.backgroundColor = .white
+        self.tabBarController?.tabBar.isHidden = true
         
         
         setupSubviews()
         defineLayout()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     private func setupSubviews() {
@@ -133,6 +144,8 @@ final class CompleteAccountViewController: UIViewController {
                                          address: self.textFieldAddress.text!,
                                          accountPicture: self.photosFromLibrary[0].image!)
             }
+            self.delegate?.didClickButton(info: true)
+            self.navigationController?.popViewController(animated: true)
         }
     }
     
@@ -155,9 +168,6 @@ final class CompleteAccountViewController: UIViewController {
             containerView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             containerView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             containerView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-//            containerView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-//            containerView.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
-//            containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
             containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
         ])
         

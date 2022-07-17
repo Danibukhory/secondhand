@@ -11,9 +11,9 @@ final class MainTabBarController: UITabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        delegate = self
         
         let homeViewController = HomeViewController()
-        
         homeViewController.tabBarItem = UITabBarItem(
             title: "Home",
             image: UIImage(named: "img-sh-home-inactive")?.withRenderingMode(.alwaysTemplate),
@@ -27,7 +27,7 @@ final class MainTabBarController: UITabBarController {
             selectedImage: UIImage(named: "img-sh-bell-active")?.withRenderingMode(.alwaysTemplate)
         )
         
-        let sellingViewController = SellingViewController()
+        let sellingViewController = DetailProductViewController()
         sellingViewController.tabBarItem = UITabBarItem(
             title: "Jual",
             image: UIImage(named: "img-sh-plus-circle")?.withRenderingMode(.alwaysTemplate),
@@ -66,6 +66,15 @@ final class MainTabBarController: UITabBarController {
         tabBar.tintColor = UIColor(rgb: 0x7126B5)
         self.viewControllers = viewControllers
     }
+}
 
-
+extension MainTabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if viewController == tabBarController.viewControllers?[2] {
+            let vc = DetailProductViewController()
+            self.navigationController?.pushViewController(vc, animated: true)
+            return false
+        }
+        return true
+    }
 }

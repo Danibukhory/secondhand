@@ -1,21 +1,24 @@
 //
-//  BuyerSixViewController.swift
+//  SellerPreviewViewController.swift
 //  SecondHand
 //
-//  Created by Daffashiddiq on 24/06/22.
+//  Created by Daffashiddiq on 11/07/22.
 //
 
 import UIKit
-import Kingfisher
 
-class BuyerSixViewController: UIViewController {
+class SellerPreviewViewController: UIViewController {
     
-    var buyerResponse: SHBuyerProductResponse?
+    var userResponse: SHUserResponse?
+    var imageData: UIImage?
+    var productName: String?
+    var productDesc: String?
+    var productPrice: String?
+    var productCategory: String?
+    var productCategoryID: Int?
     
-    private lazy var orderedItem: [SHBuyerOrderResponse] = []
+    
     private lazy var isOffered: Bool = false
-    private lazy var popUpView: SHPopupView = SHPopupView(frame: CGRect.zero, popupType: .success, text: "Harga tawarmu berhasil dikirim ke penjual")
-    private lazy var popupFailedView: SHPopupView = SHPopupView(frame: CGRect.zero, popupType: .failed, text: "Produk mencapai batas maksimal penawaran")
     
     let scrollView = UIScrollView()
     let contentView = UIView()
@@ -53,15 +56,9 @@ class BuyerSixViewController: UIViewController {
             view.heightAnchor.constraint(equalToConstant: 24),
         ])
         
-        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissProductView))
-        view.addGestureRecognizer(tapRecognizer)
         
         return view
     }()
-    
-    @objc private func dismissProductView() {
-        self.dismiss(animated: true)
-    }
     
     private lazy var pageControl = UIPageControl()
     
@@ -79,13 +76,13 @@ class BuyerSixViewController: UIViewController {
         
         
         let productName = UILabel()
-        productName.setTitle(text: (buyerResponse?.name ?? "Dummy name"), size: 14, weight: .medium, color: .black)
+        productName.setTitle(text: (self.productName ?? "Jam Tangan Gemink"), size: 14, weight: .medium, color: .black)
         
         let productCategory = UILabel()
-        productCategory.setTitle(text: (buyerResponse?.categories[0]?.name ?? "Category undefined"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        productCategory.setTitle(text: (self.productCategory ?? "Aksesoris"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         let productPrice = UILabel()
-        productPrice.setTitle(text:  (buyerResponse?.basePrice ?? 0).convertToCurrency(), size: 14, weight: .medium, color: .black)
+        productPrice.setTitle(text: "Rp. \(self.productPrice ?? "0")", size: 14, weight: .medium, color: .black)
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         productName.translatesAutoresizingMaskIntoConstraints = false
@@ -131,17 +128,16 @@ class BuyerSixViewController: UIViewController {
         productView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "img-home-product-placeholder-1")
-//        imageView.load(urlString: buyerResponse!.imageURL)
+        imageView.load(urlString: (userResponse?.imageURL!)!)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
         
         let sellerName = UILabel()
-        sellerName.setTitle(text: "Seller not recognized", size: 14, weight: .medium, color: .black)
+        sellerName.setTitle(text: (self.userResponse?.fullName!)!, size: 14, weight: .medium, color: .black)
         
         let sellerCity = UILabel()
-        sellerCity.setTitle(text: (buyerResponse?.location ?? "Location not Available"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        sellerCity.setTitle(text: (userResponse?.city! ?? "Kota Jakarta"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         sellerName.translatesAutoresizingMaskIntoConstraints = false
@@ -189,7 +185,8 @@ class BuyerSixViewController: UIViewController {
         descLabel.setTitle(text: "Deskripsi", size: 14, weight: .medium, color: .black)
         
         let descDetails = UILabel()
-        descDetails.setTitle(text: buyerResponse?.description ?? "Description not Available", size: 14, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+
+        descDetails.setTitle(text: self.productDesc!, size: 14, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         descDetails.numberOfLines = 0
         
         
@@ -217,42 +214,34 @@ class BuyerSixViewController: UIViewController {
     }()
     
     private lazy var publishButton: SHButton = {
-        let button = SHButton(frame: CGRect.zero, title: "Saya Tertarik dan ingin Nego", type: .filled, size: .regular)
-        button.addTarget(self, action: #selector(showModal), for: .touchUpInside)
-        
-        if !orderedItem.isEmpty {
-            button.backgroundColor = UIColor(rgb: 0xD0D0D0)
-            button.setActiveButtonTitle(string: "Menunggu respon penjual")
-            button.isEnabled = false
-        }
+        let button = SHButton(frame: CGRect.zero, title: "Terbitkan", type: .filled, size: .regular)
+        button.addTarget(self, action: #selector(publishButtonAction), for: .touchUpInside)
         
         return button
     }()
     
-    @objc func showModal() {
-        let vc = BuyerTenViewController()
-//        vc.buyerResponse = self.buyerResponse
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.changeDefaultHeight(to: view.frame.height/1.3)
-        vc.delegate = self
-        vc.buyerResponse = self.buyerResponse
-        self.present(vc, animated: false)
-//
+    @objc func publishButtonAction() {
+        
+        DispatchQueue.main.async {
+            let callAPI = SecondHandAPI()
+            callAPI.postProductAsSeller(
+                with: self.productName!,
+                description: self.productDesc!,
+                basePrice: Int(self.productPrice!)!,
+                category: self.productCategoryID!,
+                location: (self.userResponse?.city!)!,
+                productPicture: self.imageData!
+            )
+        }
+        
+
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let group = DispatchGroup()
-        defer {
-            group.notify(queue: .main) { [self] in
-                setupSubViews()
-                setupScrollView()
-                setupContentView()
-            }
-        }
-        group.enter()
-        getOrderedItem()
-        group.leave()
+        setupSubViews()
+        setupScrollView()
+        setupContentView()
     }
     
     private func setupSubViews() {
@@ -343,25 +332,8 @@ class BuyerSixViewController: UIViewController {
         ])
     }
     
-    private func getOrderedItem() {
-        let apiCall = SecondHandAPI()
-        apiCall.getBuyerOrders { [weak self] response, error in
-            guard let _self = self else { return }
-            if error == nil {
-                guard let _response = response else { return }
-                _self.orderedItem = _response.filter({ order in
-                    return order.productID == _self.buyerResponse?.id
-                })
-                if !_self.orderedItem.isEmpty {
-                    _self.publishButton.isEnabled = false
-                    _self.publishButton.setActiveButtonTitle(string: "Menunggu Respon Penjual")
-                }
-            }
-        }
-    }
-    
     private func configurePageControl() {
-        self.pageControl.numberOfPages = 4
+        self.pageControl.numberOfPages = 1
         self.pageControl.currentPage = 0
         self.pageControl.tintColor = .clear
         self.pageControl.pageIndicatorTintColor = UIColor.systemGray
@@ -377,7 +349,7 @@ class BuyerSixViewController: UIViewController {
     private func configurePhotoCollectionView(){
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(BuyerSixPhotoProductViewCell.self, forCellWithReuseIdentifier: "\(BuyerSixPhotoProductViewCell.self)")
+        collectionView.register(SellerPreviewProductViewCell.self, forCellWithReuseIdentifier: "\(SellerPreviewProductViewCell.self)")
         
         layout.scrollDirection = .horizontal
         collectionView.isPagingEnabled = true
@@ -399,51 +371,16 @@ class BuyerSixViewController: UIViewController {
     
 }
 
-extension BuyerSixViewController: ItemIsOfferedDelegate {
-    func userDidOfferItem(info: Bool, code: Int?) {
-        self.isOffered = info
-//        self.viewDidLoad()
-        if code != 400 {
-            publishButton.backgroundColor = UIColor(rgb: 0xD0D0D0)
-            publishButton.setActiveButtonTitle(string: "Menunggu respon penjual")
-            publishButton.isEnabled = false
-            
-            view.addSubview(popUpView)
-            popUpView.translatesAutoresizingMaskIntoConstraints = false
-            popUpView.isPresenting.toggle()
-            
-            NSLayoutConstraint.activate([
-                popUpView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-                popUpView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-                popUpView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
-            ])
-        } else {
-            view.addSubview(popupFailedView)
-            popupFailedView.translatesAutoresizingMaskIntoConstraints = false
-            popupFailedView.isPresenting.toggle()
-            
-            NSLayoutConstraint.activate([
-                popupFailedView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-                popupFailedView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-                popupFailedView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
-            ])
-        }
-        
-    }
-    
-    
-}
-
-extension BuyerSixViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension SellerPreviewViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4 //photoForProduct.count
+        return 1 //photoForProduct.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(BuyerSixPhotoProductViewCell.self)", for: indexPath) as? BuyerSixPhotoProductViewCell else {return UICollectionViewCell()}
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(SellerPreviewProductViewCell.self)", for: indexPath) as? SellerPreviewProductViewCell else {return UICollectionViewCell()}
         
-        cell.setImage(to: buyerResponse?.imageURL ?? "")
+        cell.setImage(to: imageData!)
         return cell
     }
     
@@ -458,7 +395,7 @@ extension BuyerSixViewController: UICollectionViewDataSource, UICollectionViewDe
     
 }
 
-extension BuyerSixViewController: UIScrollViewDelegate {
+extension SellerPreviewViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
 
@@ -467,18 +404,20 @@ extension BuyerSixViewController: UIScrollViewDelegate {
     }
 }
 
-final class BuyerSixPhotoProductViewCell: UICollectionViewCell {
+final class SellerPreviewProductViewCell: UICollectionViewCell {
+    
+    var imageProduct: UIImage? = nil
     
     private lazy var photoProduct: UIImageView = {
         let imageView = UIImageView()
+        imageView.image = imageProduct ?? UIImage(named: "img-home-product-placeholder-1")
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
     
-    func setImage(to img: String) {
-        let url = URL(string: img)
-        photoProduct.kf.setImage(with: url)
+    func setImage(to img: UIImage) {
+        self.imageProduct = img
     }
     
     override init(frame: CGRect) {
