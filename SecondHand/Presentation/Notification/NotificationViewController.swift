@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NotificationViewController: UITableViewController {
+final class NotificationViewController: UITableViewController, UIGestureRecognizerDelegate {
     
     var notifications: [SHNotificationResponse] = []
     var refControl = UIRefreshControl()
@@ -23,11 +23,16 @@ final class NotificationViewController: UITableViewController {
             loadingIndicator.stopAnimating()
         }
     }
+    var api = SecondHandAPI.shared
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tabBarController?.navigationController?.interactivePopGestureRecognizer?.delegate = self as UIGestureRecognizerDelegate
+        self.tabBarController?.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLoadingIndicator()
-        navigationController?.navigationBar.backgroundColor = .white
         tableView.register(NotificationCell.self, forCellReuseIdentifier: "\(NotificationCell.self)")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "emptyCell")
         title = "Notifikasi"
@@ -89,10 +94,36 @@ final class NotificationViewController: UITableViewController {
             return
         default:
             let notification = notifications[row]
-            guard let user = notification.user else { return }
-            let viewController = OffererViewController(user: user, notification: notification)
-            viewController.buyerName = notification.buyerName
-            navigationController?.pushViewController(viewController, animated: true)
+            switch notification.status {
+            case "bid":
+                guard let user = notification.user else { return }
+                let viewController = OffererViewController(user: user, notification: notification)
+                viewController.buyerName = notification.buyerName
+                navigationController?.pushViewController(viewController, animated: true)
+            case "create":
+                guard let productId = notification.productID else { return }
+                api.getBuyerProductDetail(itemId: "\(productId)") { [weak self] result, error in
+                    guard let _self = self,
+                          let _result = result
+                    else {
+                        if let _error = error {
+                            let alertController = UIAlertController(title: "Error", message: "Terjadi kesalahan :(\n\nResponse: \(String(describing: _error))", preferredStyle: .alert)
+                            let dismiss = UIAlertAction(title: "Kembali", style: .destructive)
+                            alertController.addAction(dismiss)
+                            self?.tableView.deselectRow(at: indexPath, animated: true)
+                            self?.navigationController?.present(alertController, animated: true)
+                        }
+                        return
+                    }
+                    let viewController = BuyerSixViewController()
+                    viewController.buyerResponse = _result
+                    _self.tabBarController?.navigationController?.pushViewController(viewController, animated: true)
+                }
+            default:
+                let viewController = NotificationDetailViewController(notification: notification, style: .insetGrouped)
+                navigationController?.pushViewController(viewController, animated: true)
+            }
+            
         }
     }
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class OfferAcceptedViewController: SHModalViewController {
+final class AcceptedOfferViewController: SHModalViewController {
     
     var handleBar: UIView = {
         let view = UIView()

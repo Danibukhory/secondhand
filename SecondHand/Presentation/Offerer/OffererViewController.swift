@@ -60,7 +60,7 @@ final class OffererViewController: UITableViewController {
         view.backgroundColor = .white
         tableView.backgroundColor = .white
         setupLoadingView()
-        loadOrders()
+        loadOrder()
         setupNavigationBar()
         setupPopupView()
         tableView.register(OffererDetailCell.self, forCellReuseIdentifier: "\(OffererDetailCell.self)")
@@ -130,11 +130,12 @@ final class OffererViewController: UITableViewController {
             cell.selectionStyle = .none
             cell.onRejectButtonTap = { [weak self] in
                 guard let _self = self,
-                      let _order = self?.order
+                      let _order = self?.order,
+                      let orderId = _order.id
                 else { return }
                 switch cell.rejectButton.currentAttributedTitle?.string {
                 case "Tolak":
-                    _self.api.patchSellerOrderStatus(to: .declined, orderId: _order.id) { result, error in
+                    _self.api.patchSellerOrderStatus(to: .declined, orderId: orderId) { result, error in
                         _self.handleOrderStatusUpdate(result, error, popupString: "Status penawaran produk berhasil diperbarui menjadi: ditolak")
                     }
                     cell.rejectButton.fadeOut()
@@ -147,13 +148,13 @@ final class OffererViewController: UITableViewController {
                     viewController.modalPresentationStyle = .overCurrentContext
                     viewController.onSendButtonTap = {
                         if viewController.isCanceled {
-                            _self.api.patchSellerOrderStatus(to: .bid, orderId: _order.id) { result, error in
+                            _self.api.patchSellerOrderStatus(to: .bid, orderId: orderId) { result, error in
                                 _self.handleOrderStatusUpdate(result, error, popupString: "Status penawaran produk berhasil diperbarui menjadi: ditawar")
                             }
                             cell.rejectButton.setActiveButtonTitle(string: "Tolak")
                             cell.acceptButton.setActiveButtonTitle(string: "Terima")
                         } else {
-                            _self.api.patchSellerOrderStatus(to: .accepted, orderId: _order.id) { result, error in
+                            _self.api.patchSellerOrderStatus(to: .accepted, orderId: orderId) { result, error in
                                 _self.handleOrderStatusUpdate(result, error, popupString: "Status penawaran produk berhasil diperbarui menjadi: diterima")
                             }
                         }
@@ -171,7 +172,7 @@ final class OffererViewController: UITableViewController {
             cell.onAcceptButtonTap = { [weak self] in
                 guard let _self = self else { return }
                 if cell.acceptButton.attributedTitle(for: .normal)?.string == "Terima" {
-                    let viewController = OfferAcceptedViewController()
+                    let viewController = AcceptedOfferViewController()
                     let buyerCell = tableView.dequeueReusableCell(withIdentifier: "\(OffererDetailCell.self)") as! OffererDetailCell
                     let productNameText = cell.productNameLabel.attributedText
                     let productValue = _self.notification?.bidPrice
@@ -201,8 +202,8 @@ final class OffererViewController: UITableViewController {
                         cell.rejectButton.setActiveButtonTitle(string: "Status")
                         cell.acceptButton.setActiveButtonTitle(string: "Hubungi")
                     })
-                    guard let _order = _self.order else { return }
-                    _self.api.patchSellerOrderStatus(to: .accepted, orderId: _order.id) { result, error in
+                    guard let _order = _self.order, let orderId = _order.id else { return }
+                    _self.api.patchSellerOrderStatus(to: .accepted, orderId: orderId) { result, error in
                         _self.handleOrderStatusUpdate(result, error, popupString: "Status penawaran produk berhasil diperbarui menjadi: diterima")
                     }
                 } else {
@@ -303,37 +304,75 @@ final class OffererViewController: UITableViewController {
         tableView.dataSource = self
     }
     
-    private func loadOrders() {
-        api.getSellerOrders { [weak self] result, error in
-            DispatchQueue.main.async {
-                guard let _self = self,
-                      let _result = result
-                else { return }
-                let filteredOrder = _result.filter { order in
-                    return order.productID == _self.notification?.productID && order.price == _self.notification?.bidPrice
+    private func loadOrder() {
+//        api.getSellerOrders { [weak self] result, error in
+//            DispatchQueue.main.async {
+//                guard let _self = self,
+//                      let _result = result
+//                else { return }
+//                let filteredOrder = _result.filter { order in
+//                    return order.productID == _self.notification?.productID && order.price == _self.notification?.bidPrice
+//                }
+//                guard !filteredOrder.isEmpty else { return }
+//                _self.order = filteredOrder[0]
+//                guard let cell = _self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? OffererProductCell else { return }
+//                if filteredOrder[0].status == "accepted" {
+//                    cell.rejectButton.setActiveButtonTitle(string: "Status")
+//                    cell.acceptButton.setActiveButtonTitle(string: "Hubungi")
+//                } else if filteredOrder[0].status == "declined" {
+//                    cell.rejectButton.alpha = 0
+//                    cell.acceptButton.alpha = 0
+//                    cell.offerRejectedButton.fadeIn()
+//                }
+//                else if filteredOrder[0].product.status == "sold" {
+//                    cell.rejectButton.alpha = 0
+//                    cell.acceptButton.alpha = 0
+//                    cell.productSoldButton.fadeIn()
+//                }
+//                else {
+//                    cell.rejectButton.setActiveButtonTitle(string: "Tolak")
+//                    cell.acceptButton.setActiveButtonTitle(string: "Terima")
+//                }
+//                _self.loadingView.fadeOut()
+//            }
+//        }
+        api.getSellerOrder(orderId: self.notification?.orderID ?? 0) { [weak self] result, error in
+            guard let _self = self,
+                  let _result = result
+            else {
+                if let _error = error, let code = _error.responseCode {
+                    let alertController = UIAlertController(title: "Error", message: "Terjadi kesalahan :(\n\nResponse code: \(String(describing: code))", preferredStyle: .alert)
+                    let dismiss = UIAlertAction(title: "Kembali", style: .destructive) { [weak self] _ in
+                        guard let _self = self else { return }
+                        _self.navigationController?.popViewController(animated: true)
+                    }
+                    alertController.addAction(dismiss)
+                    self?.present(alertController, animated: true)
+                    return
                 }
-                guard !filteredOrder.isEmpty else { return }
-                _self.order = filteredOrder[0]
-                guard let cell = _self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? OffererProductCell else { return }
-                if filteredOrder[0].status == "accepted" {
-                    cell.rejectButton.setActiveButtonTitle(string: "Status")
-                    cell.acceptButton.setActiveButtonTitle(string: "Hubungi")
-                } else if filteredOrder[0].status == "declined" {
-                    cell.rejectButton.alpha = 0
-                    cell.acceptButton.alpha = 0
-                    cell.offerRejectedButton.fadeIn()
-                }
-                else if filteredOrder[0].product.status == "sold" {
-                    cell.rejectButton.alpha = 0
-                    cell.acceptButton.alpha = 0
-                    cell.productSoldButton.fadeIn()
-                }
-                else {
-                    cell.rejectButton.setActiveButtonTitle(string: "Tolak")
-                    cell.acceptButton.setActiveButtonTitle(string: "Terima")
-                }
-                _self.loadingView.fadeOut()
+                return
             }
+            _self.order = _result
+            guard let cell = _self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? OffererProductCell else { return }
+            if _result.status == "accepted" {
+                cell.rejectButton.setActiveButtonTitle(string: "Status")
+                cell.acceptButton.setActiveButtonTitle(string: "Hubungi")
+            } else if _result.status == "declined" {
+                cell.rejectButton.alpha = 0
+                cell.acceptButton.alpha = 0
+                cell.offerRejectedButton.fadeIn()
+            }
+            else if _result.product?.status == "sold" {
+                cell.rejectButton.alpha = 0
+                cell.acceptButton.alpha = 0
+                cell.productSoldButton.fadeIn()
+            }
+            else {
+                cell.rejectButton.setActiveButtonTitle(string: "Tolak")
+                cell.acceptButton.setActiveButtonTitle(string: "Terima")
+            }
+            _self.loadingView.fadeOut()
+            _self.tableView.reloadData()
         }
     }
     

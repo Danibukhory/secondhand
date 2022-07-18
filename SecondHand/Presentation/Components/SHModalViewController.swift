@@ -162,8 +162,8 @@ class SHModalViewController: UIViewController {
         }
     }
     
-    private func animateContainerHeight(_ height: CGFloat) {
-        UIView.animate(withDuration: 0.4) {
+    func animateContainerHeight(_ height: CGFloat) {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.containerViewHeightConstraint?.constant = height
             self.view.layoutIfNeeded()
         }

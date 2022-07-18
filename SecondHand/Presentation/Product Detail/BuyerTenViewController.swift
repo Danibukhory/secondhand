@@ -104,7 +104,7 @@ final class BuyerTenViewController: SHModalViewController {
         textfield.setPlaceholder(placeholder: "Rp 0,0")
         textfield.keyboardType = .numberPad
         textfield.translatesAutoresizingMaskIntoConstraints = false
-        
+        textfield.returnKeyType = .done
         return textfield
     }()
     
@@ -117,7 +117,7 @@ final class BuyerTenViewController: SHModalViewController {
     
     @objc private func dismissThisView() {
         if offerTextfield.text?.isEmpty == true {
-            offerTextfield.layer.borderColor = UIColor.red.cgColor
+            offerTextfield.layer.borderColor = UIColor.systemRed.cgColor
         } else {
             let apiCall = SecondHandAPI()
             guard let offer = offerTextfield.text else { return }
@@ -126,7 +126,8 @@ final class BuyerTenViewController: SHModalViewController {
                 _self.delegate?.userDidOfferItem(info: true, code: response.response?.statusCode)
             }
 //            delegate?.userDidOfferItem(info: true)
-            self.dismiss(animated: true)
+//            self.dismiss(animated: true)
+            self.animateDismissView()
         }
     }
     
@@ -134,6 +135,12 @@ final class BuyerTenViewController: SHModalViewController {
         super.viewDidLoad()
         setupSubViews()
         defineLayout()
+    }
+    
+    override func animateDismissView() {
+        super.animateDismissView()
+        self.sendButton.fadeOut()
+        self.containerView.endEditing(true)
     }
     
     private func setupSubViews() {
@@ -153,8 +160,28 @@ final class BuyerTenViewController: SHModalViewController {
         )
     }
     
+    override func handlePanGesture(gesture: UIPanGestureRecognizer) {
+        super.handlePanGesture(gesture: gesture)
+        let translation = gesture.translation(in: view)
+        switch gesture.state {
+        case .changed:
+            sendButton.alpha = ((currentContainerHeight ?? 0) - (translation.y * 1.5)) / defaultHeight
+        case .ended:
+            if (currentContainerHeight ?? 0) <= dismissibleHeight {
+                sendButton.fadeOut()
+            } else {
+                sendButton.fadeIn()
+            }
+        default:
+            break
+        }
+    }
+    
     private func defineLayout() {
-        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        self.containerView.addGestureRecognizer(tapRecognizer)
+        self.containerView.isUserInteractionEnabled = true
+        offerTextfield.addTarget(self, action: #selector(maximizeHeight), for: .editingDidBegin)
         NSLayoutConstraint.activate([
             handleBar.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16),
             handleBar.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
@@ -193,10 +220,19 @@ final class BuyerTenViewController: SHModalViewController {
             offerTextfield.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 32),
             offerTextfield.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -32),
             
-            sendButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -24),
+            sendButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             sendButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 32),
             sendButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -32),
             
         ])
+    }
+    
+    @objc private func maximizeHeight() {
+        self.animateContainerHeight(self.maximumContainerHeight)
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.containerView.endEditing(true)
+        self.animateContainerHeight(self.defaultHeight)
     }
 }

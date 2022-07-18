@@ -8,13 +8,13 @@
 import Foundation
 
 struct SHSellerOrderResponse: Codable {
-    let id, productID, buyerID, price: Int
+    let id, productID, buyerID, price: Int?
     let transactionDate: String?
-    let productName, basePrice: String
+    let productName, basePrice: String?
     let imageProduct: String?
-    let status, createdAt, updatedAt: String
-    let product: SHOrderProduct
-    let user: SHOrderUser
+    let status, createdAt, updatedAt: String?
+    let product: SHOrderProduct?
+    let user: SHOrderUser?
 
     enum CodingKeys: String, CodingKey {
         case id
