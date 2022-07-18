@@ -146,7 +146,6 @@ struct SecondHandAPI {
         }
     }
     
-    
     func signIn(
         email: String,
         password: String,
@@ -208,29 +207,30 @@ struct SecondHandAPI {
             }
         }
     }
-func getUserDetails(
-_ completionHandler: @escaping (SHUserResponse?, AFError?) -> Void
-) {
-guard let _accessToken = accessToken else { return }
-let headers: HTTPHeaders = [
-"access_token" : _accessToken,
-]
-AF.request(
-baseUrl + "auth/user",
-method: .get,
-headers: headers
-)
-.validate()
-.responseDecodable(of: SHUserResponse.self) { (response) in
-switch response.result {
-case let .success(data):
-completionHandler(data, nil)
-case let .failure(error):
-completionHandler(nil, error)
-print(String(describing: error))
-}
-}
-}
+    
+    func getUserDetails(
+        _ completionHandler: @escaping (SHUserResponse?, AFError?) -> Void
+    ) {
+        guard let _accessToken = accessToken else { return }
+        let headers: HTTPHeaders = [
+            "access_token" : _accessToken,
+        ]
+        AF.request(
+            baseUrl + "auth/user",
+            method: .get,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable(of: SHUserResponse.self) { (response) in
+            switch response.result {
+            case let .success(data):
+                completionHandler(data, nil)
+            case let .failure(error):
+                completionHandler(nil, error)
+                print(String(describing: error))
+            }
+        }
+    }
 
     func postProductAsSeller(
         with name: String,
@@ -472,6 +472,57 @@ print(String(describing: error))
         )
         .validate()
         .responseDecodable(of: [SHSellerOrderResponse].self) { (response) in
+            switch response.result {
+            case let .success(data):
+                completionHandler(data, nil)
+            case let .failure(error):
+                completionHandler(nil, error)
+                print(error)
+            }
+        }
+    }
+    
+    func getSellerOrder(
+        orderId: Int,
+        _ completionHandler: @escaping (SHSellerOrderResponse?, AFError?) -> Void
+    ) {
+        guard let _accessToken = accessToken else { return }
+        let headers: HTTPHeaders = [
+            "access_token" : _accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        AF.request(
+            baseUrl + "seller/order/\(orderId)",
+            method: .get,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable(of: SHSellerOrderResponse.self) { (response) in
+            switch response.result {
+            case let .success(data):
+                completionHandler(data, nil)
+            case let .failure(error):
+                completionHandler(nil, error)
+                print(error)
+            }
+        }
+    }
+    
+    func getBanners(
+        _ completionHandler: @escaping ([SHBannerResponse]?, AFError?) -> Void
+    ) {
+        guard let _accessToken = accessToken else { return }
+        let headers: HTTPHeaders = [
+            "access_token" : _accessToken,
+            "Content-Type" : "application/x-www-form-urlencoded"
+        ]
+        AF.request(
+            baseUrl + "seller/banner",
+            method: .get,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable(of: [SHBannerResponse].self) { (response) in
             switch response.result {
             case let .success(data):
                 completionHandler(data, nil)

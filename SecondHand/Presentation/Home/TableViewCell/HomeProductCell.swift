@@ -113,15 +113,8 @@ final class HomeProductCell: UITableViewCell {
         ])
     }
     
-    private func loadProducts() {
+    func loadProducts() {
         let api = SecondHandAPI.shared
-//        api.getBuyerProducts { [weak self] result, error in
-//            guard let _self = self else { return }
-//            _self.products = result ?? []
-//            _self.displayedProducts = _self.products
-//            _self.collectionView.reloadData()
-//            _self.onProductLoad?()
-//        }
         let group = DispatchGroup()
         defer {
             group.notify(queue: .main) { [weak self] in

@@ -12,7 +12,7 @@ protocol DidClickSaveButtonAction: AnyObject {
     func didClickButton(info: Bool)
 }
 
-final class CompleteAccountViewController: UIViewController {
+final class CompleteAccountViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
     weak var delegate: DidClickSaveButtonAction?
     
@@ -71,7 +71,7 @@ final class CompleteAccountViewController: UIViewController {
         super.viewDidLoad()
         self.title = "Lengkapi Info Akun"
         view.backgroundColor = .white
-        self.tabBarController?.tabBar.isHidden = true
+//        self.tabBarController?.tabBar.isHidden = true
         
         
         setupSubviews()
@@ -79,13 +79,26 @@ final class CompleteAccountViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        self.tabBarController?.tabBar.isHidden = false
+//        self.tabBarController?.tabBar.isHidden = false
     }
     
     private func setupSubviews() {
         view.addSubviews(scrollView,buttonSave)
-        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapRecognizer.cancelsTouchesInView = false
+        containerView.isUserInteractionEnabled = true
+        containerView.addGestureRecognizer(tapRecognizer)
         scrollView.addSubview(containerView)
+        scrollView.bounces = true
+        
+        textFieldCity.returnKeyType = .done
+        textFieldName.returnKeyType = .done
+        textFieldPhone.returnKeyType = .done
+        
+        textFieldCity.delegate = self
+        textFieldName.delegate = self
+        textFieldPhone.delegate = self
+        textFieldAddress.delegate = self
         
         containerView.addSubviews(
             backgroundProfilePic,
@@ -109,29 +122,25 @@ final class CompleteAccountViewController: UIViewController {
         let getData = DataForCityInIndonesia()
         textFieldCity.optionArray = getData.dataKotaBersih
         textFieldCity.arrowColor = UIColor(rgb: 0x8A8A8A)
-        
-    
-        
         buttonSave.addTarget(self, action: #selector(publishButtonTapped), for: .touchUpInside)
-        
     }
     
     @objc func publishButtonTapped() {
 
         if (textFieldName.text?.isEmpty == true) {
-            textFieldName.layer.borderColor = UIColor.red.cgColor
+            textFieldName.layer.borderColor = UIColor.systemRed.cgColor
             textFieldName.layer.borderWidth = 1
         }
         if (textFieldCity.text?.isEmpty == true) {
-            textFieldCity.layer.borderColor = UIColor.red.cgColor
+            textFieldCity.layer.borderColor = UIColor.systemRed.cgColor
             textFieldCity.layer.borderWidth = 1
         }
         if (textFieldAddress.text == "Contoh: Jalan Ikan Hiu 33") {
-            textFieldAddress.layer.borderColor = UIColor.red.cgColor
+            textFieldAddress.layer.borderColor = UIColor.systemRed.cgColor
             textFieldAddress.layer.borderWidth = 1
         }
         if (textFieldPhone.text?.isEmpty == true) {
-            textFieldPhone.layer.borderColor = UIColor.red.cgColor
+            textFieldPhone.layer.borderColor = UIColor.systemRed.cgColor
             textFieldPhone.layer.borderWidth = 1
         }
         if (textFieldName.text?.isEmpty == false), (textFieldCity.text?.isEmpty == false), (textFieldAddress.text?.isEmpty == false), (textFieldPhone.text?.isEmpty == false), (photosFromLibrary.count > 0) {
@@ -218,9 +227,8 @@ final class CompleteAccountViewController: UIViewController {
             textFieldPhone.bottomAnchor.constraint(equalTo: margin.bottomAnchor, constant: -96),
             
             buttonSave.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -16),
-            buttonSave.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            buttonSave.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-        
+            buttonSave.widthAnchor.constraint(equalTo: margin.widthAnchor),
+            buttonSave.centerXAnchor.constraint(equalTo: margin.centerXAnchor)
         ])
         
         for photoFromLibrary in photosFromLibrary {
@@ -235,6 +243,15 @@ final class CompleteAccountViewController: UIViewController {
                 photoFromLibrary.trailingAnchor.constraint(equalTo: backgroundProfilePic.trailingAnchor)
             ])
         }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+    
+    @objc private func dismissKeyboard() {
+        self.view.endEditing(true)
     }
     
 }

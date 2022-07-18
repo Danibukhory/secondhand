@@ -13,15 +13,16 @@ struct SHNotificationResponse: Codable {
     let bidPrice: Int?
     let imageURL: String?
     let transactionDate: String?
-    let status: String?
-    let sellerName: String?
+    let status, sellerName: String?
     let buyerName: String?
     let receiverID: Int?
     let read: Bool?
+    let notificationType: String?
+    let orderID: Int?
     let createdAt, updatedAt: String?
     let product: SHNotificationProductResponse?
     let user: SHUserResponse?
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case productID = "product_id"
@@ -34,7 +35,10 @@ struct SHNotificationResponse: Codable {
         case sellerName = "seller_name"
         case buyerName = "buyer_name"
         case receiverID = "receiver_id"
-        case read, createdAt, updatedAt
+        case read
+        case notificationType = "notification_type"
+        case orderID = "order_id"
+        case createdAt, updatedAt
         case product = "Product"
         case user = "User"
     }

@@ -10,9 +10,6 @@ import UIKit
 extension UINavigationBar {
     func useSHLargeTitle() {
         self.prefersLargeTitles = true
-//        self.isTranslucent = false
-//        self.backgroundColor = .white
-//        self.barTintColor = .white
         self.titleTextAttributes = [
             .foregroundColor : UIColor.black,
             .font : UIFont(name: "Poppins-Medium", size: 16)!
@@ -21,7 +18,14 @@ extension UINavigationBar {
             .foregroundColor : UIColor.black,
             .font : UIFont(name: "Poppins-Bold", size: 28)!
         ]
-//        let backImage = UIImage(systemName: "chevron.left")
+        self.tintColor = .black
+    }
+    
+    func useSHTitle() {
+        self.titleTextAttributes = [
+            .foregroundColor : UIColor.black,
+            .font : UIFont(name: "Poppins-Medium", size: 16)!
+        ]
         self.tintColor = .black
     }
 }

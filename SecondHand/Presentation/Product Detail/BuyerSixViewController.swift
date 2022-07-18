@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class BuyerSixViewController: UIViewController {
+class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
     
     var buyerResponse: SHBuyerProductResponse?
     
@@ -37,6 +37,7 @@ class BuyerSixViewController: UIViewController {
         view.clipsToBounds = true
         view.layer.cornerRadius = 12
         view.backgroundColor = .white
+        view.isUserInteractionEnabled = true
         
         let arrow = UIImageView()
         arrow.image = UIImage(systemName: "arrow.left")
@@ -60,7 +61,7 @@ class BuyerSixViewController: UIViewController {
     }()
     
     @objc private func dismissProductView() {
-        self.dismiss(animated: true)
+        self.navigationController?.popViewController(animated: true)
     }
     
     private lazy var pageControl = UIPageControl()
@@ -82,7 +83,24 @@ class BuyerSixViewController: UIViewController {
         productName.setTitle(text: (buyerResponse?.name ?? "Dummy name"), size: 14, weight: .medium, color: .black)
         
         let productCategory = UILabel()
-        productCategory.setTitle(text: (buyerResponse?.categories[0]?.name ?? "Category undefined"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        if let product = buyerResponse {
+            if !product.categories.isEmpty {
+                productCategory.setTitle(
+                    text: (product.categories[0]?.name ?? "Category undefined"),
+                    size: 10,
+                    weight: .regular,
+                    color: UIColor(rgb: 0x8A8A8A)
+                )
+            } else {
+                productCategory.setTitle(
+                    text: ("Category undefined"),
+                    size: 10,
+                    weight: .regular,
+                    color: UIColor(rgb: 0x8A8A8A)
+                )
+            }
+        }
+        
         
         let productPrice = UILabel()
         productPrice.setTitle(text:  (buyerResponse?.basePrice ?? 0).convertToCurrency(), size: 14, weight: .medium, color: .black)
@@ -233,11 +251,16 @@ class BuyerSixViewController: UIViewController {
         let vc = BuyerTenViewController()
 //        vc.buyerResponse = self.buyerResponse
         vc.modalPresentationStyle = .overCurrentContext
-        vc.changeDefaultHeight(to: view.frame.height/1.3)
+        vc.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) + 50)
         vc.delegate = self
         vc.buyerResponse = self.buyerResponse
         self.present(vc, animated: false)
 //
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self as UIGestureRecognizerDelegate
+        self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
     override func viewDidLoad() {
@@ -272,12 +295,14 @@ class BuyerSixViewController: UIViewController {
         )
         
         contentPhotoView.addSubviews(collectionView,backButton)
+        view.bringSubviewToFront(backButton)
         
     }
     
     private func setupScrollView() {
         scrollView.isScrollEnabled = true
         scrollView.bounces = true
+        scrollView.alwaysBounceVertical = true
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         contentView.translatesAutoresizingMaskIntoConstraints = false
         
@@ -313,7 +338,7 @@ class BuyerSixViewController: UIViewController {
             contentPhotoView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             contentPhotoView.heightAnchor.constraint(equalToConstant: 300),
             
-            backButton.topAnchor.constraint(equalTo: contentPhotoView.topAnchor, constant: 44),
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             backButton.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor, constant: 16),
             
             pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -369,6 +394,7 @@ class BuyerSixViewController: UIViewController {
         self.view.addSubview(pageControl)
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
     }
+    
     @objc func changePage(sender: AnyObject) -> () {
             let x = CGFloat(pageControl.currentPage) * collectionView.frame.size.width
             collectionView.setContentOffset(CGPoint(x:x, y:0), animated: true)

@@ -10,7 +10,7 @@ import UIKit
 extension UIImageView {
     
     func addDashedBorder() {
-        let color = UIColor.red.cgColor
+        let color = UIColor.systemRed
 
         let shapeLayer:CAShapeLayer = CAShapeLayer()
         let frameSize = self.frame.size
@@ -19,7 +19,7 @@ extension UIImageView {
         shapeLayer.bounds = shapeRect
         shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height/2)
         shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.strokeColor = color
+        shapeLayer.strokeColor = color.cgColor
         shapeLayer.lineWidth = 2
         shapeLayer.lineJoin = CAShapeLayerLineJoin.round
         shapeLayer.lineDashPattern = [6,3]

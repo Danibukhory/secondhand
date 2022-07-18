@@ -121,8 +121,11 @@ final class SignInViewController: UIViewController {
                     _self.loadingIndicator.stopAnimating()
                     _self.signInButton.setActiveButtonTitle(string: "Masuk")
                     UserDefaults.standard.set(true, forKey: "isLogin")
-                    let home = MainTabBarController()
-                    _self.navigationController?.pushViewController(home, animated: true)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        let home = MainTabBarController()
+                        _self.navigationController?.pushViewController(home, animated: true)
+                    }
+                    
                 }
             }
         } else {

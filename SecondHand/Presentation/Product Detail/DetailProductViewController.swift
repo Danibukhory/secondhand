@@ -85,14 +85,15 @@ final class DetailProductViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTapRecognizer()
         self.title = "Lengkapi Detail Produk"
-        self.navigationItem.title = "Jual"
         self.navigationController?.isNavigationBarHidden = false
 
         view.backgroundColor = .white
         getUserData { response in
             self.userResponse = response
         }
+        setupNavigationBar()
         setupSubviews()
         defineLayout()
     }
@@ -168,19 +169,19 @@ final class DetailProductViewController: UIViewController {
     
     @objc private func previewButtonTapped() {
         if (nameTextfield.text?.isEmpty == true) {
-            nameTextfield.layer.borderColor = UIColor.red.cgColor
+            nameTextfield.layer.borderColor = UIColor.systemRed.cgColor
             nameTextfield.layer.borderWidth = 1
         }
         if (priceTextfield.text?.isEmpty == true) {
-            priceTextfield.layer.borderColor = UIColor.red.cgColor
+            priceTextfield.layer.borderColor = UIColor.systemRed.cgColor
             priceTextfield.layer.borderWidth = 1
         }
         if (descTextfield.text == "Contoh: Jalan Ikan Hiu 33") {
-            descTextfield.layer.borderColor = UIColor.red.cgColor
+            descTextfield.layer.borderColor = UIColor.systemRed.cgColor
             descTextfield.layer.borderWidth = 1
         }
         if (categoryDropdown.text?.isEmpty == true) {
-            categoryDropdown.layer.borderColor = UIColor.red.cgColor
+            categoryDropdown.layer.borderColor = UIColor.systemRed.cgColor
             categoryDropdown.layer.borderWidth = 1
         }
         
@@ -204,19 +205,19 @@ final class DetailProductViewController: UIViewController {
     
     @objc func publishButtonTapped() {
         if (nameTextfield.text?.isEmpty == true) {
-            nameTextfield.layer.borderColor = UIColor.red.cgColor
+            nameTextfield.layer.borderColor = UIColor.systemRed.cgColor
             nameTextfield.layer.borderWidth = 1
         }
         if (priceTextfield.text?.isEmpty == true) {
-            priceTextfield.layer.borderColor = UIColor.red.cgColor
+            priceTextfield.layer.borderColor = UIColor.systemRed.cgColor
             priceTextfield.layer.borderWidth = 1
         }
         if (descTextfield.text == "Contoh: Jalan Ikan Hiu 33") {
-            descTextfield.layer.borderColor = UIColor.red.cgColor
+            descTextfield.layer.borderColor = UIColor.systemRed.cgColor
             descTextfield.layer.borderWidth = 1
         }
         if (categoryDropdown.text?.isEmpty == true) {
-            categoryDropdown.layer.borderColor = UIColor.red.cgColor
+            categoryDropdown.layer.borderColor = UIColor.systemRed.cgColor
             categoryDropdown.layer.borderWidth = 1
         }
         if (nameTextfield.text?.isEmpty == false), (priceTextfield.text?.isEmpty == false), (descTextfield.text?.isEmpty == false), (categoryDropdown.text?.isEmpty == false), (photosFromLibrary.count > 0) {
@@ -321,6 +322,29 @@ final class DetailProductViewController: UIViewController {
                 photoFromLibrary.trailingAnchor.constraint(equalTo: dashedView.trailingAnchor)
             ])
         }
+    }
+    
+    private func setupNavigationBar() {
+        title = "Lengkapi Detail Produk"
+        let button = UIBarButtonItem(image: UIImage(systemName: "arrow.left"), style: .plain, target: self, action: #selector(dismissView))
+        button.tintColor = .black
+        navigationItem.leftBarButtonItem = button
+        navigationController?.navigationBar.useSHTitle()
+    }
+    
+    @objc private func dismissView() {
+        self.navigationController?.dismiss(animated: true)
+    }
+    
+    private func setupTapRecognizer() {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapRecognizer)
+        view.isUserInteractionEnabled = true
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
     
 }

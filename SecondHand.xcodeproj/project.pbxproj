@@ -15,11 +15,16 @@
 		383095DD28646FD300EDFDAB /* RenewTransactionStatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383095DC28646FD300EDFDAB /* RenewTransactionStatusViewController.swift */; };
 		383095E02864A7EC00EDFDAB /* TransactionStatusCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 383095DF2864A7EC00EDFDAB /* TransactionStatusCell.swift */; };
 		38349B76287A7EDF001E98F0 /* HomeSearchResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38349B75287A7EDF001E98F0 /* HomeSearchResultCell.swift */; };
+		384AE52D2883E6CD0018F132 /* NotificationDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384AE52C2883E6CD0018F132 /* NotificationDetailViewController.swift */; };
+		384AE52F2884490C0018F132 /* SHBannerResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384AE52E2884490C0018F132 /* SHBannerResponse.swift */; };
+		384AE53128844E3E0018F132 /* BannerCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384AE53028844E3E0018F132 /* BannerCollectionCell.swift */; };
 		384B04EA2862278A00949209 /* SHPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B04E92862278A00949209 /* SHPopupView.swift */; };
-		384B04ED2862427500949209 /* OfferAcceptedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B04EC2862427500949209 /* OfferAcceptedViewController.swift */; };
+		384B04ED2862427500949209 /* AcceptedOfferViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 384B04EC2862427500949209 /* AcceptedOfferViewController.swift */; };
 		3858177A286D802400748254 /* SHBuyerProductResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38581779286D802400748254 /* SHBuyerProductResponse.swift */; };
 		3858177C286D809100748254 /* SHUserResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858177B286D809100748254 /* SHUserResponse.swift */; };
 		3858177E286D82F400748254 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858177D286D82F400748254 /* Int+Extension.swift */; };
+		3858BC93288466AE009EB472 /* ColorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3858BC92288466AE009EB472 /* ColorKit */; };
+		3858BC9528850FF4009EB472 /* NotificationDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858BC9428850FF4009EB472 /* NotificationDetailCell.swift */; };
 		38822BC1286AED53006B2C6C /* SecondHandAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38822BC0286AED53006B2C6C /* SecondHandAPI.swift */; };
 		38822BC4286B3282006B2C6C /* SHNotificationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38822BC3286B3282006B2C6C /* SHNotificationResponse.swift */; };
 		3893251D287DC14600151410 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3893251C287DC14600151410 /* SettingsViewController.swift */; };
@@ -84,11 +89,15 @@
 		383095DC28646FD300EDFDAB /* RenewTransactionStatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenewTransactionStatusViewController.swift; sourceTree = "<group>"; };
 		383095DF2864A7EC00EDFDAB /* TransactionStatusCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStatusCell.swift; sourceTree = "<group>"; };
 		38349B75287A7EDF001E98F0 /* HomeSearchResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeSearchResultCell.swift; sourceTree = "<group>"; };
+		384AE52C2883E6CD0018F132 /* NotificationDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailViewController.swift; sourceTree = "<group>"; };
+		384AE52E2884490C0018F132 /* SHBannerResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHBannerResponse.swift; sourceTree = "<group>"; };
+		384AE53028844E3E0018F132 /* BannerCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionCell.swift; sourceTree = "<group>"; };
 		384B04E92862278A00949209 /* SHPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHPopupView.swift; sourceTree = "<group>"; };
-		384B04EC2862427500949209 /* OfferAcceptedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfferAcceptedViewController.swift; sourceTree = "<group>"; };
+		384B04EC2862427500949209 /* AcceptedOfferViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptedOfferViewController.swift; sourceTree = "<group>"; };
 		38581779286D802400748254 /* SHBuyerProductResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHBuyerProductResponse.swift; sourceTree = "<group>"; };
 		3858177B286D809100748254 /* SHUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHUserResponse.swift; sourceTree = "<group>"; };
 		3858177D286D82F400748254 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
+		3858BC9428850FF4009EB472 /* NotificationDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailCell.swift; sourceTree = "<group>"; };
 		38822BC0286AED53006B2C6C /* SecondHandAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondHandAPI.swift; sourceTree = "<group>"; };
 		38822BC3286B3282006B2C6C /* SHNotificationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHNotificationResponse.swift; sourceTree = "<group>"; };
 		3893251C287DC14600151410 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -152,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AD938D885CB627C54448F68 /* Pods_SecondHand.framework in Frameworks */,
+				3858BC93288466AE009EB472 /* ColorKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,12 +203,12 @@
 			path = TableViewCell;
 			sourceTree = "<group>";
 		};
-		384B04EB2862425300949209 /* OfferAccepted */ = {
+		384B04EB2862425300949209 /* AcceptedOffer */ = {
 			isa = PBXGroup;
 			children = (
-				384B04EC2862427500949209 /* OfferAcceptedViewController.swift */,
+				384B04EC2862427500949209 /* AcceptedOfferViewController.swift */,
 			);
-			path = OfferAccepted;
+			path = AcceptedOffer;
 			sourceTree = "<group>";
 		};
 		38822BBE286AED3D006B2C6C /* DataLayer */ = {
@@ -229,6 +239,7 @@
 				3858177B286D809100748254 /* SHUserResponse.swift */,
 				38B758F8288056B6007D09B3 /* SHSellerOrderResponse.swift */,
 				7B79A3FB2881A21F009D8509 /* SHBuyerOrderResponse.swift */,
+				384AE52E2884490C0018F132 /* SHBannerResponse.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -266,6 +277,7 @@
 			children = (
 				38940C6F2859EB2F000DD541 /* CategorySelectorCollectionCell.swift */,
 				38940C732859EB5B000DD541 /* HomeProductCollectionCell.swift */,
+				384AE53028844E3E0018F132 /* BannerCollectionCell.swift */,
 			);
 			path = CollectionViewCell;
 			sourceTree = "<group>";
@@ -274,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				3895B75B285B6FEA00202609 /* NotificationCell.swift */,
+				3858BC9428850FF4009EB472 /* NotificationDetailCell.swift */,
 			);
 			path = NotificationCell;
 			sourceTree = "<group>";
@@ -407,6 +420,7 @@
 			children = (
 				3895B75A285B6FD200202609 /* NotificationCell */,
 				E9B46FC9285A1C23008F0615 /* NotificationViewController.swift */,
+				384AE52C2883E6CD0018F132 /* NotificationDetailViewController.swift */,
 			);
 			path = Notification;
 			sourceTree = "<group>";
@@ -451,7 +465,7 @@
 				3893251B287DC13300151410 /* Settings */,
 				E90C4BAD2869FB3C00C64528 /* SellingList */,
 				383095DB28646FA600EDFDAB /* RenewTransactionStatus */,
-				384B04EB2862425300949209 /* OfferAccepted */,
+				384B04EB2862425300949209 /* AcceptedOffer */,
 				382F59602860AFF6009F0BB5 /* Offerer */,
 				E9B46FC8285A1BDD008F0615 /* Account */,
 				E9B46FC6285A1BA9008F0615 /* Selling */,
@@ -499,6 +513,9 @@
 			dependencies = (
 			);
 			name = SecondHand;
+			packageProductDependencies = (
+				3858BC92288466AE009EB472 /* ColorKit */,
+			);
 			productName = SecondHand;
 			productReference = 6E78117E28522ED600104FE1 /* SecondHand.app */;
 			productType = "com.apple.product-type.application";
@@ -525,8 +542,12 @@
 			knownRegions = (
 				en,
 				Base,
+				fr,
 			);
 			mainGroup = 6E78117528522ED600104FE1;
+			packageReferences = (
+				3858BC91288466AE009EB472 /* XCRemoteSwiftPackageReference "ColorKit" */,
+			);
 			productRefGroup = 6E78117F28522ED600104FE1 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -611,6 +632,7 @@
 				38B758F9288056B6007D09B3 /* SHSellerOrderResponse.swift in Sources */,
 				7BCE01AC285A4E2400FF94BA /* SHLongTextField.swift in Sources */,
 				E9C1F3362858AC3900489969 /* SignInViewController.swift in Sources */,
+				384AE52F2884490C0018F132 /* SHBannerResponse.swift in Sources */,
 				383095DD28646FD300EDFDAB /* RenewTransactionStatusViewController.swift in Sources */,
 				7B878B88287C44E400748772 /* SellerPreviewViewController.swift in Sources */,
 				7B878B7C2875D0A000748772 /* SHDropDownTextField.swift in Sources */,
@@ -621,6 +643,7 @@
 				E95E27212859AEE30090A5CC /* SHTextfield.swift in Sources */,
 				6E78118228522ED600104FE1 /* AppDelegate.swift in Sources */,
 				38AB06E128588D5D0006342E /* SHButton.swift in Sources */,
+				3858BC9528850FF4009EB472 /* NotificationDetailCell.swift in Sources */,
 				3858177C286D809100748254 /* SHUserResponse.swift in Sources */,
 				38106AA2286C633200B5794A /* SHCategoryResponse.swift in Sources */,
 				7B878B7A2875D03E00748772 /* DetailProductViewController.swift in Sources */,
@@ -642,6 +665,7 @@
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
 				7B79A3FC2881A21F009D8509 /* SHBuyerOrderResponse.swift in Sources */,
 				3895B75C285B6FEA00202609 /* NotificationCell.swift in Sources */,
+				384AE52D2883E6CD0018F132 /* NotificationDetailViewController.swift in Sources */,
 				3858177E286D82F400748254 /* Int+Extension.swift in Sources */,
 				E9B46FCC285A1C35008F0615 /* SellingViewController.swift in Sources */,
 				38940C6C2859EAD7000DD541 /* HomeViewController.swift in Sources */,
@@ -654,9 +678,10 @@
 				E90C4BB42869FBBD00C64528 /* SellingListPageViewController.swift in Sources */,
 				38940C762859EB79000DD541 /* UICollectionView+Extension.swift in Sources */,
 				E90C4BAF2869FB7D00C64528 /* ProductListViewController.swift in Sources */,
-				384B04ED2862427500949209 /* OfferAcceptedViewController.swift in Sources */,
+				384B04ED2862427500949209 /* AcceptedOfferViewController.swift in Sources */,
 				E9B46FC4285A1B5E008F0615 /* MainTabBarController.swift in Sources */,
 				3893251D287DC14600151410 /* SettingsViewController.swift in Sources */,
+				384AE53128844E3E0018F132 /* BannerCollectionCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -868,6 +893,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3858BC91288466AE009EB472 /* XCRemoteSwiftPackageReference "ColorKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Boris-Em/ColorKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3858BC92288466AE009EB472 /* ColorKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3858BC91288466AE009EB472 /* XCRemoteSwiftPackageReference "ColorKit" */;
+			productName = ColorKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		6E78118A28522ED600104FE1 /* SecondHand.xcdatamodeld */ = {

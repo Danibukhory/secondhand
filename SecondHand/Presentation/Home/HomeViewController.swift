@@ -8,14 +8,14 @@
 import UIKit
 import Alamofire
 
-
-enum HomeViewCellRowType: Int {
-    case header = 0
-    case product = 1
-}
-
-final class HomeViewController: UITableViewController {
-        
+final class HomeViewController: UITableViewController, UIGestureRecognizerDelegate {
+    
+    enum HomeViewCellRowType: Int {
+        case header = 0
+        case product = 1
+    }
+    
+    var refControl = UIRefreshControl()
     var searchTableView = UITableView()
     var products: [SHBuyerProductResponse] = []
     var displayedSearchedProducts: [SHBuyerProductResponse] = []
@@ -38,16 +38,16 @@ final class HomeViewController: UITableViewController {
         super.viewDidLoad()
         setupGestureRecognizers()
         setupSearchTableView()
+        setupRefreshControl()
         prepareScrollButton()
-        tableView.register(HomeHeaderCell.self, forCellReuseIdentifier: "\(HomeHeaderCell.self)")
-        tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
-        searchTableView.register(HomeSearchResultCell.self, forCellReuseIdentifier: "\(HomeSearchResultCell.self)")
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "loadingCell")
+        registerCells()
         tableView.backgroundColor = UIColor(rgb: 0xFFE9C9)
         tableView.separatorStyle = .none
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tabBarController?.navigationController?.interactivePopGestureRecognizer?.delegate = self as UIGestureRecognizerDelegate
+        self.tabBarController?.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -103,14 +103,14 @@ final class HomeViewController: UITableViewController {
                     guard self != nil else { return }
                     DispatchQueue.main.async {
                         let _indexPath = IndexPath(item: 0, section: 0)
-                        guard let collectionCell = cell.collectionView.cellForItem(at: _indexPath)
+                        guard let collectionCell = cell.categoryCollectionView.cellForItem(at: _indexPath)
                                 as? CategorySelectorCollectionCell else { return }
-                        cell.collectionView.selectItem(at: _indexPath, animated: true, scrollPosition: .centeredVertically)
+                        cell.categoryCollectionView.selectItem(at: _indexPath, animated: true, scrollPosition: .centeredVertically)
                         collectionCell.selectedState()
-                        cell.loadingIndicator.stopAnimating()
+                        cell.categoryLoadingIndicator.stopAnimating()
                     }
-                    cell.collectionView.alpha = 0
-                    cell.collectionView.fadeIn()
+                    cell.categoryCollectionView.alpha = 0
+                    cell.categoryCollectionView.fadeIn()
                 }
                 cell.onCategorySelectorTap = { [weak self] _category in
                     guard self != nil,
@@ -147,6 +147,11 @@ final class HomeViewController: UITableViewController {
                     }
                     _self.searchTableView.reloadData()
                 }
+                cell.newTableViewColor = { [weak self] color in
+                    guard let _self = self else { return }
+                    _self.tableView.backgroundColor = color
+                    _self.searchTableView.backgroundColor = color
+                }
                 return cell
                 
             case rowType.product.rawValue:
@@ -171,8 +176,7 @@ final class HomeViewController: UITableViewController {
                     guard let _self = self else { return }
                     let buyerSixVC = BuyerSixViewController()
                     buyerSixVC.buyerResponse = product
-                    buyerSixVC.modalPresentationStyle = .overCurrentContext
-                    _self.tabBarController?.navigationController?.present(buyerSixVC, animated: true)
+                    _self.tabBarController?.navigationController?.pushViewController(buyerSixVC, animated: true)
                 }
                 
                 return cell
@@ -185,12 +189,12 @@ final class HomeViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch tableView {
         case searchTableView:
+            tableView.deselectRow(at: indexPath, animated: true)
             let item = indexPath.item
             let product = displayedSearchedProducts[item]
             let buyerSixVC = BuyerSixViewController()
             buyerSixVC.buyerResponse = product
-            buyerSixVC.modalPresentationStyle = .overCurrentContext
-            self.tabBarController?.navigationController?.present(buyerSixVC, animated: true)
+            self.tabBarController?.navigationController?.pushViewController(buyerSixVC, animated: true)
         default:
             break
         }
@@ -230,9 +234,6 @@ final class HomeViewController: UITableViewController {
             searchTableView.heightAnchor.constraint(greaterThanOrEqualToConstant: 100),
             searchTableView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     private func setupGestureRecognizers() {
@@ -243,15 +244,6 @@ final class HomeViewController: UITableViewController {
         tableView.keyboardDismissMode = .onDrag
         tabBarController?.navigationController?.isNavigationBarHidden = true
     }
-    
-//    private func handleAuth() {
-//        let isLogin = UserDefaults.standard.bool(forKey: "isLogin")
-//        if !isLogin {
-//            let viewController = UINavigationController(rootViewController: SignInViewController())
-//            viewController.modalPresentationStyle = .fullScreen
-//            navigationController?.present(viewController, animated: true)
-//        }
-//    }
     
     private func prepareScrollButton() {
         view.addSubview(scrollToBottomButton)
@@ -281,20 +273,31 @@ final class HomeViewController: UITableViewController {
         tableView.endEditing(true)
     }
     
-    @objc private func keyboardWillShow(notification: NSNotification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            searchTableView.frame.size.height -= keyboardSize.height
-//            searchTableView.beginUpdates()
-//            searchTableView.endUpdates()
-//        }
+    private func registerCells() {
+        tableView.register(HomeHeaderCell.self, forCellReuseIdentifier: "\(HomeHeaderCell.self)")
+        tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "loadingCell")
+        searchTableView.register(HomeSearchResultCell.self, forCellReuseIdentifier: "\(HomeSearchResultCell.self)")
     }
-
-    @objc private func keyboardWillHide(notification: NSNotification) {
-//        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-//            searchTableView.frame.size.height += keyboardSize.height
-//        }
+    
+    private func setupRefreshControl() {
+        refControl.addTarget(self, action: #selector(refreshPage), for: .valueChanged)
+        self.refreshControl = refControl
+    }
+    
+    @objc private func refreshPage() {
+        guard let headerCell = tableView.dequeueReusableCell(withIdentifier: "\(HomeHeaderCell.self)", for: IndexPath(row: 0, section: 0)) as? HomeHeaderCell,
+              let productCell = tableView.dequeueReusableCell(withIdentifier: "\(HomeProductCell.self)", for: IndexPath(row: 0, section: 0)) as? HomeProductCell
+        else { return }
+        let group = DispatchGroup()
+        group.enter()
+        headerCell.loadBanners()
+        headerCell.loadCategories()
+        productCell.loadProducts()
+        group.leave()
+        group.notify(queue: .main) {
+            self.refControl.endRefreshing()
+        }
     }
     
 }
-
-

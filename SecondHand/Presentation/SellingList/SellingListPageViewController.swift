@@ -54,7 +54,7 @@ final class SellingListPageViewController: UIViewController {
     private lazy var imageTopView: UIImageView = {
         let imageTop = UIImageView()
         imageTop.translatesAutoresizingMaskIntoConstraints = false
-        imageTop.backgroundColor = .blue
+        imageTop.backgroundColor = UIColor.systemBlue
         imageTop.layer.cornerRadius = 12
         return imageTop
     }()

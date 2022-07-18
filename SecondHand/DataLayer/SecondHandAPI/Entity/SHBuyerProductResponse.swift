@@ -16,7 +16,7 @@ struct SHBuyerProductResponse: Codable {
     let userID: Int?
     let status, createdAt, updatedAt: String?
     let categories: [SHCategoryResponse?]
-//    let user: SHUserResponse
+    let user: SHUserResponse?
 
     enum CodingKeys: String, CodingKey {
         case id, name
@@ -28,6 +28,7 @@ struct SHBuyerProductResponse: Codable {
         case userID = "user_id"
         case status, createdAt, updatedAt
         case categories = "Categories"
-//        case user = "User"
+        case user = "User"
     }
 }
+

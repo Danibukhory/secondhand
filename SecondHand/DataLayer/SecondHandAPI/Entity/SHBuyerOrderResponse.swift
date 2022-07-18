@@ -14,8 +14,8 @@ struct SHBuyerOrderResponse: Codable {
     let productName, basePrice: String?
     let imageProduct: String?
     let status: String?
-    let product: BuyerOrderProduct
-    let user: BuyerOrderUser
+    let product: BuyerOrderProduct?
+    let user: BuyerOrderUser?
 
     enum CodingKeys: String, CodingKey {
         case id
