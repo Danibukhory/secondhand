@@ -380,7 +380,7 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
                 return UICollectionViewCell()
             }
             cell.fill(with: banner)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [self] in
                 if item == 0 {
                     if let image = cell.bannerImageView.image {
                         handleNewColor(image: image)

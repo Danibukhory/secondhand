@@ -94,8 +94,11 @@ final class SignUpViewController: UIViewController {
         // give spring animation for button if needed
     }()
     
+    private lazy var tapGestureRecognizer = UITapGestureRecognizer()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTapRecognizer()
         view.backgroundColor = .systemBackground
         configure()
     }
@@ -240,6 +243,16 @@ final class SignUpViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OKE", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-   
     
+    private func setupTapRecognizer() {
+        tapGestureRecognizer.addTarget(self, action: #selector(dismissKeyboard))
+        tapGestureRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGestureRecognizer)
+    }
+   
+    @objc private func dismissKeyboard() {
+        emailTextField.endEditing(true)
+        passwordTextField.endEditing(true)
+        self.setEditing(false, animated: true)
+    }
 }

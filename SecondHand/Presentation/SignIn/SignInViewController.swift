@@ -6,11 +6,11 @@
 //
 
 import UIKit
+import CoreData
 
 final class SignInViewController: UIViewController {
-    let signManager = SecondHandAPI.shared
     
-    private var signInData: SignInResponse = SignInResponse()
+    var signManager = SecondHandAPI.shared
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
@@ -94,7 +94,8 @@ final class SignInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        prepareTapRecognizer()
+        setupTapRecognizer()
+        setupNavigationBar()
         view.backgroundColor = .systemBackground
         configure()
     }
@@ -105,27 +106,40 @@ final class SignInViewController: UIViewController {
         else { return }
     
         if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
+            let group = DispatchGroup()
             loadingIndicator.startAnimating()
             signInButton.setActiveButtonTitle(string: "")
-            signManager.signIn(email: emailText, password: passwordText) { [weak self] result, error in
+            DispatchQueue.main.async { [weak self] in
                 guard let _self = self else { return }
-                guard let _result = result else {
-                    self?.loadingIndicator.stopAnimating()
-                    self?.signInButton.setActiveButtonTitle(string: "Masuk")
-                    self?.setupAlert(title: "Error", message: "Email atau password salah. Coba lagi.", style: .alert)
-                    return
-                }
-                _self.signInData.id = _result.id
-                if _self.signInData.id != 0 {
-                    UserDefaults.standard.set(_result.accessToken, forKey: "accessToken")
-                    _self.loadingIndicator.stopAnimating()
-                    _self.signInButton.setActiveButtonTitle(string: "Masuk")
-                    UserDefaults.standard.set(true, forKey: "isLogin")
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        let home = MainTabBarController()
-                        _self.navigationController?.pushViewController(home, animated: true)
+                group.enter()
+                _self.signManager.signIn(email: emailText, password: passwordText) { result, error in
+                    guard let _result = result else {
+                        self?.loadingIndicator.stopAnimating()
+                        self?.signInButton.setActiveButtonTitle(string: "Masuk")
+                        self?.setupAlert(title: "Error", message: "Email atau password salah. Coba lagi.", style: .alert)
+                        return
                     }
-                    
+                    guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+                    let managedContext = appDelegate.persistentContainer.viewContext
+                    let entity = NSEntityDescription.entity(forEntityName: "SignedInUser", in: managedContext)!
+                    let user = NSManagedObject(entity: entity, insertInto: managedContext)
+                    user.setValue(_result.id, forKey: "id")
+                    user.setValue(_result.fullName, forKey: "full_name")
+                    user.setValue(_result.address, forKey: "address")
+                    user.setValue(_result.email, forKey: "email")
+                    user.setValue(_result.password, forKey: "password")
+                    user.setValue(_result.phoneNumber, forKey: "phone_number")
+                    user.setValue(_result.city, forKey: "city")
+                    user.setValue(_result.imageURL, forKey: "image_url")
+                    user.setValue(_result.createdAt, forKey: "createdAt")
+                    user.setValue(_result.updatedAt, forKey: "updatedAt")
+                    do {
+                      try managedContext.save()
+                    } catch let error as NSError {
+                      print("Could not save. \(error), \(error.userInfo)")
+                    }
+                    _self.dismiss(animated: true)
+                    UserDefaults.standard.set(true, forKey: "isSignedIn")
                 }
             }
         } else {
@@ -239,13 +253,13 @@ final class SignInViewController: UIViewController {
         ])
     }
     
-    private func prepareTapRecognizer() {
+    private func setupTapRecognizer() {
         tapGestureRecognizer.addTarget(self, action: #selector(dismissKeyboard))
         tapGestureRecognizer.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    @objc func dismissKeyboard() {
+    @objc private func dismissKeyboard() {
         emailTextField.endEditing(true)
         passwordTextField.endEditing(true)
         self.setEditing(false, animated: true)
@@ -259,6 +273,37 @@ final class SignInViewController: UIViewController {
         let alert = UIAlertController(title: titleAlert, message: messageAlert, preferredStyle: styleAlert)
         alert.addAction(UIAlertAction(title: "Oke", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func saveSignedInUser(_ data: SHUserResponse) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let entity = NSEntityDescription.entity(forEntityName: "SignedInUser", in: managedContext)!
+        let user = NSManagedObject(entity: entity, insertInto: managedContext)
+        user.setValue(data.fullName, forKey: "full_name")
+        user.setValue(data.id, forKey: "id")
+        user.setValue(data.password, forKey: "password")
+        user.setValue(data.imageURL, forKey: "image_url")
+        user.setValue(data.address, forKey: "address")
+        user.setValue(data.city, forKey: "city")
+        user.setValue(data.phoneNumber, forKey: "phone_number")
+        user.setValue(data.createdAt, forKey: "createdAt")
+        user.setValue(data.updatedAt, forKey: "updatedAt")
+        do {
+            try managedContext.save()
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    private func setupNavigationBar() {
+        let button = UIBarButtonItem(image: UIImage(systemName: "arrow.left"), style: .plain, target: self, action: #selector(dismissView))
+        button.tintColor = .black
+        navigationItem.leftBarButtonItem = button
+    }
+    
+    @objc private func dismissView() {
+        self.navigationController?.dismiss(animated: true)
     }
     
 }

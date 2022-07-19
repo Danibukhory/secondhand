@@ -56,26 +56,57 @@ final class MainTabBarController: UITabBarController {
             accountViewController
         ].map {
             let navigationController = UINavigationController(rootViewController: $0)
-//            navigationController.navigationBar.prefersLargeTitles = true
-//            navigationController.navigationItem.largeTitleDisplayMode = .always
-//            navigationController.navigationBar.tintColor = .white
             return navigationController
         }
-    
         tabBar.backgroundColor = .systemBackground
         tabBar.tintColor = UIColor(rgb: 0x7126B5)
         self.viewControllers = viewControllers
+    }
+    
+    func showSignInAlert() {
+        let alertController = UIAlertController(
+            title: "Masuk",
+            message: "Anda harus masuk terlebih dahulu untuk menggunakan fitur ini.",
+            preferredStyle: .alert
+        )
+        alertController.view.tintColor = UIColor(rgb: 0x7126B5)
+        let signInAction = UIAlertAction(title: "Masuk", style: .default) { _ in
+            self.dismiss(animated: true)
+            let vc = SignInViewController()
+            let navigationController = UINavigationController(rootViewController: vc)
+            navigationController.modalPresentationStyle = .fullScreen
+            self.tabBarController?.navigationController?.present(navigationController, animated: true)
+            self.navigationController?.present(navigationController, animated: true)
+        }
+        let cancelAction = UIAlertAction(title: "Nanti", style: .cancel)
+        alertController.addAction(cancelAction)
+        alertController.addAction(signInAction)
+        self.present(alertController, animated: true)
     }
 }
 
 extension MainTabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        let isSignedIn = UserDefaults.standard.bool(forKey: "isSignedIn")
         if viewController == tabBarController.viewControllers?[2] {
-            let vc = DetailProductViewController()
-            let navigationController = UINavigationController(rootViewController: vc)
-            navigationController.modalPresentationStyle = .fullScreen
-            self.navigationController?.present(navigationController, animated: true)
-            return false
+            if isSignedIn {
+                let viewController = DetailProductViewController()
+                let navigationController = UINavigationController(rootViewController: viewController)
+                navigationController.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(navigationController, animated: true)
+                return false
+            } else {
+                showSignInAlert()
+                return false
+            }
+        }
+        if viewController == tabBarController.viewControllers?[3] {
+            if isSignedIn {
+                return true
+            } else {
+                showSignInAlert()
+                return false
+            }
         }
         return true
     }
