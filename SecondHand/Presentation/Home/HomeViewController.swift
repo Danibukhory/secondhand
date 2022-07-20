@@ -19,6 +19,8 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     var searchTableView = UITableView()
     var products: [SHBuyerProductResponse] = []
     var displayedSearchedProducts: [SHBuyerProductResponse] = []
+    var recentlyViewedProducts: [SHBuyerProductResponse] = []
+    var searchText: String = ""
     
     private typealias rowType = HomeViewCellRowType
     
@@ -56,6 +58,20 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
         guard let cell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? HomeProductCell else { return }
         cell.isSorterButtonShown = isSorterButtonShown
     }
+    
+//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        switch tableView {
+//        case searchTableView:
+//            if searchText.isEmpty && !recentlyViewedProducts.isEmpty {
+//                return "Yang anda cari sebelumnya"
+//            } else if !searchText.isEmpty {
+//                return nil
+//            }
+//            return nil
+//        default:
+//            return nil
+//        }
+//    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch tableView {
@@ -134,7 +150,8 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
                 cell.onSearchBarTextChange = { [weak self] searchText in
                     guard let _self = self else { return }
                     if searchText.isEmpty {
-                        _self.displayedSearchedProducts = []
+                        _self.displayedSearchedProducts = _self.recentlyViewedProducts
+                        _self.searchText = searchText
                     } else {
                         let filteredProducts: [SHBuyerProductResponse] = _self.products.filter { product in
                             if let name = product.name?.lowercased() {
@@ -193,6 +210,15 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
             let item = indexPath.item
             let product = displayedSearchedProducts[item]
             let buyerSixVC = BuyerSixViewController()
+            var sameProduct: Int = 0
+            for prod in self.recentlyViewedProducts {
+                if prod.id == product.id {
+                    sameProduct += 1
+                }
+            }
+            if sameProduct == 0 {
+                self.recentlyViewedProducts.insert(product, at: 0)
+            }
             buyerSixVC.buyerResponse = product
             self.tabBarController?.navigationController?.pushViewController(buyerSixVC, animated: true)
         default:
@@ -277,6 +303,7 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
         tableView.register(HomeHeaderCell.self, forCellReuseIdentifier: "\(HomeHeaderCell.self)")
         tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "loadingCell")
+        searchTableView.register(UITableViewCell.self, forCellReuseIdentifier: "searchHistoryCell")
         searchTableView.register(HomeSearchResultCell.self, forCellReuseIdentifier: "\(HomeSearchResultCell.self)")
     }
     
