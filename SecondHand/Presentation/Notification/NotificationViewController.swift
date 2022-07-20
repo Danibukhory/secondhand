@@ -28,6 +28,7 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
     override func viewDidAppear(_ animated: Bool) {
         self.tabBarController?.navigationController?.interactivePopGestureRecognizer?.delegate = self as UIGestureRecognizerDelegate
         self.tabBarController?.navigationController?.interactivePopGestureRecognizer?.isEnabled = false
+        self.loadNotification()
     }
     
     override func viewDidLoad() {
@@ -253,7 +254,15 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
     private func loadNotification() {
         let api = SecondHandAPI()
         api.getNotifications { [weak self] result, error in
-            guard let _self = self else { return }
+            guard let _self = self else {
+                let alert = UIAlertController(title: "Error", message: "Failed to fetch notifications.", preferredStyle: .alert)
+                alert.view.tintColor = UIColor(rgb: 0x7126B5)
+                let action = UIAlertAction(title: "OK", style: .default)
+                alert.addAction(action)
+                self?.present(alert, animated: true)
+                self?.loadingIndicator.stopAnimating()
+                return
+            }
             DispatchQueue.main.async {
                 _self.notifications = result?.sorted(by: {$0.transactionDate ?? "" > $1.transactionDate ?? ""}) ?? []
                 _self.isAlreadyLoading = true

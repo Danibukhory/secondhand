@@ -10,6 +10,9 @@ import Kingfisher
 
 final class BannerCollectionCell: UICollectionViewCell {
     
+    typealias OnImageFinishLoading = () -> Void
+    var onImageFinishLoading: OnImageFinishLoading?
+    
     var bannerImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false

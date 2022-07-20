@@ -7,17 +7,17 @@
 import Foundation
 import UIKit
 import Kingfisher
+import CoreData
 
-class AccountTableViewController: UITableViewController {       
-
-//    private lazy var titleLabel: UILabel = {
-//        let label = UILabel()
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "Akun Saya"
-//        label.font = UIFont(name:"Poppins-Bold",size:32)
-//        return label
-//    }()
+class AccountTableViewController: UITableViewController {
+    
+    var signedInUsers: [NSManagedObject] = []
     private lazy var popUpView: SHPopupView = SHPopupView(frame: CGRect.zero, popupType: .success, text: "Berhasil merubah akun")
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +33,7 @@ class AccountTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let isSignedIn = UserDefaults.standard.bool(forKey: "isSignedIn")
         let row = indexPath.row
         let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell", for: indexPath)
         cell.contentView.heightAnchor.constraint(equalToConstant: 70).isActive = true
@@ -46,13 +47,15 @@ class AccountTableViewController: UITableViewController {
             else {
                 return UITableViewCell()
             }
-            cell.selectionStyle = .none
             return cell
             
         case 1:
             config.image = UIImage(named: "img-sh-edit")
             config.attributedText = NSAttributedString(string: "Ubah Akun", attributes: [.font : UIFont(name: "Poppins-Medium", size: 14)!])
             cell.contentConfiguration = config
+            if !isSignedIn {
+                cell.isHidden = true
+            }
             return cell
             
         case 2:
@@ -65,6 +68,9 @@ class AccountTableViewController: UITableViewController {
             config.image = UIImage(named: "img-sh-logout")
             config.attributedText = NSAttributedString(string: "Keluar", attributes: [.font : UIFont(name: "Poppins-Medium", size: 14)!])
             cell.contentConfiguration = config
+            if !isSignedIn {
+                cell.isHidden = true
+            }
             return cell
         }
         
@@ -74,6 +80,9 @@ class AccountTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         let row = indexPath.row
         switch row {
+        case 0:
+            let viewController = AcoountDetailViewController()
+            navigationController?.pushViewController(viewController, animated: true)
         case 1:
             let viewController = CompleteAccountViewController()
             viewController.delegate = self
@@ -86,18 +95,35 @@ class AccountTableViewController: UITableViewController {
             let cancel = UIAlertAction(title: "Batal", style: .cancel)
             let signOut = UIAlertAction(title: "Keluar", style: .destructive) { [weak self] _ in
                 guard let _self = self else { return }
-                _self.navigationController?.popViewController(animated: true)
-                _self.tabBarController?.navigationController?.popViewController(animated: true)
+//                _self.navigationController?.popViewController(animated: true)
+//                _self.tabBarController?.navigationController?.popViewController(animated: true)
+                _self.removeSignedInUserData()
                 UserDefaults.standard.set(false, forKey: "isHomeProductSorterShown")
                 UserDefaults.standard.set(nil, forKey: "accessToken")
-                UserDefaults.standard.set(false, forKey: "isLogin")
+                UserDefaults.standard.set(false, forKey: "isSignedIn")
                 KingfisherManager.shared.cache.clearCache()
+                _self.tableView.reloadData()
             }
             alertController.addAction(cancel)
             alertController.addAction(signOut)
             self.present(alertController, animated: true)
         default:
             return
+        }
+    }
+    
+    private func removeSignedInUserData() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "SignedInUser")
+        do {
+          signedInUsers = try managedContext.fetch(fetchRequest)
+            for user in signedInUsers {
+                managedContext.delete(user)
+            }
+            try managedContext.save()
+        } catch let error as NSError {
+          print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
 }

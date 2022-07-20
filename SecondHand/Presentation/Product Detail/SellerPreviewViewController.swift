@@ -128,16 +128,16 @@ class SellerPreviewViewController: UIViewController {
         productView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         let imageView = UIImageView()
-        imageView.load(urlString: (userResponse?.imageURL!)!)
+        imageView.load(urlString: (userResponse?.imageURL)!)
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
         
         let sellerName = UILabel()
-        sellerName.setTitle(text: (self.userResponse?.fullName!)!, size: 14, weight: .medium, color: .black)
+        sellerName.setTitle(text: (self.userResponse?.fullName)!, size: 14, weight: .medium, color: .black)
         
         let sellerCity = UILabel()
-        sellerCity.setTitle(text: (userResponse?.city! ?? "Kota Jakarta"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        sellerCity.setTitle(text: (userResponse?.city ?? "Kota Jakarta"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         sellerName.translatesAutoresizingMaskIntoConstraints = false
@@ -229,7 +229,7 @@ class SellerPreviewViewController: UIViewController {
                 description: self.productDesc!,
                 basePrice: Int(self.productPrice!)!,
                 category: self.productCategoryID!,
-                location: (self.userResponse?.city!)!,
+                location: (self.userResponse?.city)!,
                 productPicture: self.imageData!
             )
         }
