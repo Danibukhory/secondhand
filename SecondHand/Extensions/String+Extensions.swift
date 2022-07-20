@@ -34,4 +34,16 @@ extension String {
         let convertedDateString = dateStringFormatter.string(from: date ?? Date())
         return convertedDateString
     }
+    
+    func convertToCurrency() -> String {
+            if let value = Double(self) {
+                let formatter = NumberFormatter()
+                formatter.numberStyle = .currencyAccounting
+                formatter.locale = Locale(identifier: "id_ID")
+                if let str = formatter.string(for: value) {
+                    return str
+                }
+            }
+            return ""
+        }
 }

@@ -164,10 +164,9 @@ struct SecondHandAPI {
             switch response.result {
             case let .success(data):
                 if let _id = data.id, let token = data.accessToken {
+                    UserDefaults.standard.set(token, forKey: "accessToken")
                     getUserById(userId: _id, _accessToken: token) { result, error in
-                        guard let _result = result else {
-                            return
-                        }
+                        guard let _result = result else { return }
                         completionHandler(_result, nil)
                     }
                 }
@@ -330,12 +329,18 @@ struct SecondHandAPI {
         }
     }
        
-    func postBuyerOrder(id itemID: Int, bidPrice price: Int, _ completionHandler: @escaping (AFDataResponse<Data>) -> Void) {
+    func postBuyerOrder(
+        id itemID: Int,
+        bidPrice price: Int,
+        _ completionHandler: @escaping (AFDataResponse<Data>) -> Void
+    ) {
+        guard let _accessToken = accessToken else {
+            print(">>> no access token")
+            return }
         let requestUrl = "buyer/order"
-        guard let _accessToken = accessToken else { return }
         let headers: HTTPHeaders = [
             "access_token" : _accessToken,
-            "Content-Type" : "application/json",
+            "Content-Type" : "application/json"
         ]
         
         let parameter: [String: Any] = [
@@ -343,13 +348,21 @@ struct SecondHandAPI {
             "bid_price":  price
         ]
         
-        AF.request(baseUrl + requestUrl, method: .post, parameters: parameter, headers: headers)
-            .responseDecodable { (response: AFDataResponse<Data>) in
-                completionHandler(response)
-            }
+        AF.request(
+            baseUrl + requestUrl,
+            method: .post,
+            parameters: parameter,
+            headers: headers
+        )
+        .validate()
+        .responseDecodable { (response: AFDataResponse<Data>) in
+            completionHandler(response)
+        }
     }
     
-    func getBuyerOrders(_ completionHandler: @escaping ([SHBuyerOrderResponse]?, AFError?) -> Void) {
+    func getBuyerOrders(
+        _ completionHandler: @escaping ([SHBuyerOrderResponse]?, AFError?) -> Void
+    ) {
         let requestUrl = "buyer/order"
         guard let _accessToken = accessToken else { return }
 

@@ -318,7 +318,6 @@ extension HomeHeaderCell: UICollectionViewDelegate, UICollectionViewDataSource, 
             let item = indexPath.item
             let category = selectorCategories[item]
             onCategorySelectorTap?(category)
-            print(indexPath.item, indexPath.section)
         } else {
             return
         }

@@ -8,11 +8,11 @@
 import Foundation
 
 struct SHUserResponse: Codable {
-    let id: Int
-    let fullName, email, password, phoneNumber: String
-    let address: String
-    let imageURL: String
-    let city, createdAt, updatedAt: String
+    let id: Int?
+    let fullName, email, password, phoneNumber: String?
+    let address: String?
+    let imageURL: String?
+    let city, createdAt, updatedAt: String?
     
     enum CodingKeys: String, CodingKey {
         case id
