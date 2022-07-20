@@ -228,7 +228,7 @@ final class DetailProductViewController: UIViewController {
                     description: self.descTextfield.text!,
                     basePrice: Int(self.priceTextfield.text!)!,
                     category: self.category,
-                    location: (self.userResponse?.city!)!,
+                    location: (self.userResponse?.city)!,
                     productPicture: self.photosFromLibrary[0].image!)
             }
             
