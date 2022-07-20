@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SellerPreviewViewController: UIViewController {
-    
+        
     var userResponse: SHUserResponse?
     var imageData: UIImage?
     var productName: String?
@@ -16,8 +17,6 @@ class SellerPreviewViewController: UIViewController {
     var productPrice: String?
     var productCategory: String?
     var productCategoryID: Int?
-    
-    
     private lazy var isOffered: Bool = false
     
     let scrollView = UIScrollView()
@@ -55,10 +54,15 @@ class SellerPreviewViewController: UIViewController {
             view.widthAnchor.constraint(equalToConstant: 24),
             view.heightAnchor.constraint(equalToConstant: 24),
         ])
-        
-        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissThisView))
+        view.addGestureRecognizer(tapRecognizer)
+
         return view
     }()
+    
+    @objc private func dismissThisView() {
+        self.dismiss(animated: true)
+    }
     
     private lazy var pageControl = UIPageControl()
     
@@ -76,13 +80,14 @@ class SellerPreviewViewController: UIViewController {
         
         
         let productName = UILabel()
-        productName.setTitle(text: (self.productName ?? "Jam Tangan Gemink"), size: 14, weight: .medium, color: .black)
+        productName.setTitle(text: (self.productName ?? "Product name not available"), size: 14, weight: .medium, color: .black)
         
         let productCategory = UILabel()
-        productCategory.setTitle(text: (self.productCategory ?? "Aksesoris"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        productCategory.setTitle(text: (self.productCategory ?? "Category not available"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         let productPrice = UILabel()
-        productPrice.setTitle(text: "Rp. \(self.productPrice ?? "0")", size: 14, weight: .medium, color: .black)
+        let price = Int(self.productPrice!)?.convertToCurrency()
+        productPrice.setTitle(text: price ?? "Price not available", size: 14, weight: .medium, color: .black)
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         productName.translatesAutoresizingMaskIntoConstraints = false
@@ -128,7 +133,10 @@ class SellerPreviewViewController: UIViewController {
         productView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         let imageView = UIImageView()
-        imageView.load(urlString: (userResponse?.imageURL!)!)
+//        imageView.load(urlString: (userResponse?.imageURL!)!)
+        if let url = URL(string: userResponse?.imageURL ?? "") {
+            imageView.kf.setImage(with: url)
+        }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
@@ -233,8 +241,12 @@ class SellerPreviewViewController: UIViewController {
                 productPicture: self.imageData!
             )
         }
-        
-
+//        let vc = SellingListPageViewController()
+//        vc.isPopUpEnabled = true
+//        self.tabBarController?.navigationController?.pushViewController(vc, animated: true)
+        self.dismiss(animated: true)
+        self.tabBarController?.dismiss(animated: true)
+        self.tabBarController?.selectedIndex = 3
     }
     
     override func viewDidLoad() {
@@ -364,7 +376,6 @@ class SellerPreviewViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: contentPhotoView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentPhotoView.trailingAnchor),
-            
         ])
         
     }
@@ -380,7 +391,8 @@ extension SellerPreviewViewController: UICollectionViewDataSource, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(SellerPreviewProductViewCell.self)", for: indexPath) as? SellerPreviewProductViewCell else {return UICollectionViewCell()}
         
-        cell.setImage(to: imageData!)
+        cell.setImage(to: self.imageData!)
+        collectionView.reloadData()
         return cell
     }
     

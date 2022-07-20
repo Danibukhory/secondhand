@@ -8,8 +8,8 @@
 import UIKit
 import PhotosUI
 
-
 final class DetailProductViewController: UIViewController {
+        
     private var userResponse: SHUserResponse?
     private lazy var scrollView = UIScrollView()
     private lazy var containerView = UIView()
@@ -198,7 +198,6 @@ final class DetailProductViewController: UIViewController {
             
             previewViewController.modalPresentationStyle = .overCurrentContext
             self.present(previewViewController, animated: true)
-            
         }
         
     }
@@ -229,9 +228,13 @@ final class DetailProductViewController: UIViewController {
                     description: self.descTextfield.text!,
                     basePrice: Int(self.priceTextfield.text!)!,
                     category: self.category,
-                    location: "Jakarta",
+                    location: (self.userResponse?.city!)!,
                     productPicture: self.photosFromLibrary[0].image!)
             }
+            
+            let vc = SellingListPageViewController()
+            vc.isPopUpEnabled = true
+            self.navigationController?.pushViewController(vc, animated: true)
         }
     }
     
@@ -353,13 +356,16 @@ extension DetailProductViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        results[0].itemProvider.loadObject(ofClass: UIImage.self) {[weak self] reading, error in
-            if let image = reading as? UIImage {
-                DispatchQueue.main.async {
-                    let imv = self?.newImageView(image: image)
-                    self?.photosFromLibrary.append(imv!)
-                    self?.defineLayout()
-                    self?.view.setNeedsLayout()
+        for result in results {
+            result.itemProvider.loadObject(ofClass: UIImage.self) {[weak self] reading, error in
+                guard let _self = self else { return }
+                if let image = reading as? UIImage {
+                    DispatchQueue.main.async {
+                        let imv = _self.newImageView(image: image)
+                        _self.photosFromLibrary.append(imv)
+                        _self.defineLayout()
+                        _self.view.setNeedsLayout()
+                    }
                 }
             }
         }

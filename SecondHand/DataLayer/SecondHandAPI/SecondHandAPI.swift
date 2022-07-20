@@ -374,15 +374,9 @@ struct SecondHandAPI {
     func getProductCategories(
         _ completionHandler: @escaping ([SHCategoryResponse]?, AFError?) -> Void
     ) {
-        guard let _accessToken = accessToken else { return }
-        let headers: HTTPHeaders = [
-            "access_token" : _accessToken,
-            "Content-Type" : "application/x-www-form-urlencoded"
-        ]
         AF.request(
             baseUrl + "seller/category",
-            method: .get,
-            headers: headers
+            method: .get
         )
         .validate()
         .responseDecodable(of: [SHCategoryResponse].self) { (response) in

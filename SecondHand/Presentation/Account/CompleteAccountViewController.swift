@@ -12,7 +12,7 @@ protocol DidClickSaveButtonAction: AnyObject {
     func didClickButton(info: Bool)
 }
 
-final class CompleteAccountViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
+final class CompleteAccountViewController: UIViewController { //UITextFieldDelegate, UITextViewDelegate
     
     weak var delegate: DidClickSaveButtonAction?
     
@@ -73,7 +73,7 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
         view.backgroundColor = .white
 //        self.tabBarController?.tabBar.isHidden = true
         
-        
+        setupNavigationBar()
         setupSubviews()
         defineLayout()
     }
@@ -95,10 +95,10 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
         textFieldName.returnKeyType = .done
         textFieldPhone.returnKeyType = .done
         
-        textFieldCity.delegate = self
-        textFieldName.delegate = self
-        textFieldPhone.delegate = self
-        textFieldAddress.delegate = self
+//        textFieldCity.delegate = self
+//        textFieldName.delegate = self
+//        textFieldPhone.delegate = self
+//        textFieldAddress.delegate = self
         
         containerView.addSubviews(
             backgroundProfilePic,
@@ -245,28 +245,41 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
         }
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        return false
-    }
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        self.view.endEditing(true)
+//        return false
+//    }
     
     @objc private func dismissKeyboard() {
         self.view.endEditing(true)
     }
     
+    private func setupNavigationBar() {
+        title = "Lengkapi Info Akun"
+        let button = UIBarButtonItem(image: UIImage(systemName: "arrow.left"), style: .plain, target: self, action: #selector(dismissView))
+        button.tintColor = .black
+        navigationItem.leftBarButtonItem = button
+        navigationController?.navigationBar.useSHTitle()
+    }
+    
+    @objc private func dismissView() {
+        self.navigationController?.dismiss(animated: true)
+    }
 }
 
 extension CompleteAccountViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        results[0].itemProvider.loadObject(ofClass: UIImage.self) {[weak self] reading, error in
-            if let image = reading as? UIImage {
-                DispatchQueue.main.async {
-                    let imv = self?.newImageView(image: image)
-                    self?.photosFromLibrary.append(imv!)
-                    self?.defineLayout()
-                    self?.view.setNeedsLayout()
+        for result in results {
+            result.itemProvider.loadObject(ofClass: UIImage.self) {[weak self] reading, error in
+                if let image = reading as? UIImage {
+                    DispatchQueue.main.async {
+                        let imv = self?.newImageView(image: image)
+                        self?.photosFromLibrary.append(imv!)
+                        self?.defineLayout()
+                        self?.view.setNeedsLayout()
+                    }
                 }
             }
         }

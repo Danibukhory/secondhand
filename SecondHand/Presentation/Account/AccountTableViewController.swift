@@ -77,7 +77,9 @@ class AccountTableViewController: UITableViewController {
         case 1:
             let viewController = CompleteAccountViewController()
             viewController.delegate = self
-            navigationController?.pushViewController(viewController, animated: true)
+            let navigationController = UINavigationController(rootViewController: viewController)
+            navigationController.modalPresentationStyle = .fullScreen
+            self.present(navigationController, animated: true)
         case 2:
             let viewController = SettingsViewController(style: .insetGrouped)
             navigationController?.pushViewController(viewController, animated: true)
