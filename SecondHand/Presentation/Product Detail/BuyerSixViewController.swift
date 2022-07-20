@@ -10,6 +10,7 @@ import Kingfisher
 
 class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
     
+    let apiCall = SecondHandAPI.shared
     var buyerResponse: SHBuyerProductResponse?
     
     private lazy var orderedItem: [SHBuyerOrderResponse] = []
@@ -149,17 +150,30 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         productView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "img-home-product-placeholder-1")
-//        imageView.load(urlString: buyerResponse!.imageURL)
+        imageView.image = UIImage(named: "img-sh-offerer-placeholder")
+        if let url = URL(string: buyerResponse?.user?.imageURL ?? "") {
+            imageView.kf.indicatorType = .activity
+            imageView.kf.setImage(with: url, options: [.transition(.fade(0.2)), .cacheOriginalImage])
+        }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
         
         let sellerName = UILabel()
-        sellerName.setTitle(text: "Seller not recognized", size: 14, weight: .medium, color: .black)
+        sellerName.setTitle(
+            text: buyerResponse?.user?.fullName ?? "Seller not recognized",
+            size: 14,
+            weight: .medium,
+            color: .black
+        )
         
         let sellerCity = UILabel()
-        sellerCity.setTitle(text: (buyerResponse?.location ?? "Location not Available"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        sellerCity.setTitle(
+            text: buyerResponse?.location ?? "Location not Available",
+            size: 10,
+            weight: .regular,
+            color: UIColor(rgb: 0x8A8A8A)
+        )
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         sellerName.translatesAutoresizingMaskIntoConstraints = false
@@ -247,17 +261,6 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         return button
     }()
     
-    @objc func showModal() {
-        let vc = BuyerTenViewController()
-//        vc.buyerResponse = self.buyerResponse
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) + 50)
-        vc.delegate = self
-        vc.buyerResponse = self.buyerResponse
-        self.present(vc, animated: false)
-//
-    }
-    
     override func viewDidAppear(_ animated: Bool) {
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self as UIGestureRecognizerDelegate
         self.navigationController?.interactivePopGestureRecognizer?.isEnabled = true
@@ -271,6 +274,7 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
                 setupSubViews()
                 setupScrollView()
                 setupContentView()
+                setupPopupViews()
             }
         }
         group.enter()
@@ -368,8 +372,60 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         ])
     }
     
+    func showModalController() {
+        let isSignedIn = UserDefaults.standard.bool(forKey: "isSignedIn")
+        if isSignedIn {
+            let vc = BuyerTenViewController()
+            vc.modalPresentationStyle = .overCurrentContext
+            vc.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) + 50)
+            vc.buyerResponse = self.buyerResponse
+            self.present(vc, animated: false)
+            vc.onSendButtonTapped = { [weak self] offerValue in
+                guard let _self = self else { return }
+                _self.apiCall.postBuyerOrder(id: _self.buyerResponse?.id ?? 0, bidPrice: offerValue) { response in
+                    print(offerValue)
+                    switch response.response?.statusCode {
+                    case 201:
+                        _self.popUpView.isPresenting.toggle()
+                        _self.publishButton.setActiveButtonTitle(string: "Menunggu respon penjual")
+                        _self.publishButton.isEnabled = false
+                    case 400:
+                        _self.popupFailedView.changeTextLabelString(to: "Produk mencapai batas maksimal penawaran")
+                        _self.popupFailedView.isPresenting = true
+                    default:
+                        print(String(describing: response.response?.statusCode))
+                        _self.popupFailedView.changeTextLabelString(to: "Internal server error.\nResponse code: 500")
+                        _self.popupFailedView.isPresenting = true
+                    }
+                }
+            }
+        } else {
+            let alertController = UIAlertController(
+                title: "Masuk",
+                message: "Anda harus masuk terlebih dahulu untuk menggunakan fitur ini.",
+                preferredStyle: .alert
+            )
+            alertController.view.tintColor = UIColor(rgb: 0x7126B5)
+            let signInAction = UIAlertAction(title: "Masuk", style: .default) { _ in
+                self.dismiss(animated: true)
+                let vc = SignInViewController()
+                let navigationController = UINavigationController(rootViewController: vc)
+                navigationController.modalPresentationStyle = .fullScreen
+                self.tabBarController?.navigationController?.present(navigationController, animated: true)
+                self.navigationController?.present(navigationController, animated: true)
+            }
+            let cancelAction = UIAlertAction(title: "Nanti", style: .cancel)
+            alertController.addAction(cancelAction)
+            alertController.addAction(signInAction)
+            self.present(alertController, animated: true)
+        }
+    }
+    
+    @objc private func showModal() {
+        self.showModalController()
+    }
+    
     private func getOrderedItem() {
-        let apiCall = SecondHandAPI()
         apiCall.getBuyerOrders { [weak self] response, error in
             guard let _self = self else { return }
             if error == nil {
@@ -395,9 +451,9 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
     }
     
-    @objc func changePage(sender: AnyObject) -> () {
-            let x = CGFloat(pageControl.currentPage) * collectionView.frame.size.width
-            collectionView.setContentOffset(CGPoint(x:x, y:0), animated: true)
+    @objc private func changePage(sender: AnyObject) -> () {
+        let x = CGFloat(pageControl.currentPage) * collectionView.frame.size.width
+        collectionView.setContentOffset(CGPoint(x:x, y:0), animated: true)
     }
     
     private func configurePhotoCollectionView(){
@@ -418,45 +474,25 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
             collectionView.bottomAnchor.constraint(equalTo: contentPhotoView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentPhotoView.trailingAnchor),
-            
         ])
         
     }
     
-}
-
-extension BuyerSixViewController: ItemIsOfferedDelegate {
-    func userDidOfferItem(info: Bool, code: Int?) {
-        self.isOffered = info
-//        self.viewDidLoad()
-        if code != 400 {
-            publishButton.backgroundColor = UIColor(rgb: 0xD0D0D0)
-            publishButton.setActiveButtonTitle(string: "Menunggu respon penjual")
-            publishButton.isEnabled = false
-            
-            view.addSubview(popUpView)
-            popUpView.translatesAutoresizingMaskIntoConstraints = false
-            popUpView.isPresenting.toggle()
-            
-            NSLayoutConstraint.activate([
-                popUpView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-                popUpView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-                popUpView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
-            ])
-        } else {
-            view.addSubview(popupFailedView)
-            popupFailedView.translatesAutoresizingMaskIntoConstraints = false
-            popupFailedView.isPresenting.toggle()
-            
-            NSLayoutConstraint.activate([
-                popupFailedView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
-                popupFailedView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-                popupFailedView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
-            ])
-        }
+    private func setupPopupViews() {
+        view.addSubviews(popUpView, popupFailedView)
+        popUpView.translatesAutoresizingMaskIntoConstraints = false
+        popupFailedView.translatesAutoresizingMaskIntoConstraints = false
         
+        NSLayoutConstraint.activate([
+            popUpView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            popUpView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            popUpView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            
+            popupFailedView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            popupFailedView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            popupFailedView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+        ])
     }
-    
     
 }
 

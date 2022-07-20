@@ -8,14 +8,15 @@
 import UIKit
 import Kingfisher
 
-protocol ItemIsOfferedDelegate: AnyObject {
-    func userDidOfferItem(info:Bool, code:Int?)
-}
+//protocol ItemIsOfferedDelegate: AnyObject {
+//    func userDidOfferItem(info:Bool, code:Int?)
+//}
 
 final class BuyerTenViewController: SHModalViewController {
     
-    weak var delegate: ItemIsOfferedDelegate? = nil
+//    weak var delegate: ItemIsOfferedDelegate? = nil
     var buyerResponse: SHBuyerProductResponse?
+    var typedOfferValue: String = ""
     
     private lazy var handleBar: UIView = {
         let view = UIView()
@@ -105,31 +106,22 @@ final class BuyerTenViewController: SHModalViewController {
         textfield.keyboardType = .numberPad
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.returnKeyType = .done
+        textfield.addTarget(self, action: #selector(onBidValueEdited), for: .editingChanged)
+        textfield.addTarget(self, action: #selector(onBidValueType), for: .editingDidEnd)
+        textfield.addTarget(self, action: #selector(onBidValueBeginEditing), for: .editingDidBegin)
         return textfield
     }()
     
     private lazy var sendButton: SHButton = {
         let button = SHButton(frame: CGRect.zero, title: "Kirim", type: .filled, size: .regular)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(dismissThisView), for: .touchUpInside)
+        button.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
+        button.isEnabled = false
         return button
     }()
     
-    @objc private func dismissThisView() {
-        if offerTextfield.text?.isEmpty == true {
-            offerTextfield.layer.borderColor = UIColor.systemRed.cgColor
-        } else {
-            let apiCall = SecondHandAPI()
-            guard let offer = offerTextfield.text else { return }
-            apiCall.postBuyerOrder(id: buyerResponse?.id ?? 0, bidPrice: Int(offer) ?? 0) { [weak self] response in
-                guard let _self = self else { return }
-                _self.delegate?.userDidOfferItem(info: true, code: response.response?.statusCode)
-            }
-//            delegate?.userDidOfferItem(info: true)
-//            self.dismiss(animated: true)
-            self.animateDismissView()
-        }
-    }
+    typealias OnSendButtonTapped = (Int) -> Void
+    var onSendButtonTapped: OnSendButtonTapped?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -234,5 +226,30 @@ final class BuyerTenViewController: SHModalViewController {
     @objc private func dismissKeyboard() {
         self.containerView.endEditing(true)
         self.animateContainerHeight(self.defaultHeight)
+    }
+    
+    @objc private func sendButtonTapped() {
+        onSendButtonTapped?(Int(typedOfferValue) ?? 0)
+        self.animateDismissView()
+    }
+    
+    @objc private func onBidValueBeginEditing() {
+        offerTextfield.text = typedOfferValue
+    }
+    
+    @objc private func onBidValueEdited() {
+        if let text = offerTextfield.text, !text.isEmpty {
+            sendButton.isEnabled = true
+        } else {
+            sendButton.isEnabled = false
+        }
+    }
+    
+    @objc private func onBidValueType() {
+        if let text = offerTextfield.text {
+            offerTextfield.text = text.convertToCurrency()
+            typedOfferValue = text
+            print(typedOfferValue)
+        }
     }
 }
