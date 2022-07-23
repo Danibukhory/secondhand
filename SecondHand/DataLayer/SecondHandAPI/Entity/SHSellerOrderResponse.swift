@@ -10,7 +10,8 @@ import Foundation
 struct SHSellerOrderResponse: Codable {
     let id, productID, buyerID, price: Int?
     let transactionDate: String?
-    let productName, basePrice: String?
+    let productName: String?
+    let basePrice: Int?
     let imageProduct: String?
     let status, createdAt, updatedAt: String?
     let product: SHOrderProduct?
