@@ -8,16 +8,18 @@
 import Foundation
 
 struct SHNotificationResponse: Codable {
-    let id, productID: Int?
-    let productName, basePrice: String?
+    let id, productID: Int
+    let productName: String
+    let basePrice: String
     let bidPrice: Int?
-    let imageURL: String?
+    let imageURL: String
     let transactionDate: String?
-    let status, sellerName: String?
+    let status: String?
+    let sellerName: String?
     let buyerName: String?
-    let receiverID: Int?
-    let read: Bool?
-    let notificationType: String?
+    let receiverID: Int
+    let read: Bool
+    let notificationType: String
     let orderID: Int?
     let createdAt, updatedAt: String?
     let product: SHNotificationProductResponse?
@@ -44,23 +46,21 @@ struct SHNotificationResponse: Codable {
     }
 }
 
-// MARK: - Product
 struct SHNotificationProductResponse: Codable {
     let id: Int
-    let name: String
-    let description: String?
-    let basePrice: Int
-    let imageURL: String?
-    let imageName: String?
+    let name, productDescription: String
+//    let basePrice: Int
+    let imageURL: String
+    let imageName: String
     let location: String
     let userID: Int
-    let status: String?
+    let status: String
     let createdAt, updatedAt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id, name
-        case description = "description"
-        case basePrice = "base_price"
+        case productDescription = "description"
+//        case basePrice = "base_price"
         case imageURL = "image_url"
         case imageName = "image_name"
         case location

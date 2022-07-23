@@ -8,6 +8,30 @@
 import Foundation
 
 struct SHBuyerProductResponse: Codable {
+    let id: Int
+    let name, description: String
+    let basePrice: Int
+    let imageURL: String
+    let imageName, location: String
+    let userID: Int
+    let status: String
+    let createdAt, updatedAt: String
+    let categories: [SHCategoryResponse]
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case description = "description"
+        case basePrice = "base_price"
+        case imageURL = "image_url"
+        case imageName = "image_name"
+        case location
+        case userID = "user_id"
+        case status, createdAt, updatedAt
+        case categories = "Categories"
+    }
+}
+
+struct SHBuyerProductDetailResponse: Codable {
     let id: Int?
     let name, description: String?
     let basePrice: Int?
@@ -17,7 +41,7 @@ struct SHBuyerProductResponse: Codable {
     let status, createdAt, updatedAt: String?
     let categories: [SHCategoryResponse?]
     let user: SHUserResponse?
-
+    
     enum CodingKeys: String, CodingKey {
         case id, name
         case description = "description"
@@ -31,4 +55,3 @@ struct SHBuyerProductResponse: Codable {
         case user = "User"
     }
 }
-

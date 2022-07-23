@@ -81,21 +81,21 @@ final class OffererDetailCell: UITableViewCell {
         ])
     }
     
-    func fill(with data: SHUserResponse) {
-        if let imageUrl = URL(string: data.imageURL ?? "") {
-            offererImageView.kf.setImage(
-                with: imageUrl,
-                options: [.transition(.fade(0.2))]
-            )
-        }
-//        offererNameLabel.setTitle(
-//            text: data.fullName ?? "Name not available",
-//            size: 14,
-//            weight: .medium,
-//            color: .black
-//        )
+    func fill(with data: SHOrderBuyer) {
+//        if let url = URL(string: data.imageURL ?? "") {
+//            offererImageView.kf.indicatorType = .activity
+//            offererImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
+//        }
+        offererImageView.image = UIImage(named: "img-sh-offerer-placeholder")
+        
+        offererNameLabel.setTitle(
+            text: data.fullName,
+            size: 14,
+            weight: .medium, color: .black
+        )
+        
         offererCityLabel.setTitle(
-            text: data.city ?? "Domicile not available",
+            text: data.city,
             size: 10,
             weight: .regular,
             color: UIColor(rgb: 0x8A8A8A)

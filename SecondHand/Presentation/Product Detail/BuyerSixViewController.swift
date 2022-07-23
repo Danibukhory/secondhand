@@ -10,8 +10,9 @@ import Kingfisher
 
 class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
     
-    let apiCall = SecondHandAPI.shared
+    var apiCall = SecondHandAPI.shared
     var buyerResponse: SHBuyerProductResponse?
+//    var product: SHBuyerProductDetailResponse?
     
     private lazy var orderedItem: [SHBuyerOrderResponse] = []
     private lazy var isOffered: Bool = false
@@ -87,7 +88,7 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         if let product = buyerResponse {
             if !product.categories.isEmpty {
                 productCategory.setTitle(
-                    text: (product.categories[0]?.name ?? "Category undefined"),
+                    text: (product.categories[0].name ?? "Category undefined"),
                     size: 10,
                     weight: .regular,
                     color: UIColor(rgb: 0x8A8A8A)
@@ -137,7 +138,7 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         return productView
     }()
 
-    private lazy var productOwner: UIView = {
+    private lazy var productOwnerView: UIView = {
         let productView = UIView()
         scrollView.addSubview(productView)
         productView.backgroundColor = .white
@@ -149,60 +150,32 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         productView.layer.shadowOpacity = 0.15
         productView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
+        productView.translatesAutoresizingMaskIntoConstraints = false
+        return productView
+    }()
+    
+    private lazy var productOwnerImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "img-sh-offerer-placeholder")
-        if let url = URL(string: buyerResponse?.user?.imageURL ?? "") {
-            imageView.kf.indicatorType = .activity
-            imageView.kf.setImage(with: url, options: [.transition(.fade(0.2)), .cacheOriginalImage])
-        }
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
-        
+        imageView.alpha = 0
+        return imageView
+    }()
+    
+    private lazy var productOwnerNameLabel: UILabel = {
         let sellerName = UILabel()
-        sellerName.setTitle(
-            text: buyerResponse?.user?.fullName ?? "Seller not recognized",
-            size: 14,
-            weight: .medium,
-            color: .black
-        )
-        
-        let sellerCity = UILabel()
-        sellerCity.setTitle(
-            text: buyerResponse?.location ?? "Location not Available",
-            size: 10,
-            weight: .regular,
-            color: UIColor(rgb: 0x8A8A8A)
-        )
-        
-        productView.translatesAutoresizingMaskIntoConstraints = false
         sellerName.translatesAutoresizingMaskIntoConstraints = false
+        sellerName.alpha = 0
+        return sellerName
+    }()
+    
+    private lazy var productOwnerCityLabel: UILabel = {
+        let sellerCity = UILabel()
         sellerCity.translatesAutoresizingMaskIntoConstraints = false
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        productView.addSubviews(
-            imageView,
-            sellerName,
-            sellerCity
-        )
-        
-        NSLayoutConstraint.activate([
-            imageView.centerYAnchor.constraint(equalTo: productView.centerYAnchor),
-            imageView.leadingAnchor.constraint(equalTo: productView.leadingAnchor, constant: 24),
-            imageView.widthAnchor.constraint(equalToConstant: 48),
-            imageView.heightAnchor.constraint(equalToConstant: 48),
-            
-            sellerName.centerYAnchor.constraint(equalTo: imageView.centerYAnchor, constant: -10),
-            sellerName.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16),
-            sellerName.trailingAnchor.constraint(equalTo: productView.trailingAnchor, constant: -16),
-            
-            sellerCity.topAnchor.constraint(equalTo: sellerName.bottomAnchor),
-            sellerCity.leadingAnchor.constraint(equalTo: imageView.trailingAnchor,
-                                               constant: 16),
-        ])
-
-        
-        return productView
+        sellerCity.alpha = 0
+        return sellerCity
     }()
     
     private lazy var productDescription: UIView = {
@@ -249,8 +222,8 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
     }()
     
     private lazy var publishButton: SHButton = {
-        let button = SHButton(frame: CGRect.zero, title: "Saya Tertarik dan ingin Nego", type: .filled, size: .regular)
-        button.addTarget(self, action: #selector(showModal), for: .touchUpInside)
+        let button = SHButton(frame: CGRect.zero, title: "Saya tertarik dan ingin nego", type: .filled, size: .regular)
+        button.addTarget(self, action: #selector(onPublishButtonTapped), for: .touchUpInside)
         
         if !orderedItem.isEmpty {
             button.backgroundColor = UIColor(rgb: 0xD0D0D0)
@@ -260,6 +233,23 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         
         return button
     }()
+    
+    private lazy var buttonLoadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        indicator.color = .white
+        return indicator
+    }()
+    
+    private lazy var productOwnerLoadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
+    private var isQuotaExceededLately: Bool = false
     
     override func viewDidAppear(_ animated: Bool) {
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self as UIGestureRecognizerDelegate
@@ -279,7 +269,9 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         group.enter()
         getOrderedItem()
+        loadProductDetail()
         group.leave()
+        print(self.buyerResponse)
     }
     
     private func setupSubViews() {
@@ -297,10 +289,15 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
             contentPhotoView,
             pageControl
         )
-        
-        contentPhotoView.addSubviews(collectionView,backButton)
+        contentPhotoView.addSubviews(collectionView, backButton)
+        productOwnerView.addSubviews(
+            productOwnerImageView,
+            productOwnerNameLabel,
+            productOwnerCityLabel,
+            productOwnerLoadingIndicator
+        )
         view.bringSubviewToFront(backButton)
-        
+        publishButton.addSubview(buttonLoadingIndicator)
     }
     
     private func setupScrollView() {
@@ -332,7 +329,7 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         backButton.translatesAutoresizingMaskIntoConstraints = false
         pageControl.translatesAutoresizingMaskIntoConstraints = false
         productDetail.translatesAutoresizingMaskIntoConstraints = false
-        productOwner.translatesAutoresizingMaskIntoConstraints = false
+        productOwnerView.translatesAutoresizingMaskIntoConstraints = false
         productDescription.translatesAutoresizingMaskIntoConstraints = false
         publishButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -353,12 +350,12 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
             productDetail.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             productDetail.topAnchor.constraint(equalTo: pageControl.bottomAnchor, constant: 16),
             
-            productOwner.topAnchor.constraint(equalTo: productDetail.bottomAnchor, constant: 16),
-            productOwner.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
-            productOwner.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
-            productOwner.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            productOwnerView.topAnchor.constraint(equalTo: productDetail.bottomAnchor, constant: 16),
+            productOwnerView.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
+            productOwnerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 80),
+            productOwnerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            productDescription.topAnchor.constraint(equalTo: productOwner.bottomAnchor, constant: 19),
+            productDescription.topAnchor.constraint(equalTo: productOwnerView.bottomAnchor, constant: 19),
             productDescription.widthAnchor.constraint(equalTo: contentView.widthAnchor, constant: -32),
             productDescription.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             productDescription.heightAnchor.constraint(greaterThanOrEqualToConstant: 10),
@@ -369,36 +366,44 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
             publishButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             publishButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
+            buttonLoadingIndicator.centerXAnchor.constraint(equalTo: publishButton.centerXAnchor),
+            buttonLoadingIndicator.centerYAnchor.constraint(equalTo: publishButton.centerYAnchor),
+            
+            productOwnerImageView.centerYAnchor.constraint(equalTo: productOwnerView.centerYAnchor),
+            productOwnerImageView.leadingAnchor.constraint(equalTo: productOwnerView.leadingAnchor, constant: 24),
+            productOwnerImageView.widthAnchor.constraint(equalToConstant: 48),
+            productOwnerImageView.heightAnchor.constraint(equalToConstant: 48),
+            
+            productOwnerNameLabel.centerYAnchor.constraint(equalTo: productOwnerImageView.centerYAnchor, constant: -10),
+            productOwnerNameLabel.leadingAnchor.constraint(equalTo: productOwnerImageView.trailingAnchor, constant: 16),
+            productOwnerNameLabel.trailingAnchor.constraint(equalTo: productOwnerView.trailingAnchor, constant: -16),
+            
+            productOwnerCityLabel.topAnchor.constraint(equalTo: productOwnerNameLabel.bottomAnchor),
+            productOwnerCityLabel.leadingAnchor.constraint(equalTo: productOwnerImageView.trailingAnchor, constant: 16),
+            
+            productOwnerLoadingIndicator.centerXAnchor.constraint(equalTo: productOwnerView.centerXAnchor),
+            productOwnerLoadingIndicator.centerYAnchor.constraint(equalTo: productOwnerView.centerYAnchor)
         ])
     }
     
-    func showModalController() {
+    private func publishButtonTapped() {
         let isSignedIn = UserDefaults.standard.bool(forKey: "isSignedIn")
-        if isSignedIn {
-            let vc = BuyerTenViewController()
-            vc.modalPresentationStyle = .overCurrentContext
-            vc.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) + 50)
-            vc.buyerResponse = self.buyerResponse
-            self.present(vc, animated: false)
-            vc.onSendButtonTapped = { [weak self] offerValue in
-                guard let _self = self else { return }
-                _self.apiCall.postBuyerOrder(id: _self.buyerResponse?.id ?? 0, bidPrice: offerValue) { response in
-                    print(offerValue)
-                    switch response.response?.statusCode {
-                    case 201:
-                        _self.popUpView.isPresenting.toggle()
-                        _self.publishButton.setActiveButtonTitle(string: "Menunggu respon penjual")
-                        _self.publishButton.isEnabled = false
-                    case 400:
-                        _self.popupFailedView.changeTextLabelString(to: "Produk mencapai batas maksimal penawaran")
-                        _self.popupFailedView.isPresenting = true
-                    default:
-                        print(String(describing: response.response?.statusCode))
-                        _self.popupFailedView.changeTextLabelString(to: "Internal server error.\nResponse code: 500")
-                        _self.popupFailedView.isPresenting = true
-                    }
-                }
+        if isSignedIn, isQuotaExceededLately {
+            let alertController = UIAlertController(
+                title: "Perhatian",
+                message: "Terakhir kali anda menawar, batas penawaran untuk produk ini sudah penuh. Tetap lanjutkan menawar?",
+                preferredStyle: .alert
+            )
+            alertController.view.tintColor = UIColor(rgb: 0x7126B5)
+            let cancel = UIAlertAction(title: "Batal", style: .destructive)
+            let proceed = UIAlertAction(title: "Lanjut", style: .default) { _ in
+                self.showModalController()
             }
+            alertController.addAction(cancel)
+            alertController.addAction(proceed)
+            self.present(alertController, animated: true)
+        } else if isSignedIn {
+            showModalController()
         } else {
             let alertController = UIAlertController(
                 title: "Masuk",
@@ -421,8 +426,42 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    @objc private func showModal() {
-        self.showModalController()
+    @objc private func onPublishButtonTapped() {
+        self.publishButtonTapped()
+    }
+    
+    private func showModalController() {
+        let vc = BuyerTenViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.changeDefaultHeight(to: (UIScreen.main.bounds.height / 2) + 50)
+        vc.buyerResponse = self.buyerResponse
+        self.present(vc, animated: false)
+        vc.onSendButtonTapped = { [weak self] offerValue in
+            guard let _self = self else { return }
+            _self.buttonLoadingIndicator.startAnimating()
+            _self.publishButton.setActiveButtonTitle(string: "")
+            _self.apiCall.renewAccessToken()
+            _self.apiCall.postBuyerOrder(id: _self.buyerResponse?.id ?? 0, bidPrice: offerValue) { response in
+                switch response.result {
+                case .success(_):
+                    _self.popUpView.isPresenting.toggle()
+                    _self.buttonLoadingIndicator.stopAnimating()
+                    _self.publishButton.setActiveButtonTitle(string: "Menunggu respon penjual")
+                    _self.publishButton.isEnabled = false
+                case let .failure(error):
+                    print(error)
+                    if response.response?.statusCode == 400 {
+                        _self.isQuotaExceededLately = true
+                        _self.popupFailedView.changeTextLabelString(to: "Produk mencapai batas maksimal penawaran")
+                    } else {
+                        _self.popupFailedView.changeTextLabelString(to: "Internal server error.")
+                    }
+                    _self.buttonLoadingIndicator.stopAnimating()
+                    _self.publishButton.setActiveButtonTitle(string: "Saya tertarik dan ingin nego")
+                    _self.popupFailedView.isPresenting = true
+                }
+            }
+        }
     }
     
     private func getOrderedItem() {
@@ -437,7 +476,38 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
                     _self.publishButton.isEnabled = false
                     _self.publishButton.setActiveButtonTitle(string: "Menunggu Respon Penjual")
                 }
+            } else {
+                print(error as Any)
             }
+        }
+    }
+    
+    private func loadProductDetail() {
+        productOwnerLoadingIndicator.startAnimating()
+        apiCall.getBuyerProductDetail(itemId: "\(buyerResponse!.id)") { [weak self] result, error in
+            guard let _self = self, let _result = result else {
+                return
+            }
+            if let url = URL(string: _result.imageURL ?? "") {
+                _self.productOwnerImageView.kf.indicatorType = .activity
+                _self.productOwnerImageView.kf.setImage(with: url)
+            }
+            _self.productOwnerNameLabel.setTitle(
+                text: _result.user?.fullName ?? "nama tidak tersedia",
+                size: 14,
+                weight: .medium,
+                color: .black
+            )
+            _self.productOwnerCityLabel.setTitle(
+                text: _result.user?.city ?? "Location not Available",
+                size: 10,
+                weight: .regular,
+                color: UIColor(rgb: 0x8A8A8A)
+            )
+            _self.productOwnerLoadingIndicator.stopAnimating()
+            _self.productOwnerImageView.fadeInWithScale()
+            _self.productOwnerNameLabel.fadeIn()
+            _self.productOwnerCityLabel.fadeIn()
         }
     }
     

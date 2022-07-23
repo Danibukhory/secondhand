@@ -81,7 +81,7 @@ class AccountTableViewController: UITableViewController {
         let row = indexPath.row
         switch row {
         case 0:
-            let viewController = AcoountDetailViewController()
+            let viewController = AccountDetailViewController()
             navigationController?.pushViewController(viewController, animated: true)
         case 1:
             let viewController = CompleteAccountViewController()

@@ -22,7 +22,7 @@ final class MainTabBarController: UITabBarController {
         
         let notificationViewController = NotificationViewController()
         notificationViewController.tabBarItem = UITabBarItem(
-            title: "Notification",
+            title: "Notifikasi",
             image: UIImage(named: "img-sh-bell-inactive")?.withRenderingMode(.alwaysTemplate),
             selectedImage: UIImage(named: "img-sh-bell-active")?.withRenderingMode(.alwaysTemplate)
         )

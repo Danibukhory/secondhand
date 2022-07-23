@@ -134,7 +134,7 @@ final class NotificationCell: UITableViewCell {
         DispatchQueue.main.async { [weak self] in
             guard let _self = self else { return }
             _self.notificationImageView.kf.indicatorType = .activity
-            if let url = URL(string: data.imageURL ?? "") {
+            if let url = URL(string: data.imageURL) {
                 _self.notificationImageView.kf.setImage(
                     with: url,
                     options: [.transition(.fade(0.25))]
@@ -174,7 +174,7 @@ final class NotificationCell: UITableViewCell {
             }
             
             _self.notificationContentLabel.setTitle(
-                text: "\(data.productName ?? "product has no name")\n\(data.bidPrice?.convertToCurrency() ?? data.product?.description ?? "")",
+                text: "\(data.productName )\n\(data.bidPrice?.convertToCurrency() ?? data.product?.productDescription ?? "")",
                 size: 14,
                 weight: .regular,
                 color: .black
@@ -187,13 +187,18 @@ final class NotificationCell: UITableViewCell {
                     color: UIColor(rgb: 0x8A8A8A)
                 )
             }
-            if let read = data.read {
-                if read {
-                    self?.isRead = true
-                } else {
-                    self?.isRead = false
-                }
+            if data.read {
+                self?.isRead = true
+            } else {
+                self?.isRead = false
             }
+//            if let read = data.read {
+//                if read {
+//                    self?.isRead = true
+//                } else {
+//                    self?.isRead = false
+//                }
+//            }
         }
         loadingIndicator.stopAnimating()
         loadingBackground.fadeOut()

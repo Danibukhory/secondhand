@@ -9,14 +9,14 @@ import Foundation
 
 // MARK: - SHBuyerOrderResponse
 struct SHBuyerOrderResponse: Codable {
-    let id, productID, buyerID, price: Int?
-    let transactionDate: String?
-    let productName, basePrice: String?
-    let imageProduct: String?
-    let status: String?
-    let product: BuyerOrderProduct?
-    let user: BuyerOrderUser?
-
+    let id, productID, buyerID, price: Int
+    let transactionDate, productName: String
+    let basePrice: Int
+    let imageProduct: String
+    let status: String
+    let product: BuyerOrderProduct
+    let user: BuyerOrderUser
+    
     enum CodingKeys: String, CodingKey {
         case id
         case productID = "product_id"
@@ -34,14 +34,14 @@ struct SHBuyerOrderResponse: Codable {
 
 // MARK: - Product
 struct BuyerOrderProduct: Codable {
-    let name, productDescription: String?
-    let basePrice: Int?
-    let imageURL: String?
-    let imageName, location: String?
-    let userID: Int?
-    let status: String?
+    let name, productDescription: String
+    let basePrice: Int
+    let imageURL: String
+    let imageName, location: String
+    let userID: Int
+    let status: String
     let user: BuyerOrderUser
-
+    
     enum CodingKeys: String, CodingKey {
         case name
         case productDescription = "description"
@@ -57,10 +57,10 @@ struct BuyerOrderProduct: Codable {
 
 // MARK: - User
 struct BuyerOrderUser: Codable {
-    let id: Int?
-    let fullName, email, phoneNumber, address: String?
-    let city: String?
-
+    let id: Int
+    let fullName, email, phoneNumber, address: String
+    let city: String
+    
     enum CodingKeys: String, CodingKey {
         case id
         case fullName = "full_name"
