@@ -80,7 +80,7 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
                 return UITableViewCell()
             }
             cell.fill(with: notification)
-            if notification.read ?? false {
+            if notification.read {
                 cell.isRead = true
             }
             return cell
@@ -97,12 +97,14 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
             let notification = notifications[row]
             switch notification.status {
             case "bid":
-                guard let user = notification.user else { return }
-                let viewController = OffererViewController(user: user, notification: notification)
-                viewController.buyerName = notification.buyerName
+//                guard let user = notification.user else { return }
+                let viewController = OffererViewController(notification: notification)
+//                viewController.buyerName = notification.buyerName
                 navigationController?.pushViewController(viewController, animated: true)
             case "create":
-                guard let productId = notification.productID else { return }
+//                guard let productId = notification.productID else { return }
+                let productId = notification.productID
+                api.renewAccessToken()
                 api.getBuyerProductDetail(itemId: "\(productId)") { [weak self] result, error in
                     guard let _self = self,
                           let _result = result
@@ -117,7 +119,14 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
                         return
                     }
                     let viewController = BuyerSixViewController()
-                    viewController.buyerResponse = _result
+                    let categories: [SHCategoryResponse] = {
+                        var array: [SHCategoryResponse] = []
+                        for category in _result.categories {
+                            array.append(category!)
+                        }
+                        return array
+                    }()
+                    viewController.buyerResponse = SHBuyerProductResponse(id: _result.id ?? 0, name: _result.name ?? "nama tidak tersedia", description: _result.description ?? "deskripsi tidak tersedia", basePrice: _result.basePrice ?? 0, imageURL: _result.imageURL ?? "", imageName: _result.imageName ?? "", location: _result.location ?? "lokasi tidak tersedia", userID: _result.userID ?? 0, status: _result.status ?? "available", createdAt: _result.createdAt ?? "", updatedAt: _result.updatedAt ?? "", categories: categories)
                     _self.tabBarController?.navigationController?.pushViewController(viewController, animated: true)
                 }
             default:
@@ -198,7 +207,6 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
             style: .normal,
             title: actionTitle
         ) { action, view, completion in
-            let api = SecondHandAPI.shared
             let alertTitle: String = {
                 if read {
                     return "Tandai Notifikasi Belum Dibaca"
@@ -222,14 +230,14 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
             let markAsRead = UIAlertAction(
                 title: actionTitle,
                 style: .default
-            ) { _ in
+            ) { [unowned self] _ in
                 if read {
                     cell.isRead = false
                     completion(true)
                 } else {
                     cell.isRead = true
                     let notificationId = self.notifications[row].id
-                    api.setNotificationAsRead(notificationId: "\(notificationId ?? 0)")
+                    self.api.setNotificationAsRead(notificationId: "\(notificationId)")
                     completion(true)
                 }
             }
@@ -252,7 +260,7 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
     }
     
     private func loadNotification() {
-        let api = SecondHandAPI()
+        api.renewAccessToken()
         api.getNotifications { [weak self] result, error in
             guard let _self = self else {
                 let alert = UIAlertController(title: "Error", message: "Failed to fetch notifications.", preferredStyle: .alert)

@@ -66,7 +66,7 @@ final class SignInViewController: UIViewController {
     private lazy var noAccountLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont(name:"Poppins-Regular",size:16)
+        label.font = UIFont(name:"Poppins-Regular", size: 16)
         label.text = "Belum punya akun?"
         return label
     }()
@@ -76,7 +76,8 @@ final class SignInViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Daftar di sini", for: .normal)
         button.setTitleColor(UIColor.tintColor, for: .normal)
-        button.titleLabel?.font = UIFont(name:"Poppins-Bold",size:18)
+        button.titleLabel?.font = UIFont(name:"Poppins-Bold", size: 18)
+        button.tintColor = UIColor(rgb: 0x7126B5)
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(moveToSignUpPage), for: .touchUpInside)
         return button
@@ -88,6 +89,13 @@ final class SignInViewController: UIViewController {
         indicator.hidesWhenStopped = true
         indicator.color = .white
         return indicator
+    }()
+    
+    private lazy var bottomTextContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
     }()
     
     private lazy var tapGestureRecognizer = UITapGestureRecognizer()
@@ -127,12 +135,12 @@ final class SignInViewController: UIViewController {
                     user.setValue(_result.fullName, forKey: "full_name")
                     user.setValue(_result.address, forKey: "address")
                     user.setValue(_result.email, forKey: "email")
-                    user.setValue(_result.password, forKey: "password")
+//                    user.setValue(_result.password, forKey: "password")
                     user.setValue(_result.phoneNumber, forKey: "phone_number")
                     user.setValue(_result.city, forKey: "city")
                     user.setValue(_result.imageURL, forKey: "image_url")
-                    user.setValue(_result.createdAt, forKey: "createdAt")
-                    user.setValue(_result.updatedAt, forKey: "updatedAt")
+//                    user.setValue(_result.createdAt, forKey: "createdAt")
+//                    user.setValue(_result.updatedAt, forKey: "updatedAt")
                     do {
                       try managedContext.save()
                     } catch let error as NSError {
@@ -212,10 +220,10 @@ final class SignInViewController: UIViewController {
             passwordLabel,
             passwordTextField,
             signInButton,
-            noAccountLabel,
-            moveToSignUpPageButton
+            bottomTextContainerView
         )
         signInButton.addSubview(loadingIndicator)
+        bottomTextContainerView.addSubviews(noAccountLabel,  moveToSignUpPageButton)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
@@ -244,12 +252,18 @@ final class SignInViewController: UIViewController {
             loadingIndicator.centerXAnchor.constraint(equalTo: signInButton.centerXAnchor),
             loadingIndicator.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor),
             
-            noAccountLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
-            noAccountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 75),
+            bottomTextContainerView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -16),
+            bottomTextContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomTextContainerView.heightAnchor.constraint(equalToConstant: 36),
+            bottomTextContainerView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10),
             
-            moveToSignUpPageButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor,constant: -11),
-            moveToSignUpPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 5),
+            noAccountLabel.centerYAnchor.constraint(equalTo: bottomTextContainerView.centerYAnchor),
+            noAccountLabel.leadingAnchor.constraint(equalTo: bottomTextContainerView.leadingAnchor),
+            
+            moveToSignUpPageButton.centerYAnchor.constraint(equalTo: bottomTextContainerView.centerYAnchor),
+            moveToSignUpPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 4),
             moveToSignUpPageButton.heightAnchor.constraint(equalToConstant: 20),
+            moveToSignUpPageButton.trailingAnchor.constraint(equalTo: bottomTextContainerView.trailingAnchor),
         ])
     }
     
@@ -275,7 +289,7 @@ final class SignInViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-    private func saveSignedInUser(_ data: SHUserResponse) {
+    private func saveSignedInUser(_ data: SignInDetailResponse) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         let managedContext = appDelegate.persistentContainer.viewContext
         let entity = NSEntityDescription.entity(forEntityName: "SignedInUser", in: managedContext)!

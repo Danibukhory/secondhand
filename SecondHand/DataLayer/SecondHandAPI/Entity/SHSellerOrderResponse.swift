@@ -8,14 +8,14 @@
 import Foundation
 
 struct SHSellerOrderResponse: Codable {
-    let id, productID, buyerID, price: Int?
-    let transactionDate: String?
-    let productName, basePrice: String?
-    let imageProduct: String?
-    let status, createdAt, updatedAt: String?
-    let product: SHOrderProduct?
-    let user: SHOrderUser?
-
+    let id, productID, buyerID, price: Int
+    let transactionDate, productName: String
+    let basePrice: Int
+    let imageProduct: String
+    let status, createdAt, updatedAt: String
+    let product: SHOrderProduct
+    let buyer: SHOrderBuyer
+    
     enum CodingKeys: String, CodingKey {
         case id
         case productID = "product_id"
@@ -27,7 +27,7 @@ struct SHSellerOrderResponse: Codable {
         case imageProduct = "image_product"
         case status, createdAt, updatedAt
         case product = "Product"
-        case user = "User"
+        case buyer = "User"
     }
 }
 
@@ -38,7 +38,7 @@ struct SHOrderProduct: Codable {
     let imageName, location: String
     let userID: Int
     let status: String
-    let user: SHOrderUser
+    let seller: SHOrderSeller
 
     enum CodingKeys: String, CodingKey {
         case name
@@ -49,11 +49,11 @@ struct SHOrderProduct: Codable {
         case location
         case userID = "user_id"
         case status
-        case user = "User"
+        case seller = "User"
     }
 }
 
-struct SHOrderUser: Codable {
+struct SHOrderBuyer: Codable {
     let id: Int
     let fullName, email, phoneNumber, address: String
     let city: String
@@ -67,12 +67,28 @@ struct SHOrderUser: Codable {
     }
 }
 
+struct SHOrderSeller: Codable {
+    let id: Int
+    let fullName, email, phoneNumber, address: String
+    let city: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case fullName = "full_name"
+        case email
+        case phoneNumber = "phone_number"
+        case address, city
+    }
+}
+
+
 struct SHPatchedOrderResponse: Codable {
     let id, productID, buyerID, price: Int
-    let transactionDate, productName, basePrice: String
-    let imageProduct: String?
+    let transactionDate, productName: String
+    let basePrice: Int
+    let imageProduct: String
     let status, createdAt, updatedAt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case id
         case productID = "product_id"

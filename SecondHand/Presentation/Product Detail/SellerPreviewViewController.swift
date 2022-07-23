@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SellerPreviewViewController: UIViewController {
     
@@ -17,7 +18,7 @@ class SellerPreviewViewController: UIViewController {
     var productCategory: String?
     var productCategoryID: Int?
     
-    
+    var didFinishedUploadProduct: (() -> Void)?
     private lazy var isOffered: Bool = false
     
     let scrollView = UIScrollView()
@@ -40,6 +41,7 @@ class SellerPreviewViewController: UIViewController {
         view.clipsToBounds = true
         view.layer.cornerRadius = 12
         view.backgroundColor = .white
+        view.isUserInteractionEnabled = true
         
         let arrow = UIImageView()
         arrow.image = UIImage(systemName: "arrow.left")
@@ -56,6 +58,8 @@ class SellerPreviewViewController: UIViewController {
             view.heightAnchor.constraint(equalToConstant: 24),
         ])
         
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissProductView))
+        view.addGestureRecognizer(tapRecognizer)
         
         return view
     }()
@@ -82,7 +86,7 @@ class SellerPreviewViewController: UIViewController {
         productCategory.setTitle(text: (self.productCategory ?? "Aksesoris"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         let productPrice = UILabel()
-        productPrice.setTitle(text: "Rp. \(self.productPrice ?? "0")", size: 14, weight: .medium, color: .black)
+        productPrice.setTitle(text: self.productPrice?.convertToCurrency() ?? "0".convertToCurrency() , size: 14, weight: .medium, color: .black)
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         productName.translatesAutoresizingMaskIntoConstraints = false
@@ -128,7 +132,10 @@ class SellerPreviewViewController: UIViewController {
         productView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         let imageView = UIImageView()
-        imageView.load(urlString: (userResponse?.imageURL)!)
+        if let imageURL = URL(string: userResponse?.imageURL ?? "") {
+            imageView.kf.indicatorType = .activity
+            imageView.kf.setImage(with: imageURL, options: [.transition(.fade(0.25))])
+        }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
@@ -161,11 +168,9 @@ class SellerPreviewViewController: UIViewController {
             sellerName.trailingAnchor.constraint(equalTo: productView.trailingAnchor, constant: -16),
             
             sellerCity.topAnchor.constraint(equalTo: sellerName.bottomAnchor),
-            sellerCity.leadingAnchor.constraint(equalTo: imageView.trailingAnchor,
-                                               constant: 16),
+            sellerCity.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16),
         ])
 
-        
         return productView
     }()
     
@@ -209,7 +214,6 @@ class SellerPreviewViewController: UIViewController {
             descDetails.bottomAnchor.constraint(equalTo: productView.bottomAnchor, constant: -16),
         ])
 
-        
         return productView
     }()
     
@@ -221,20 +225,8 @@ class SellerPreviewViewController: UIViewController {
     }()
     
     @objc func publishButtonAction() {
-        
-        DispatchQueue.main.async {
-            let callAPI = SecondHandAPI()
-            callAPI.postProductAsSeller(
-                with: self.productName!,
-                description: self.productDesc!,
-                basePrice: Int(self.productPrice!)!,
-                category: self.productCategoryID!,
-                location: (self.userResponse?.city)!,
-                productPicture: self.imageData!
-            )
-        }
-        
-
+        self.didFinishedUploadProduct?()
+        self.dismiss(animated: true)
     }
     
     override func viewDidLoad() {
@@ -279,7 +271,7 @@ class SellerPreviewViewController: UIViewController {
             contentView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
         ])
     }
     
@@ -302,7 +294,7 @@ class SellerPreviewViewController: UIViewController {
             contentPhotoView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             contentPhotoView.heightAnchor.constraint(equalToConstant: 300),
             
-            backButton.topAnchor.constraint(equalTo: contentPhotoView.topAnchor, constant: 44),
+            backButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             backButton.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor, constant: 16),
             
             pageControl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
@@ -336,10 +328,10 @@ class SellerPreviewViewController: UIViewController {
         self.pageControl.numberOfPages = 1
         self.pageControl.currentPage = 0
         self.pageControl.tintColor = .clear
-        self.pageControl.pageIndicatorTintColor = UIColor.systemGray
-        self.pageControl.currentPageIndicatorTintColor = UIColor.white
+        self.pageControl.pageIndicatorTintColor = .systemGray
+        self.pageControl.currentPageIndicatorTintColor = .white
         self.view.addSubview(pageControl)
-        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControl.Event.valueChanged)
+        pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: .valueChanged)
     }
     @objc func changePage(sender: AnyObject) -> () {
             let x = CGFloat(pageControl.currentPage) * collectionView.frame.size.width
@@ -363,10 +355,13 @@ class SellerPreviewViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: contentPhotoView.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentPhotoView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: contentPhotoView.trailingAnchor),
-            
+            collectionView.trailingAnchor.constraint(equalTo: contentPhotoView.trailingAnchor)
         ])
         
+    }
+    
+    @objc private func dismissProductView() {
+        self.dismiss(animated: true)
     }
     
 }
@@ -378,7 +373,11 @@ extension SellerPreviewViewController: UICollectionViewDataSource, UICollectionV
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(SellerPreviewProductViewCell.self)", for: indexPath) as? SellerPreviewProductViewCell else {return UICollectionViewCell()}
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: "\(SellerPreviewProductViewCell.self)",
+            for: indexPath
+        ) as? SellerPreviewProductViewCell
+        else { return UICollectionViewCell() }
         
         cell.setImage(to: imageData!)
         return cell
@@ -398,26 +397,24 @@ extension SellerPreviewViewController: UICollectionViewDataSource, UICollectionV
 extension SellerPreviewViewController: UIScrollViewDelegate {
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
     }
+    
 }
 
 final class SellerPreviewProductViewCell: UICollectionViewCell {
     
-    var imageProduct: UIImage? = nil
-    
     private lazy var photoProduct: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = imageProduct ?? UIImage(named: "img-home-product-placeholder-1")
+        imageView.image = UIImage(named: "img-home-product-placeholder-1")
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
     
     func setImage(to img: UIImage) {
-        self.imageProduct = img
+        self.photoProduct.image = img
     }
     
     override init(frame: CGRect) {

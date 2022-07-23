@@ -19,7 +19,7 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
     var collectionLabel = UILabel()
     var api = SecondHandAPI.shared
     var categoryCollectionView: UICollectionView!
-    var backgroundTopColor: CGColor = UIColor(rgb: 0xFFE9C9).cgColor
+    var backgroundTopColor: CGColor = UIColor(rgb: 0x7126B5).cgColor
     var categoryFlowLayout: UICollectionViewFlowLayout = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
@@ -42,6 +42,7 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
         indicator.style = .medium
+        indicator.color = UIColor(rgb: 0x7126B5)
         return indicator
     }()
     var bannerLoadingIndicator: UIActivityIndicatorView = {
@@ -50,6 +51,7 @@ final class HomeHeaderCell: UITableViewCell, UITextFieldDelegate {
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
         indicator.style = .medium
+        indicator.color = .white
         return indicator
     }()
     var bannerCollectionView: UICollectionView = {

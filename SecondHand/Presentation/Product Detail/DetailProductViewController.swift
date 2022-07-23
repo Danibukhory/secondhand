@@ -29,9 +29,11 @@ final class DetailProductViewController: UIViewController {
     private lazy var priceTextfield: SHRoundedTextfield = {
         let textfield = SHRoundedTextfield(frame: CGRect.zero)
         textfield.keyboardType = .numberPad
-        
+        textfield.addTarget(self, action: #selector(onProductValueBeginEditing), for: .editingDidBegin)
+        textfield.addTarget(self, action: #selector(onProductValueEndEditing), for: .editingDidEnd)
         return textfield
     }()
+    var typedProductValue: String = ""
     
     private lazy var buttonPreview = SHButton(frame: CGRect.zero, title: "Preview", type: .bordered, size: .regular)
     private lazy var buttonPublish = SHButton(frame: CGRect.zero, title: "Terbitkan", type: .filled, size: .regular)
@@ -42,7 +44,6 @@ final class DetailProductViewController: UIViewController {
         let photoView = UIImageView(image: photo)
         photoView.translatesAutoresizingMaskIntoConstraints = false
         photoView.contentMode = .center
-
         return photoView
     }()
 
@@ -74,6 +75,8 @@ final class DetailProductViewController: UIViewController {
         return shapeView
     }()
     
+    var loadingView = SHBlurLoadingView()
+    
     @objc func pickImageFromLibrary() {
         lazy var config = PHPickerConfiguration(photoLibrary: .shared())
         config.selectionLimit = 1
@@ -99,9 +102,11 @@ final class DetailProductViewController: UIViewController {
     }
     
     private func setupSubviews() {
-        view.addSubviews(scrollView,
-                         buttonPreview,
-                         buttonPublish)
+        view.addSubviews(
+            scrollView,
+            buttonPreview,
+            buttonPublish
+        )
         
         scrollView.addSubview(containerView)
         
@@ -115,7 +120,8 @@ final class DetailProductViewController: UIViewController {
             priceTextfield,
             categoryDropdown,
             descTextfield,
-            dashedView
+            dashedView,
+            loadingView
         )
         
         dashedView.addSubviews(photoIcon)
@@ -154,7 +160,6 @@ final class DetailProductViewController: UIViewController {
     }
     
     private func getCategories() {
-    
         apiCall.getProductCategories { responses, error in
             var listName: [String] = []
             var listInd: [Int] = []
@@ -188,15 +193,18 @@ final class DetailProductViewController: UIViewController {
         if (nameTextfield.text?.isEmpty == false), (priceTextfield.text?.isEmpty == false), (descTextfield.text?.isEmpty == false), (categoryDropdown.text?.isEmpty == false), (photosFromLibrary.count > 0) {
 
             let previewViewController = SellerPreviewViewController()
-            previewViewController.imageData = self.photosFromLibrary[0].image
+            let image = self.photosFromLibrary[0].image
+            previewViewController.imageData = image
             previewViewController.productName = self.nameTextfield.text!
-            previewViewController.productPrice = self.priceTextfield.text!
+            previewViewController.productPrice = self.typedProductValue
             previewViewController.productDesc = self.descTextfield.text!
             previewViewController.productCategory = self.categoryName
             previewViewController.productCategoryID = self.category
             previewViewController.userResponse = self.userResponse!
-            
             previewViewController.modalPresentationStyle = .overCurrentContext
+            previewViewController.didFinishedUploadProduct = { [unowned self] in
+                self.uploadProduct()
+            }
             self.present(previewViewController, animated: true)
             
         }
@@ -220,18 +228,12 @@ final class DetailProductViewController: UIViewController {
             categoryDropdown.layer.borderColor = UIColor.systemRed.cgColor
             categoryDropdown.layer.borderWidth = 1
         }
-        if (nameTextfield.text?.isEmpty == false), (priceTextfield.text?.isEmpty == false), (descTextfield.text?.isEmpty == false), (categoryDropdown.text?.isEmpty == false), (photosFromLibrary.count > 0) {
-
-            DispatchQueue.main.async {
-                let callAPI = SecondHandAPI()
-                callAPI.postProductAsSeller(
-                    with: self.nameTextfield.text!,
-                    description: self.descTextfield.text!,
-                    basePrice: Int(self.priceTextfield.text!)!,
-                    category: self.category,
-                    location: "Jakarta",
-                    productPicture: self.photosFromLibrary[0].image!)
-            }
+        if (nameTextfield.text?.isEmpty == false),
+           (priceTextfield.text?.isEmpty == false),
+           (descTextfield.text?.isEmpty == false),
+           (categoryDropdown.text?.isEmpty == false),
+           (photosFromLibrary.count > 0) {
+            uploadProduct()
         }
     }
     
@@ -244,7 +246,9 @@ final class DetailProductViewController: UIViewController {
         descTextfield.translatesAutoresizingMaskIntoConstraints = false
         buttonPreview.translatesAutoresizingMaskIntoConstraints = false
         buttonPublish.translatesAutoresizingMaskIntoConstraints = false
+        loadingView.translatesAutoresizingMaskIntoConstraints = false
         
+        scrollView.alwaysBounceVertical = true
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
@@ -308,6 +312,9 @@ final class DetailProductViewController: UIViewController {
             buttonPublish.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -24),
             buttonPublish.leadingAnchor.constraint(equalTo: buttonPreview.trailingAnchor, constant: 16),
             buttonPublish.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
+            
+            loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
         for photoFromLibrary in photosFromLibrary {
@@ -336,6 +343,17 @@ final class DetailProductViewController: UIViewController {
         self.navigationController?.dismiss(animated: true)
     }
     
+    @objc private func onProductValueBeginEditing() {
+        priceTextfield.text = typedProductValue
+    }
+    
+    @objc private func onProductValueEndEditing() {
+        if let text = priceTextfield.text {
+            priceTextfield.text = text.convertToCurrency()
+            typedProductValue = text
+        }
+    }
+    
     private func setupTapRecognizer() {
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapRecognizer.cancelsTouchesInView = false
@@ -347,19 +365,62 @@ final class DetailProductViewController: UIViewController {
         view.endEditing(true)
     }
     
+    private func uploadProduct() {
+        DispatchQueue.main.async {
+            self.loadingView.fadeInWithScale()
+            let callAPI = SecondHandAPI()
+            callAPI.postProductAsSeller(
+                with: self.nameTextfield.text!,
+                description: self.descTextfield.text!,
+                basePrice: Int(self.typedProductValue)!,
+                category: self.category,
+                location: "Jakarta",
+                productPicture: self.photosFromLibrary[0].image!
+            ) { [weak self] response in
+                guard let _self = self else {
+                    let alert = UIAlertController(title: "Error", message: "Error terjadi.", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: .default)
+                    alert.addAction(action)
+                    print(String(describing: response.response?.statusCode))
+                    self?.present(alert, animated: true)
+                    return
+                }
+                switch response.response?.statusCode {
+                case 201:
+                    let alert = UIAlertController(title: "Upload Berhasil", message: "Produkmu berhasil diupload! Pembeli dapat menawar barangmu sekarang.", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: .default) { _ in
+                        _self.dismiss(animated: true)
+                    }
+                    alert.addAction(action)
+                    _self.loadingView.fadeOutWithScale()
+                    _self.present(alert, animated: true)
+                default:
+                    let alert = UIAlertController(title: "Error", message: "Upload produk gagal.", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "OK", style: .default)
+                    alert.addAction(action)
+                    print(String(describing: response.response?.statusCode))
+                    _self.loadingView.fadeOutWithScale()
+                    _self.present(alert, animated: true)
+                }
+            }
+        }
+    }
+    
 }
 
 extension DetailProductViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        results[0].itemProvider.loadObject(ofClass: UIImage.self) {[weak self] reading, error in
-            if let image = reading as? UIImage {
-                DispatchQueue.main.async {
-                    let imv = self?.newImageView(image: image)
-                    self?.photosFromLibrary.append(imv!)
-                    self?.defineLayout()
-                    self?.view.setNeedsLayout()
+        for result in results {
+            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] reading, error in
+                if let image = reading as? UIImage {
+                    DispatchQueue.main.async {
+                        let imv = self?.newImageView(image: image)
+                        self?.photosFromLibrary.append(imv!)
+                        self?.defineLayout()
+                        self?.view.setNeedsLayout()
+                    }
                 }
             }
         }
@@ -368,6 +429,7 @@ extension DetailProductViewController: PHPickerViewControllerDelegate {
     func newImageView(image:UIImage?) -> UIImageView {
         let imv = UIImageView()
         imv.backgroundColor = .clear
+        imv.contentMode = .scaleAspectFill
         imv.image = image
         imv.layer.cornerRadius = 12
         return imv

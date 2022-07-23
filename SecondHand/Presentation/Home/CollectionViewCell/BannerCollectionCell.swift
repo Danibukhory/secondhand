@@ -48,7 +48,7 @@ final class BannerCollectionCell: UICollectionViewCell {
         let imageUrl = URL(string: data.imageURL)
         if let url = imageUrl {
             bannerImageView.kf.indicatorType = .activity
-            bannerImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
+            bannerImageView.kf.setImage(with: url, options: [.transition(.fade(0.25)), .cacheOriginalImage])
         }
     }
     

@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-final class AcoountDetailViewController: UITableViewController {
+final class AccountDetailViewController: UITableViewController {
     
     var user: [NSManagedObject] = []
     

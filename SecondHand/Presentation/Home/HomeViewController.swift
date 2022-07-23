@@ -43,7 +43,7 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
         setupRefreshControl()
         prepareScrollButton()
         registerCells()
-        tableView.backgroundColor = UIColor(rgb: 0xFFE9C9)
+        tableView.backgroundColor = UIColor(rgb: 0x7126B5)
         tableView.separatorStyle = .none
     }
     
@@ -138,7 +138,7 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
                         productCell.displayedProducts = productCell.products
                     } else {
                         let filteredProducts: [SHBuyerProductResponse] = productCell.products.filter { product in
-                            return product.categories.contains(where: {$0?.name == _category.name})
+                            return product.categories.contains(where: {$0.name == _category.name})
                         }
                         productCell.displayedProducts = filteredProducts
                     }
@@ -154,11 +154,12 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
                         _self.searchText = searchText
                     } else {
                         let filteredProducts: [SHBuyerProductResponse] = _self.products.filter { product in
-                            if let name = product.name?.lowercased() {
-                                return name.contains(searchText.lowercased())
-                            } else {
-                                return false
-                            }
+//                            if let name = product.name.lowercased() {
+//                                return name.contains(searchText.lowercased())
+//                            } else {
+//                                return false
+//                            }
+                            return product.name.lowercased().contains(searchText.lowercased())
                         }
                         _self.displayedSearchedProducts = filteredProducts
                     }

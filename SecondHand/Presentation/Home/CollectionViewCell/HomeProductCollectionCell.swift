@@ -91,19 +91,19 @@ final class HomeProductCollectionCell: UICollectionViewCell {
     
     func fill(with data: SHBuyerProductResponse) {
         let urlString = data.imageURL
-        if let url = URL(string: urlString ?? "") {
+        if let url = URL(string: urlString) {
             productImageView.kf.indicatorType = .activity
             productImageView.kf.setImage(with: url, options: [.transition(.fade(0.2)), .cacheOriginalImage])
         }
         productNameLabel.setTitle(
-            text: data.name ?? "",
+            text: data.name,
             size: 14,
             weight: .regular,
             color: .black
         )
         if !data.categories.isEmpty {
             productCategoryLabel.setTitle(
-                text: data.categories[0]?.name?.capitalized ?? "Not available",
+                text: data.categories[0].name?.capitalized ?? "Not available",
                 size: 10,
                 weight: .regular,
                 color: .secondaryLabel
@@ -117,7 +117,7 @@ final class HomeProductCollectionCell: UICollectionViewCell {
             )
         }
         productPriceLabel.setTitle(
-            text: data.basePrice?.convertToCurrency() ?? "",
+            text: data.basePrice.convertToCurrency(),
             size: 14,
             weight: .regular,
             color: .black

@@ -69,7 +69,7 @@ final class SignUpViewController: UIViewController {
     }()
         
     private lazy var signUpButton: SHButton = {
-        let button = SHButton(frame: CGRect(), title: "Masuk", type: .filled, size: .regular)
+        let button = SHButton(frame: CGRect(), title: "Daftar", type: .filled, size: .regular)
         button.addTarget(self, action: #selector(handleSignUpButton), for: .touchUpInside)
         return button
     }()
@@ -86,13 +86,21 @@ final class SignUpViewController: UIViewController {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Masuk di sini", for: .normal)
+        button.tintColor = UIColor(rgb: 0x7126B5)
         button.setTitleColor(UIColor.tintColor, for: .normal)
-        button.titleLabel?.font = UIFont(name:"Poppins-Bold",size:18)
+        button.titleLabel?.font = UIFont(name:"Poppins-Bold", size: 18)
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(moveToSignInPage), for: .touchUpInside)
         return button
-        // give spring animation for button if needed
     }()
+    
+    private lazy var bottomTextContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .clear
+        return view
+    }()
+    
     
     private lazy var tapGestureRecognizer = UITapGestureRecognizer()
     
@@ -109,38 +117,39 @@ final class SignUpViewController: UIViewController {
               let passwordText = passwordTextField.text?.trimmingCharacters(in: .whitespaces)
         else { return }
         
-        switch(emailText.isEmpty,usernameText.isEmpty,passwordText.isEmpty) {
-            
+        switch(emailText.isEmpty, usernameText.isEmpty, passwordText.isEmpty) {
         case (true,true,true):
-            setupAlert(title: "Error", message: "Please Input Email, Username & Password", style: .alert)
+            setupAlert(title: "Error", message: "Kolom username, email, dan password harus diisi.", style: .alert)
         case (false,true,true):
-            setupAlert(title: "Error", message: "Please Input Username & Password", style: .alert)
+            setupAlert(title: "Error", message: "Kolom username dan password harus diisi.", style: .alert)
         case (false,false,true):
-            setupAlert(title: "Error", message: "Please Input Password", style: .alert)
+            setupAlert(title: "Error", message: "Kolom password harus diisi.", style: .alert)
         case (true,true,false):
-            setupAlert(title: "Error", message: "Please Input Email & Username", style: .alert)
+            setupAlert(title: "Error", message: "Kolom username dan email harus diisi.", style: .alert)
         case (true,false,true):
-            setupAlert(title: "Error", message: "Please Input Email & Password", style: .alert)
+            setupAlert(title: "Error", message: "Kolom email dan password harus diisi.", style: .alert)
         case (true,false,false):
-            setupAlert(title: "Error", message: "Please Input Email", style: .alert)
+            setupAlert(title: "Error", message: "Kolom email harus diisi.", style: .alert)
         case (false,true,false):
-            setupAlert(title: "Error", message: "Please Input Username", style: .alert)
-            
+            setupAlert(title: "Error", message: "Kolom username harus diisi.", style: .alert)
         default:
             if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
-                setupAlert(title: "Success", message: "Success Registered Please Sign In!", style: .alert)
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                    self.moveToSignInPage()
-//                }
-                
-                apiManager.signUp(username: usernameText, email: emailText, password: passwordText) { [weak self] response, error in
-                    guard let _self = self else {
+                apiManager.signUp(
+                    username: usernameText,
+                    email: emailText,
+                    password: passwordText
+                ) { [weak self] response, error in
+                    guard let _self = self, let _ = response else {
+                        self?.setupAlert(title: "Error", message: "Kesalahan terjadi :(\n\(String(describing: error))", style: .alert)
                         return
                     }
-                    
-                    if response != nil {
-                        _self.moveToSignInPage()
+                    let alert = UIAlertController(title: "Pendaftaran Berhasil!", message: "Silahkan login dengan akun baru anda.", preferredStyle: .alert)
+                    alert.view.tintColor = UIColor(rgb: 0x7126B5)
+                    let action = UIAlertAction(title: "Oke", style: .default) { _ in
+                        _self.dismiss(animated: true)
                     }
+                    alert.addAction(action)
+                    _self.present(alert, animated: true)
                 }
                 
             } else {
@@ -189,9 +198,9 @@ final class SignUpViewController: UIViewController {
             passwordLabel,
             passwordTextField,
             signUpButton,
-            noAccountLabel,
-            moveToSignInPageButton
+            bottomTextContainerView
         )
+        bottomTextContainerView.addSubviews(noAccountLabel, moveToSignInPageButton)
         
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
@@ -225,12 +234,18 @@ final class SignUpViewController: UIViewController {
             signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
             signUpButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             
-            noAccountLabel.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -10),
-            noAccountLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 75),
+            bottomTextContainerView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -16),
+            bottomTextContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bottomTextContainerView.heightAnchor.constraint(equalToConstant: 36),
+            bottomTextContainerView.widthAnchor.constraint(greaterThanOrEqualToConstant: 10),
             
-            moveToSignInPageButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor,constant: -11),
-            moveToSignInPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 5),
+            noAccountLabel.centerYAnchor.constraint(equalTo: bottomTextContainerView.centerYAnchor),
+            noAccountLabel.leadingAnchor.constraint(equalTo: bottomTextContainerView.leadingAnchor),
+            
+            moveToSignInPageButton.centerYAnchor.constraint(equalTo: bottomTextContainerView.centerYAnchor),
+            moveToSignInPageButton.leadingAnchor.constraint(equalTo: noAccountLabel.trailingAnchor, constant: 4),
             moveToSignInPageButton.heightAnchor.constraint(equalToConstant: 20),
+            moveToSignInPageButton.trailingAnchor.constraint(equalTo: bottomTextContainerView.trailingAnchor),
         ])
     }
     
@@ -240,7 +255,7 @@ final class SignUpViewController: UIViewController {
         style styleAlert: UIAlertController.Style)
     {
         let alert = UIAlertController(title: titleAlert, message: messageAlert, preferredStyle: styleAlert)
-        alert.addAction(UIAlertAction(title: "OKE", style: UIAlertAction.Style.default, handler: nil))
+        alert.addAction(UIAlertAction(title: "Oke", style: UIAlertAction.Style.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
     

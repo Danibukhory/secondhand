@@ -7,6 +7,7 @@
 
 import UIKit
 import PhotosUI
+import CoreData
 
 protocol DidClickSaveButtonAction: AnyObject {
     func didClickButton(info: Bool)
@@ -14,6 +15,7 @@ protocol DidClickSaveButtonAction: AnyObject {
 
 final class CompleteAccountViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate {
     
+    var user: [NSManagedObject] = []
     weak var delegate: DidClickSaveButtonAction?
     
     private lazy var scrollView = UIScrollView()
@@ -73,9 +75,9 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
         view.backgroundColor = .white
 //        self.tabBarController?.tabBar.isHidden = true
         
-        
         setupSubviews()
         defineLayout()
+        loadUser()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -117,7 +119,7 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
         textFieldName.setPlaceholder(placeholder: "Nama")
         textFieldCity.setPlaceholder(placeholder: "Pilih Kota")
         textFieldPhone.setPlaceholder(placeholder: "contoh: +628123456789")
-        
+        textFieldPhone.addTarget(self, action: #selector(scrolltoBottom), for: .editingDidBegin)
         
         let getData = DataForCityInIndonesia()
         textFieldCity.optionArray = getData.dataKotaBersih
@@ -147,11 +149,19 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
 
             DispatchQueue.main.async {
                 let callAPI = SecondHandAPI()
-                callAPI.putAccountDetail(with: self.textFieldName.text!,
-                                         city: self.textFieldCity.text!,
-                                         phoneNumber: Int(self.textFieldPhone.text!)!,
-                                         address: self.textFieldAddress.text!,
-                                         accountPicture: self.photosFromLibrary[0].image!)
+                callAPI.putAccountDetail(
+                    with: self.textFieldName.text!,
+                    city: self.textFieldCity.text!,
+                    phoneNumber: Int(self.textFieldPhone.text!)!,
+                    address: self.textFieldAddress.text!,
+                    accountPicture: self.photosFromLibrary[0].image!
+                ) { response in
+                    if response.response?.statusCode == 201 {
+                        print("Upload successful")
+                    } else {
+                        print("Upload failed.")
+                    }
+                }
             }
             self.delegate?.didClickButton(info: true)
             self.navigationController?.popViewController(animated: true)
@@ -160,6 +170,7 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
     
     private func defineLayout() {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.alwaysBounceVertical = true
         containerView.translatesAutoresizingMaskIntoConstraints = false
         textFieldName.translatesAutoresizingMaskIntoConstraints = false
         textFieldCity.translatesAutoresizingMaskIntoConstraints = false
@@ -224,9 +235,9 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
             textFieldPhone.topAnchor.constraint(equalTo: labelPhone.bottomAnchor),
             textFieldPhone.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
             textFieldPhone.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            textFieldPhone.bottomAnchor.constraint(equalTo: margin.bottomAnchor, constant: -96),
+            textFieldPhone.bottomAnchor.constraint(equalTo: margin.bottomAnchor, constant: -UIScreen.main.bounds.height/2),
             
-            buttonSave.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -16),
+            buttonSave.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             buttonSave.widthAnchor.constraint(equalTo: margin.widthAnchor),
             buttonSave.centerXAnchor.constraint(equalTo: margin.centerXAnchor)
         ])
@@ -254,29 +265,55 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
         self.view.endEditing(true)
     }
     
+    @objc private func scrolltoBottom() {
+        UIView.animate(withDuration: 0.25, delay: 0) {
+            self.scrollView.contentOffset = CGPoint(x: 0, y: UIScreen.main.bounds.height / 5)
+        }
+    }
+    
 }
 
 extension CompleteAccountViewController: PHPickerViewControllerDelegate {
     
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
-        results[0].itemProvider.loadObject(ofClass: UIImage.self) {[weak self] reading, error in
-            if let image = reading as? UIImage {
-                DispatchQueue.main.async {
-                    let imv = self?.newImageView(image: image)
-                    self?.photosFromLibrary.append(imv!)
-                    self?.defineLayout()
-                    self?.view.setNeedsLayout()
+        for result in results {
+            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] reading, error in
+                if let image = reading as? UIImage {
+                    DispatchQueue.main.async {
+                        let imv = self?.newImageView(image: image)
+                        self?.photosFromLibrary.append(imv!)
+                        self?.defineLayout()
+                        self?.view.setNeedsLayout()
+                    }
                 }
             }
         }
     }
     
-    func newImageView(image:UIImage?) -> UIImageView {
+    private func newImageView(image:UIImage?) -> UIImageView {
         let imv = UIImageView()
         imv.backgroundColor = .clear
         imv.image = image
         imv.layer.cornerRadius = 12
         return imv
+    }
+    
+    private func loadUser() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "SignedInUser")
+        do {
+            user = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+        if !user.isEmpty {
+            let _user = user[0]
+            textFieldName.text = _user.value(forKey: "full_name") as? String
+            textFieldCity.text = _user.value(forKey: "city") as? String
+            textFieldPhone.text = _user.value(forKey: "phone_number") as? String
+            textFieldAddress.text = _user.value(forKey: "address") as? String
+        }
     }
 }

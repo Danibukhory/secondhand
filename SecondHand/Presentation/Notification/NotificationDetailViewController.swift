@@ -9,7 +9,9 @@ import UIKit
 
 final class NotificationDetailViewController: UITableViewController {
     
+    var api = SecondHandAPI.shared
     var notification: SHNotificationResponse
+    var product: SHBuyerProductDetailResponse?
     var statusImage: UIImage?
     var contactButton = SHButton(frame: CGRect(), title: "Hubungi", type: .filled, size: .small)
     var offerButton = SHButton(frame: CGRect(), title: "Tawar Lagi", type: .filled, size: .small)
@@ -36,6 +38,7 @@ final class NotificationDetailViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "detailCell")
         tableView.register(NotificationDetailCell.self, forCellReuseIdentifier: "\(NotificationDetailCell.self)")
         title = "Detail Penawaran"
+        loadProduct()
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -90,7 +93,9 @@ final class NotificationDetailViewController: UITableViewController {
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(NotificationDetailCell.self)", for: indexPath) as? NotificationDetailCell else { return UITableViewCell() }
-            cell.fill(with: notification.user!)
+            if let _product = product {
+                cell.fill(with: _product)
+            }
             if notification.status == "accepted" {
                 cell.contentView.addSubview(contactButton)
                 NSLayoutConstraint.activate([
@@ -112,5 +117,15 @@ final class NotificationDetailViewController: UITableViewController {
             return cell
         }
         
+    }
+    
+    private func loadProduct() {
+        api.getBuyerProductDetail(itemId: "\(notification.productID)") { [weak self] result, error in
+            guard let _self = self, let _result = result else {
+                return
+            }
+            _self.product = _result
+            _self.tableView.reloadData()
+        }
     }
 }

@@ -74,18 +74,22 @@ final class HomeSearchResultCell: UITableViewCell {
     }
     
     func fill(with data: SHBuyerProductResponse) {
-        if let imageUrlString = data.imageURL {
-            let url = URL(string: imageUrlString)
-            productImageView.kf.indicatorType = .activity
-            productImageView.kf.setImage(with: url, options: [.cacheOriginalImage, .transition(.fade(0.2))])
-        }
-        productNameLabel.setTitle(text: data.name ?? "", size: 14, weight: .medium, color: .black)
-        if let price = data.basePrice {
-            productPriceLabel.setTitle(text: price.convertToCurrency(), size: 14, weight: .regular, color: .black)
-        }
+//        if let imageUrlString = data.imageURL {
+//            let url = URL(string: imageUrlString)
+//            productImageView.kf.indicatorType = .activity
+//            productImageView.kf.setImage(with: url, options: [.cacheOriginalImage, .transition(.fade(0.2))])
+//        }
+        let url = URL(string: data.imageURL)
+        productImageView.kf.indicatorType = .activity
+        productImageView.kf.setImage(with: url, options: [.cacheOriginalImage, .transition(.fade(0.2))])
+        productNameLabel.setTitle(text: data.name, size: 14, weight: .medium, color: .black)
+//        if let price = data.basePrice {
+//            productPriceLabel.setTitle(text: price.convertToCurrency(), size: 14, weight: .regular, color: .black)
+//        }
+        productPriceLabel.setTitle(text: data.basePrice.convertToCurrency(), size: 14, weight: .regular, color: .black)
         if !data.categories.isEmpty {
             let category = data.categories[0]
-            productCategoryLabel.setTitle(text: category?.name ?? "Recommended for you", size: 10, weight: .regular, color: .secondaryLabel)
+            productCategoryLabel.setTitle(text: category.name ?? "Recommended for you", size: 10, weight: .regular, color: .secondaryLabel)
         }
     }
 }

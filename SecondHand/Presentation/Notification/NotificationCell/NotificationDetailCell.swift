@@ -71,7 +71,7 @@ final class NotificationDetailCell: UITableViewCell {
             )
         }
         sellerNameLabel.setTitle(
-            text: data.fullName ?? "Name not available",
+            text: data.fullName,
             size: 14,
             weight: .medium,
             color: .black
@@ -92,13 +92,34 @@ final class NotificationDetailCell: UITableViewCell {
             )
         }
         sellerNameLabel.setTitle(
-            text: data.productName ?? "Name not available",
+            text: data.productName,
             size: 14,
             weight: .medium,
             color: .black
         )
         sellerCityLabel.setTitle(
             text: data.bidPrice?.convertToCurrency() ?? "Bid price not available",
+            size: 10,
+            weight: .regular,
+            color: UIColor(rgb: 0x8A8A8A)
+        )
+    }
+    
+    func fill(with data: SHBuyerProductDetailResponse) {
+        if let imageUrl = URL(string: data.user?.imageURL ?? "") {
+            sellerImageView.kf.setImage(
+                with: imageUrl,
+                options: [.transition(.fade(0.2))]
+            )
+        }
+        sellerNameLabel.setTitle(
+            text: data.user?.fullName ?? "Nama tidak tersedia",
+            size: 14,
+            weight: .medium,
+            color: .black
+        )
+        sellerCityLabel.setTitle(
+            text: data.user?.city ?? "Kota tidak tersedia",
             size: 10,
             weight: .regular,
             color: UIColor(rgb: 0x8A8A8A)
