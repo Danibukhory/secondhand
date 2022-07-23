@@ -46,6 +46,7 @@ final class HomeProductCell: UITableViewCell {
         indicator.startAnimating()
         indicator.hidesWhenStopped = true
         indicator.style = .medium
+        indicator.color = UIColor(rgb: 0x7126B5)
         return indicator
     }()
     
@@ -143,7 +144,7 @@ final class HomeProductCell: UITableViewCell {
             guard let _self = self else { return }
             _self.sorterButton.setActiveButtonTitle(string: "Nama (A - Z)")
             _self.sorterButton.setImage(UIImage(systemName: "arrow.up.arrow.down"), for: .normal)
-            _self.displayedProducts.sort(by: { ($0.name ?? "") < ($1.name ?? "") })
+            _self.displayedProducts.sort(by: { ($0.name) < ($1.name) })
             _self.collectionView.reloadData()
         }
         let sortByNameDescending = UIAction(
@@ -154,7 +155,7 @@ final class HomeProductCell: UITableViewCell {
             guard let _self = self else { return }
             _self.sorterButton.setActiveButtonTitle(string: "Nama (Z - A)")
             _self.sorterButton.setImage(UIImage(systemName: "arrow.up.arrow.down"), for: .normal)
-            _self.displayedProducts.sort(by: { ($0.name ?? "") > ($1.name ?? "") })
+            _self.displayedProducts.sort(by: { ($0.name) > ($1.name) })
             _self.collectionView.reloadData()
         }
         let sortByPriceAscending = UIAction(
@@ -165,7 +166,7 @@ final class HomeProductCell: UITableViewCell {
             guard let _self = self else { return }
             _self.sorterButton.setActiveButtonTitle(string: "Harga (rendah ke tinggi)")
             _self.sorterButton.setImage(UIImage(systemName: "arrow.up.arrow.down"), for: .normal)
-            _self.displayedProducts.sort(by: { ($0.basePrice ?? 0) < ($1.basePrice ?? 0) })
+            _self.displayedProducts.sort(by: { ($0.basePrice) < ($1.basePrice) })
             _self.collectionView.reloadData()
         }
         let sortByPriceDescending = UIAction(
@@ -176,7 +177,7 @@ final class HomeProductCell: UITableViewCell {
             guard let _self = self else { return }
             _self.sorterButton.setActiveButtonTitle(string: "Harga (tinggi ke rendah)")
             _self.sorterButton.setImage(UIImage(systemName: "arrow.up.arrow.down"), for: .normal)
-            _self.displayedProducts.sort(by: { ($0.basePrice ?? 0) > ($1.basePrice ?? 0) })
+            _self.displayedProducts.sort(by: { ($0.basePrice) > ($1.basePrice) })
             _self.collectionView.reloadData()
         }
         let random = UIAction(

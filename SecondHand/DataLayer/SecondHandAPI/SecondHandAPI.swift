@@ -11,7 +11,7 @@ import Alamofire
 struct SecondHandAPI {
     static let shared = SecondHandAPI()
     let baseUrl: String = "https://market-final-project.herokuapp.com/"
-    let accessToken: String? = UserDefaults.standard.string(forKey: "accessToken")
+    var accessToken: String? = UserDefaults.standard.string(forKey: "accessToken")
     
     enum ProductStatus: String {
         case accepted = "accepted"
@@ -97,7 +97,7 @@ struct SecondHandAPI {
     
     func getBuyerProductDetail(
         itemId: String,
-        _ completionHandler: @escaping (SHBuyerProductResponse?, AFError?) -> Void
+        _ completionHandler: @escaping (SHBuyerProductDetailResponse?, AFError?) -> Void
     ) {
         guard let _accessToken = accessToken else { return }
         let headers: HTTPHeaders = [
@@ -110,7 +110,7 @@ struct SecondHandAPI {
             headers: headers
         )
         .validate()
-        .responseDecodable(of: SHBuyerProductResponse.self) { (response) in
+        .responseDecodable(of: SHBuyerProductDetailResponse.self) { (response) in
             switch response.result {
             case let .success(data):
                 completionHandler(data, nil)
@@ -272,7 +272,8 @@ struct SecondHandAPI {
         basePrice price: Int,
         category catg: Int,
         location loc: String,
-        productPicture image: UIImage
+        productPicture image: UIImage,
+        _ completionHandler: @escaping (AFDataResponse<Data>) -> Void
     ) {
         let requestUrl = "seller/product"
         guard let _accessToken = accessToken,
@@ -291,12 +292,12 @@ struct SecondHandAPI {
             multiPartFormData.append(loc.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: "location")
             multiPartFormData.append(imageData, withName: "image", fileName: "\(name).jpg", mimeType: "image/jpeg")
             
-        }, to: baseUrl + requestUrl, headers: headers)
+        }, to: baseUrl + requestUrl, method: .post , headers: headers)
         .uploadProgress(queue: .main) { progress in
             print("Upload Progress: \(progress.fractionCompleted)")
         }
-        .responseJSON { data in
-            print(data.debugDescription)
+        .responseData { response in
+            completionHandler(response)
         }
     }
     
@@ -305,7 +306,8 @@ struct SecondHandAPI {
         city cty: String,
         phoneNumber phone: Int,
         address add: String,
-        accountPicture image: UIImage
+        accountPicture image: UIImage,
+        _ completionHandler: @escaping (AFDataResponse<Data>) -> Void
     ) {
         let requestUrl = "auth/user"
         guard let _accessToken = accessToken,
@@ -329,26 +331,27 @@ struct SecondHandAPI {
         .uploadProgress(queue: .main) { progress in
             print("Upload Progress: \(progress.fractionCompleted)")
         }
-        .responseJSON { data in
-            print(data.debugDescription)
+        .responseDecodable { (response: AFDataResponse<Data>) in
+            completionHandler(response)
         }
     }
        
     func postBuyerOrder(
         id itemID: Int,
         bidPrice price: Int,
-        _ completionHandler: @escaping (AFDataResponse<Data>) -> Void
+        _ completionHandler: @escaping (AFDataResponse<Data?>) -> Void
     ) {
         guard let _accessToken = accessToken else {
             print(">>> no access token")
-            return }
+            return
+        }
         let requestUrl = "buyer/order"
         let headers: HTTPHeaders = [
             "access_token" : _accessToken,
-            "Content-Type" : "application/json"
+            "Content-Type" : "application/x-www-form-urlencoded"
         ]
         
-        let parameter: [String: Any] = [
+        let parameters: [String: Int] = [
             "product_id": itemID,
             "bid_price":  price
         ]
@@ -356,11 +359,11 @@ struct SecondHandAPI {
         AF.request(
             baseUrl + requestUrl,
             method: .post,
-            parameters: parameter,
+            parameters: parameters,
             headers: headers
         )
         .validate()
-        .responseDecodable { (response: AFDataResponse<Data>) in
+        .response { response in
             completionHandler(response)
         }
     }
@@ -572,4 +575,7 @@ struct SecondHandAPI {
         }
     }
     
+    mutating func renewAccessToken() {
+        self.accessToken = UserDefaults.standard.string(forKey: "accessToken")
+    }
 }

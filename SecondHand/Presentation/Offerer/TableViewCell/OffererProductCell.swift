@@ -15,13 +15,34 @@ final class OffererProductCell: UITableViewCell {
     var productNameLabel = UILabel()
     var bidValueLabel = UILabel()
     var offerTimeLabel = UILabel()
-    var rejectButton = SHButton(frame: CGRect(), title: "Tolak", type: .bordered, size: .small)
+    var declineButton = SHButton(frame: CGRect(), title: "Tolak", type: .bordered, size: .small)
     var acceptButton = SHButton(frame: CGRect(), title: "Terima", type: .filled, size: .small)
     var productSoldButton = SHButton(frame: CGRect(), title: "Produk sudah terjual ke pembeli lain", type: .ghost, size: .regular)
     var offerRejectedButton = SHButton(frame: CGRect(), title: "Penawaran ini sudah anda tolak", type: .ghost, size: .regular)
+    var declineButtonLoadingView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        indicator.color = UIColor(rgb: 0x7126B5)
+        return indicator
+    }()
+    var acceptButtonLoadingView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.color = .white
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    var outerLoadingView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        indicator.color = UIColor(rgb: 0x7126B5)
+        return indicator
+    }()
     
     typealias OnRejectButtonTap = () -> Void
-    var onRejectButtonTap: OnRejectButtonTap?
+    var onDeclineButtonTap: OnRejectButtonTap?
     
     typealias OnAcceptButtonTap = () -> Void
     var onAcceptButtonTap: OnAcceptButtonTap?
@@ -42,9 +63,11 @@ final class OffererProductCell: UITableViewCell {
     }
     
     private func defineLayout() {
-        contentView.addSubviews(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, rejectButton, acceptButton, productSoldButton, offerRejectedButton)
-        contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, rejectButton, acceptButton, productSoldButton, offerRejectedButton)
+        contentView.addSubviews(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, declineButton, acceptButton, productSoldButton, offerRejectedButton, outerLoadingView)
+        contentView.setTranslatesAutoresizingMaskIntoConstraintsToFalse(productImageView, offerTypeLabel, productNameLabel, bidValueLabel, offerTimeLabel, declineButton, acceptButton, productSoldButton, offerRejectedButton)
         contentView.backgroundColor = .white
+        declineButton.addSubview(declineButtonLoadingView)
+        acceptButton.addSubview(acceptButtonLoadingView)
         
         productImageView.clipsToBounds = true
         productImageView.contentMode = .scaleAspectFill
@@ -63,8 +86,8 @@ final class OffererProductCell: UITableViewCell {
         acceptButton.setActiveButtonTitle(string: "Terima")
         acceptButton.addTarget(self, action: #selector(acceptTapped), for: .touchUpInside)
         
-        rejectButton.setActiveButtonTitle(string: "Tolak")
-        rejectButton.addTarget(self, action: #selector(rejectTapped), for: .touchUpInside)
+        declineButton.setActiveButtonTitle(string: "Tolak")
+        declineButton.addTarget(self, action: #selector(rejectTapped), for: .touchUpInside)
         
         productSoldButton.alpha = 0
         productSoldButton.addTarget(self, action: #selector(soldTapped), for: .touchUpInside)
@@ -96,27 +119,36 @@ final class OffererProductCell: UITableViewCell {
             offerTimeLabel.topAnchor.constraint(equalTo: productImageView.topAnchor),
             offerTimeLabel.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             
-            rejectButton.topAnchor.constraint(equalTo: bidValueLabel.bottomAnchor, constant: 16),
-            rejectButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
-            rejectButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2) - 16 * 2),
+            declineButton.topAnchor.constraint(equalTo: bidValueLabel.bottomAnchor, constant: 16),
+            declineButton.leadingAnchor.constraint(equalTo: margin.leadingAnchor),
+            declineButton.widthAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width / 2) - 16 * 2),
+            
+            declineButtonLoadingView.centerXAnchor.constraint(equalTo: declineButton.centerXAnchor),
+            declineButtonLoadingView.centerYAnchor.constraint(equalTo: declineButton.centerYAnchor),
             
             acceptButton.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
-            acceptButton.topAnchor.constraint(equalTo: rejectButton.topAnchor),
-            acceptButton.widthAnchor.constraint(equalTo: rejectButton.widthAnchor),
+            acceptButton.topAnchor.constraint(equalTo: declineButton.topAnchor),
+            acceptButton.widthAnchor.constraint(equalTo: declineButton.widthAnchor),
             acceptButton.bottomAnchor.constraint(equalTo: margin.bottomAnchor),
             
+            acceptButtonLoadingView.centerXAnchor.constraint(equalTo: acceptButton.centerXAnchor),
+            acceptButtonLoadingView.centerYAnchor.constraint(equalTo: acceptButton.centerYAnchor),
+            
             productSoldButton.widthAnchor.constraint(equalTo: margin.widthAnchor),
-            productSoldButton.topAnchor.constraint(equalTo: rejectButton.topAnchor),
+            productSoldButton.topAnchor.constraint(equalTo: declineButton.topAnchor),
             productSoldButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             offerRejectedButton.widthAnchor.constraint(equalTo: margin.widthAnchor),
-            offerRejectedButton.topAnchor.constraint(equalTo: rejectButton.topAnchor),
-            offerRejectedButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+            offerRejectedButton.topAnchor.constraint(equalTo: declineButton.topAnchor),
+            offerRejectedButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            
+            outerLoadingView.centerYAnchor.constraint(equalTo: offerRejectedButton.centerYAnchor),
+            outerLoadingView.centerXAnchor.constraint(equalTo: margin.centerXAnchor)
         ])
     }
     
     func fill(with data: SHNotificationResponse) {
-        if let urlString = URL(string: data.imageURL ?? "") {
+        if let urlString = URL(string: data.imageURL) {
             productImageView.kf.setImage(with: urlString, options: [.transition(.fade(0.2))])
         }
         offerTypeLabel.setTitle(
@@ -126,22 +158,23 @@ final class OffererProductCell: UITableViewCell {
             color: UIColor(rgb: 0x8A8A8A)
         )
         productNameLabel.setTitle(
-            text: data.productName ?? "Product name not available",
+            text: data.productName,
             size: 14,
             weight: .regular,
             color: .black
         )
-        let basePriceInt = Int(data.basePrice ?? "")
+//        let basePriceInt = Int(data.basePrice ?? "")
+        let basePriceInt = data.basePrice
         if data.bidPrice != nil {
             bidValueLabel.setTitle(
-                text: "\(basePriceInt?.convertToCurrency() ?? "")\nDitawar \(data.bidPrice?.convertToCurrency() ?? "bid price not available")",
+                text: "\(basePriceInt.convertToCurrency() )\nDitawar \(data.bidPrice?.convertToCurrency() ?? "bid price not available")",
                 size: 14,
                 weight: .regular,
                 color: .black
             )
         } else {
             bidValueLabel.setTitle(
-                text: "\(basePriceInt?.convertToCurrency() ?? "")",
+                text: "\(basePriceInt.convertToCurrency())",
                 size: 14,
                 weight: .regular,
                 color: .black
@@ -156,7 +189,7 @@ final class OffererProductCell: UITableViewCell {
     }
     
     @objc private func rejectTapped() {
-        onRejectButtonTap?()
+        onDeclineButtonTap?()
     }
     
     @objc private func acceptTapped() {

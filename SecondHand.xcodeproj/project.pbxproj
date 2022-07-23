@@ -25,6 +25,7 @@
 		3858177E286D82F400748254 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858177D286D82F400748254 /* Int+Extension.swift */; };
 		3858BC93288466AE009EB472 /* ColorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 3858BC92288466AE009EB472 /* ColorKit */; };
 		3858BC9528850FF4009EB472 /* NotificationDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3858BC9428850FF4009EB472 /* NotificationDetailCell.swift */; };
+		385D0F67288934870001D602 /* SHBlurLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385D0F66288934870001D602 /* SHBlurLoadingView.swift */; };
 		38822BC1286AED53006B2C6C /* SecondHandAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38822BC0286AED53006B2C6C /* SecondHandAPI.swift */; };
 		38822BC4286B3282006B2C6C /* SHNotificationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38822BC3286B3282006B2C6C /* SHNotificationResponse.swift */; };
 		3893251D287DC14600151410 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3893251C287DC14600151410 /* SettingsViewController.swift */; };
@@ -46,7 +47,7 @@
 		38BC0E8E28597E3400AB4281 /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */; };
 		38BC0E9028597E4D00AB4281 /* Poppins-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38BC0E8F28597E4D00AB4281 /* Poppins-Medium.ttf */; };
 		38D0CC3728634BF300561C17 /* SHModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D0CC3628634BF300561C17 /* SHModalViewController.swift */; };
-		38D935882886F515008C73E2 /* AcoountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D935872886F515008C73E2 /* AcoountDetailViewController.swift */; };
+		38D935882886F515008C73E2 /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D935872886F515008C73E2 /* AccountDetailViewController.swift */; };
 		6E78118228522ED600104FE1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E78118128522ED600104FE1 /* AppDelegate.swift */; };
 		6E78118428522ED600104FE1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E78118328522ED600104FE1 /* SceneDelegate.swift */; };
 		6E78118C28522ED600104FE1 /* SecondHand.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6E78118A28522ED600104FE1 /* SecondHand.xcdatamodeld */; };
@@ -105,6 +106,7 @@
 		3858177B286D809100748254 /* SHUserResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHUserResponse.swift; sourceTree = "<group>"; };
 		3858177D286D82F400748254 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 		3858BC9428850FF4009EB472 /* NotificationDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationDetailCell.swift; sourceTree = "<group>"; };
+		385D0F66288934870001D602 /* SHBlurLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHBlurLoadingView.swift; sourceTree = "<group>"; };
 		38822BC0286AED53006B2C6C /* SecondHandAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondHandAPI.swift; sourceTree = "<group>"; };
 		38822BC3286B3282006B2C6C /* SHNotificationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHNotificationResponse.swift; sourceTree = "<group>"; };
 		3893251C287DC14600151410 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -126,7 +128,7 @@
 		38BC0E8D28597E3400AB4281 /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		38BC0E8F28597E4D00AB4281 /* Poppins-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Poppins-Medium.ttf"; sourceTree = "<group>"; };
 		38D0CC3628634BF300561C17 /* SHModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHModalViewController.swift; sourceTree = "<group>"; };
-		38D935872886F515008C73E2 /* AcoountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcoountDetailViewController.swift; sourceTree = "<group>"; };
+		38D935872886F515008C73E2 /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
 		6B21B3F76C4D0FBF88141096 /* Pods-SecondHand.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SecondHand.release.xcconfig"; path = "Target Support Files/Pods-SecondHand/Pods-SecondHand.release.xcconfig"; sourceTree = "<group>"; };
 		6E6642DF405F8EE968D8AF9D /* Pods_SecondHand.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SecondHand.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E78117E28522ED600104FE1 /* SecondHand.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SecondHand.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -474,7 +476,7 @@
 			children = (
 				6EAAC82128622226008AC66E /* AccountTableViewController.swift */,
 				7B878B752875CF9800748772 /* CompleteAccountViewController.swift */,
-				38D935872886F515008C73E2 /* AcoountDetailViewController.swift */,
+				38D935872886F515008C73E2 /* AccountDetailViewController.swift */,
 			);
 			path = Account;
 			sourceTree = "<group>";
@@ -528,6 +530,7 @@
 				38D0CC3628634BF300561C17 /* SHModalViewController.swift */,
 				7B878B772875CFB800748772 /* SHLabelView.swift */,
 				7B878B7B2875D0A000748772 /* SHDropDownTextField.swift */,
+				385D0F66288934870001D602 /* SHBlurLoadingView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -565,7 +568,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1320;
-				LastUpgradeCheck = 1320;
+				LastUpgradeCheck = 1340;
 				TargetAttributes = {
 					6E78117D28522ED600104FE1 = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -658,6 +661,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				385D0F67288934870001D602 /* SHBlurLoadingView.swift in Sources */,
 				38940C742859EB5B000DD541 /* HomeProductCollectionCell.swift in Sources */,
 				3858177A286D802400748254 /* SHBuyerProductResponse.swift in Sources */,
 				7BCE01B1285B614300FF94BA /* SHCustomTextFieldForm.swift in Sources */,
@@ -702,7 +706,7 @@
 				7BCE01B3285C188400FF94BA /* UIImageView+Extensions.swift in Sources */,
 				7B878B7E2875D16D00748772 /* IndonesiaCityList.swift in Sources */,
 				382F59652860CEED009F0BB5 /* OffererDetailCell.swift in Sources */,
-				38D935882886F515008C73E2 /* AcoountDetailViewController.swift in Sources */,
+				38D935882886F515008C73E2 /* AccountDetailViewController.swift in Sources */,
 				38106AA0286C62BB00B5794A /* SHSellerProductResponse.swift in Sources */,
 				38940C702859EB2F000DD541 /* CategorySelectorCollectionCell.swift in Sources */,
 				7B79A3FC2881A21F009D8509 /* SHBuyerOrderResponse.swift in Sources */,
@@ -747,6 +751,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -808,6 +813,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";

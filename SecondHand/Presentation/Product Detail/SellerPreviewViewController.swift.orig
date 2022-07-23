@@ -17,8 +17,11 @@ class SellerPreviewViewController: UIViewController {
     var productPrice: String?
     var productCategory: String?
     var productCategoryID: Int?
+<<<<<<< HEAD
+=======
     
     var didFinishedUploadProduct: (() -> Void)?
+>>>>>>> main
     private lazy var isOffered: Bool = false
     
     let scrollView = UIScrollView()
@@ -57,10 +60,16 @@ class SellerPreviewViewController: UIViewController {
             view.widthAnchor.constraint(equalToConstant: 24),
             view.heightAnchor.constraint(equalToConstant: 24),
         ])
+<<<<<<< HEAD
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissThisView))
+        view.addGestureRecognizer(tapRecognizer)
+
+=======
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissProductView))
         view.addGestureRecognizer(tapRecognizer)
         
+>>>>>>> main
         return view
     }()
     
@@ -90,7 +99,12 @@ class SellerPreviewViewController: UIViewController {
         productCategory.setTitle(text: (self.productCategory ?? "Category not available"), size: 10, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         
         let productPrice = UILabel()
+<<<<<<< HEAD
+        let price = Int(self.productPrice!)?.convertToCurrency()
+        productPrice.setTitle(text: price ?? "Price not available", size: 14, weight: .medium, color: .black)
+=======
         productPrice.setTitle(text: self.productPrice?.convertToCurrency() ?? "0".convertToCurrency() , size: 14, weight: .medium, color: .black)
+>>>>>>> main
         
         productView.translatesAutoresizingMaskIntoConstraints = false
         productName.translatesAutoresizingMaskIntoConstraints = false
@@ -136,9 +150,15 @@ class SellerPreviewViewController: UIViewController {
         productView.layer.shadowOffset = CGSize(width: 0, height: 0)
         
         let imageView = UIImageView()
+<<<<<<< HEAD
+//        imageView.load(urlString: (userResponse?.imageURL!)!)
+        if let url = URL(string: userResponse?.imageURL ?? "") {
+            imageView.kf.setImage(with: url)
+=======
         if let imageURL = URL(string: userResponse?.imageURL ?? "") {
             imageView.kf.indicatorType = .activity
             imageView.kf.setImage(with: imageURL, options: [.transition(.fade(0.25))])
+>>>>>>> main
         }
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
@@ -229,8 +249,29 @@ class SellerPreviewViewController: UIViewController {
     }()
     
     @objc func publishButtonAction() {
+<<<<<<< HEAD
+        
+        DispatchQueue.main.async {
+            let callAPI = SecondHandAPI()
+            callAPI.postProductAsSeller(
+                with: self.productName!,
+                description: self.productDesc!,
+                basePrice: Int(self.productPrice!)!,
+                category: self.productCategoryID!,
+                location: (self.userResponse?.city)!,
+                productPicture: self.imageData!
+            )
+        }
+//        let vc = SellingListPageViewController()
+//        vc.isPopUpEnabled = true
+//        self.tabBarController?.navigationController?.pushViewController(vc, animated: true)
+        self.dismiss(animated: true)
+        self.tabBarController?.dismiss(animated: true)
+        self.tabBarController?.selectedIndex = 3
+=======
         self.didFinishedUploadProduct?()
         self.dismiss(animated: true)
+>>>>>>> main
     }
     
     override func viewDidLoad() {
@@ -359,7 +400,11 @@ class SellerPreviewViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: contentPhotoView.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentPhotoView.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: contentPhotoView.leadingAnchor),
+<<<<<<< HEAD
+            collectionView.trailingAnchor.constraint(equalTo: contentPhotoView.trailingAnchor),
+=======
             collectionView.trailingAnchor.constraint(equalTo: contentPhotoView.trailingAnchor)
+>>>>>>> main
         ])
         
     }

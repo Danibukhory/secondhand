@@ -51,6 +51,7 @@ final class BuyerTenViewController: SHModalViewController {
         let imageView = UIImageView()
         let url = URL(string: buyerResponse?.imageURL ?? "")
         imageView.kf.setImage(with: url)
+        imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 12
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -106,8 +107,8 @@ final class BuyerTenViewController: SHModalViewController {
         textfield.keyboardType = .numberPad
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.returnKeyType = .done
-        textfield.addTarget(self, action: #selector(onBidValueEdited), for: .editingChanged)
-        textfield.addTarget(self, action: #selector(onBidValueType), for: .editingDidEnd)
+//        textfield.addTarget(self, action: #selector(onBidValueEdited), for: .editingChanged)
+        textfield.addTarget(self, action: #selector(onBidValueEndEditing), for: .editingDidEnd)
         textfield.addTarget(self, action: #selector(onBidValueBeginEditing), for: .editingDidBegin)
         return textfield
     }()
@@ -235,21 +236,24 @@ final class BuyerTenViewController: SHModalViewController {
     
     @objc private func onBidValueBeginEditing() {
         offerTextfield.text = typedOfferValue
+        sendButton.isEnabled = false
     }
     
-    @objc private func onBidValueEdited() {
+//    @objc private func onBidValueEdited() {
+//        if let text = offerTextfield.text, !text.isEmpty {
+//            sendButton.isEnabled = true
+//        } else {
+//            sendButton.isEnabled = false
+//        }
+//    }
+    
+    @objc private func onBidValueEndEditing() {
         if let text = offerTextfield.text, !text.isEmpty {
+            offerTextfield.text = text.convertToCurrency()
+            typedOfferValue = text
             sendButton.isEnabled = true
         } else {
             sendButton.isEnabled = false
-        }
-    }
-    
-    @objc private func onBidValueType() {
-        if let text = offerTextfield.text {
-            offerTextfield.text = text.convertToCurrency()
-            typedOfferValue = text
-            print(typedOfferValue)
         }
     }
 }

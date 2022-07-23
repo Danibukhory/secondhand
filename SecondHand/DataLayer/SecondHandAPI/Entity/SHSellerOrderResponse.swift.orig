@@ -8,6 +8,17 @@
 import Foundation
 
 struct SHSellerOrderResponse: Codable {
+<<<<<<< HEAD
+    let id, productID, buyerID, price: Int?
+    let transactionDate: String?
+    let productName: String?
+    let basePrice: Int?
+    let imageProduct: String?
+    let status, createdAt, updatedAt: String?
+    let product: SHOrderProduct?
+    let user: SHOrderUser?
+
+=======
     let id, productID, buyerID, price: Int
     let transactionDate, productName: String
     let basePrice: Int
@@ -16,6 +27,7 @@ struct SHSellerOrderResponse: Codable {
     let product: SHOrderProduct
     let buyer: SHOrderBuyer
     
+>>>>>>> main
     enum CodingKeys: String, CodingKey {
         case id
         case productID = "product_id"

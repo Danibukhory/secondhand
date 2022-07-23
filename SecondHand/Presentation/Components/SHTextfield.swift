@@ -64,17 +64,13 @@ final class SHRoundedTextfield: UITextField {
     }
     
     public func setForPasswordTextfield() {
-           clearButtonMode = .never
-           let button = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
-           button.setImage(UIImage(named: "img-sh-eye"), for: .normal)
-           button.setImage(UIImage(named: "img-sh-eye"), for: .selected)
-           button.addTarget(self, action: #selector(togglePasswordView), for: .touchUpInside)
-           rightView = button
-           rightViewMode = .always
-       }
-
-       public func setForSearchBar() {
-
+        clearButtonMode = .never
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        button.setImage(UIImage(named: "img-sh-eye"), for: .normal)
+        button.setImage(UIImage(named: "img-sh-eye")?.withTintColor(UIColor(rgb: 0x7126B5)), for: .selected)
+        button.addTarget(self, action: #selector(togglePasswordView), for: .touchUpInside)
+        rightView = button
+        rightViewMode = .always
        }
 
        @objc func togglePasswordView(_ sender: UIButton) {
