@@ -82,11 +82,8 @@ final class OffererDetailCell: UITableViewCell {
     }
     
     func fill(with data: SHOrderBuyer) {
-//        if let url = URL(string: data.imageURL ?? "") {
-//            offererImageView.kf.indicatorType = .activity
-//            offererImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
-//        }
-        offererImageView.image = UIImage(named: "img-sh-offerer-placeholder")
+        offererImageView.image = UIImage(systemName: "person.crop.square.fill")?.withTintColor(UIColor(rgb: 0x7126B5), renderingMode: .alwaysOriginal)
+        offererImageView.contentMode = .scaleAspectFit
         
         offererNameLabel.setTitle(
             text: data.fullName,

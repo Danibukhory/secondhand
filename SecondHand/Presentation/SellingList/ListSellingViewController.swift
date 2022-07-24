@@ -181,13 +181,10 @@ extension ListSellingViewController {
                     if let url = URL(string: product.imageProduct) {
                         imageView.kf.setImage(with: url, options: [.transition(.fade(0.2)), .cacheOriginalImage])
                     }
-//                    imageView.load(urlString: product.imageURL!)
                     previewViewController.imageData = imageView.image
                     previewViewController.productName = product.productName
                     previewViewController.productPrice = String(product.basePrice)
-//                    previewViewController.productDesc =
                     previewViewController.productCategory = product.status
-//                    previewViewController.productCategoryID = _self.category
                     previewViewController.userResponse = _self.userDetails
                     previewViewController.publishButton.isEnabled = false
                     previewViewController.publishButton.setActiveButtonTitle(string: "Produk anda sudah diterbitkan")
