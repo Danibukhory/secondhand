@@ -28,6 +28,9 @@ final class MyProductCell: UITableViewCell {
     typealias DidSelectMyProduct = (SHSellerProductResponse) -> Void
     var didSelectMyProduct: DidSelectMyProduct?
     
+    typealias DidSelectMyOrder = (SHSellerOrderResponse) -> Void
+    var didSelecMyOrder: DidSelectMyOrder?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -221,10 +224,15 @@ extension MyProductCell: UICollectionViewDataSource, UICollectionViewDelegate, U
         case collectionProductView:
             if ind == 0, selectedCategory == 0 {
                 didSelectAddProduct?()
-            } else if selectedCategory == 0 {
+            } else if selectedCategory == 0  {
                 let productItem = productDetails?[ind-1]
                 didSelectMyProduct?(productItem!)
-                print("kepencet")
+            } else if selectedCategory == 1 {
+                let productItem = orderDetails?[ind]
+                didSelecMyOrder?(productItem!)
+            } else if selectedCategory == 2, sellerSoldProduct!.count > 0 {
+                let productItem = sellerSoldProduct?[ind]
+                didSelectMyProduct?(productItem!)
             }
         default:
             break

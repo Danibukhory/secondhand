@@ -195,7 +195,7 @@ class SellerPreviewViewController: UIViewController {
         
         let descDetails = UILabel()
 
-        descDetails.setTitle(text: self.productDesc!, size: 14, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
+        descDetails.setTitle(text: self.productDesc ?? "Deskripsi tidak tersedia", size: 14, weight: .regular, color: UIColor(rgb: 0x8A8A8A))
         descDetails.numberOfLines = 0
         
         
@@ -221,7 +221,7 @@ class SellerPreviewViewController: UIViewController {
         return productView
     }()
     
-    private lazy var publishButton: SHButton = {
+    var publishButton: SHButton = {
         let button = SHButton(frame: CGRect.zero, title: "Terbitkan", type: .filled, size: .regular)
         button.addTarget(self, action: #selector(publishButtonAction), for: .touchUpInside)
         

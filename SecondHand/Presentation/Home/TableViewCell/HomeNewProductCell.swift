@@ -225,7 +225,7 @@ final class HomeNewProductCell: UITableViewCell {
             rightProductPriceLabel.setTitle(text: "", size: 14, weight: .regular)
             rightProductCategoryLabel.setTitle(text: "", size: 14, weight: .regular)
         }
-        contentView.fadeIn()
+        contentView.fadeInWithScale()
     }
     
     @objc private func leftProductTapped() {
