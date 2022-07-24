@@ -8,6 +8,7 @@
 import UIKit
 import PhotosUI
 import CoreData
+import Alamofire
 
 protocol DidClickSaveButtonAction: AnyObject {
     func didClickButton(info: Bool)
@@ -83,7 +84,7 @@ final class CompleteAccountViewController: UIViewController { //UITextFieldDeleg
         self.title = "Lengkapi Info Akun"
         view.backgroundColor = .white
 //        self.tabBarController?.tabBar.isHidden = true
-        
+        setupNavigationBar()
         setupSubviews()
         defineLayout()
         loadUser()
@@ -156,9 +157,9 @@ final class CompleteAccountViewController: UIViewController { //UITextFieldDeleg
             textFieldPhone.layer.borderWidth = 1
         }
         if (textFieldName.text?.isEmpty == false), (textFieldCity.text?.isEmpty == false), (textFieldAddress.text?.isEmpty == false), (textFieldPhone.text?.isEmpty == false), (photosFromLibrary.count > 0) {
-
             DispatchQueue.main.async {
-                let callAPI = SecondHandAPI()
+                var callAPI = SecondHandAPI.shared
+                callAPI.renewAccessToken()
                 callAPI.putAccountDetail(
                     with: self.textFieldName.text!,
                     city: self.textFieldCity.text!,
@@ -174,7 +175,7 @@ final class CompleteAccountViewController: UIViewController { //UITextFieldDeleg
                 }
             }
             self.delegate?.didClickButton(info: true)
-            self.navigationController?.popViewController(animated: true)
+            self.dismiss(animated: true)
         }
     }
     
@@ -271,10 +272,20 @@ final class CompleteAccountViewController: UIViewController { //UITextFieldDeleg
         }
     }
     
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        self.view.endEditing(true)
-//        return false
-//    }
+    private func setupNavigationBar() {
+        let button = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.backward"),
+            style: .plain,
+            target: self,
+            action: #selector(dismissView)
+        )
+        navigationItem.leftBarButtonItem = button
+        navigationController?.navigationBar.tintColor = .black
+    }
+    
+    @objc private func dismissView() {
+        self.dismiss(animated: true)
+    }
     
     @objc private func dismissKeyboard() {
         self.view.endEditing(true)

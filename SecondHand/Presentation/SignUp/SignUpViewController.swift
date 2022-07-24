@@ -100,7 +100,13 @@ final class SignUpViewController: UIViewController {
         view.backgroundColor = .clear
         return view
     }()
-    
+    var loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        indicator.color = UIColor(rgb: 0x7126B5)
+        return indicator
+    }()
     
     private lazy var tapGestureRecognizer = UITapGestureRecognizer()
     
@@ -134,6 +140,8 @@ final class SignUpViewController: UIViewController {
             setupAlert(title: "Error", message: "Kolom username harus diisi.", style: .alert)
         default:
             if emailText.isValidEmail && passwordText.isValidPassword(passwordText) {
+                loadingIndicator.startAnimating()
+                signUpButton.isEnabled = false
                 apiManager.signUp(
                     username: usernameText,
                     email: emailText,
@@ -141,6 +149,8 @@ final class SignUpViewController: UIViewController {
                 ) { [weak self] response, error in
                     guard let _self = self, let _ = response else {
                         self?.setupAlert(title: "Error", message: "Kesalahan terjadi :(\n\(String(describing: error))", style: .alert)
+                        self?.loadingIndicator.stopAnimating()
+                        self?.signUpButton.isEnabled = true
                         return
                     }
                     let alert = UIAlertController(title: "Pendaftaran Berhasil!", message: "Silahkan login dengan akun baru anda.", preferredStyle: .alert)
@@ -150,6 +160,8 @@ final class SignUpViewController: UIViewController {
                     }
                     alert.addAction(action)
                     _self.present(alert, animated: true)
+                    _self.loadingIndicator.stopAnimating()
+                    _self.signUpButton.isEnabled = true
                 }
                 
             } else {
@@ -201,7 +213,7 @@ final class SignUpViewController: UIViewController {
             bottomTextContainerView
         )
         bottomTextContainerView.addSubviews(noAccountLabel, moveToSignInPageButton)
-        
+        signUpButton.addSubview(loadingIndicator)
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
             titleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor,constant: 16),
@@ -234,6 +246,9 @@ final class SignUpViewController: UIViewController {
             signUpButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 25),
             signUpButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             
+            loadingIndicator.centerXAnchor.constraint(equalTo: signUpButton.centerXAnchor),
+            loadingIndicator.centerYAnchor.constraint(equalTo: signUpButton.centerYAnchor),
+            
             bottomTextContainerView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -16),
             bottomTextContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             bottomTextContainerView.heightAnchor.constraint(equalToConstant: 36),
@@ -262,10 +277,12 @@ final class SignUpViewController: UIViewController {
     private func setupTapRecognizer() {
         tapGestureRecognizer.addTarget(self, action: #selector(dismissKeyboard))
         tapGestureRecognizer.cancelsTouchesInView = false
+        view.isUserInteractionEnabled = true
         view.addGestureRecognizer(tapGestureRecognizer)
     }
    
     @objc private func dismissKeyboard() {
+        usernameTextField.endEditing(true)
         emailTextField.endEditing(true)
         passwordTextField.endEditing(true)
         self.setEditing(false, animated: true)

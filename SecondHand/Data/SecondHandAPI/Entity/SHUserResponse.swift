@@ -59,27 +59,18 @@ struct SignInDetailResponse: Codable {
 
 struct SignUpResponse: Codable {
     let id: Int
-    let fullName: String
-    let email: String
-    let password: String
-    let phoneNumber: Int
+    let fullName, email, password, phoneNumber: String
     let address: String
-    let imageUrl: String
-    let city: String
-    let createdAt: String
-    let updatedAt: String
+    let imageURL: String?
+    let city, updatedAt, createdAt: String
     
     enum CodingKeys: String, CodingKey {
         case id
         case fullName = "full_name"
-        case email
-        case password
+        case email, password
         case phoneNumber = "phone_number"
         case address
-        case imageUrl = "image_url"
-        case city
-        case createdAt
-        case updatedAt
+        case imageURL = "image_url"
+        case city, updatedAt, createdAt
     }
-    
 }
