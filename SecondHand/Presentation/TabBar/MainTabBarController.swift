@@ -6,11 +6,20 @@
 //
 
 import UIKit
+import CoreData
 
 final class MainTabBarController: UITabBarController {
+    
+    var user: [NSManagedObject] = []
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        loadUser()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadUser()
         delegate = self
         
         let homeViewController = HomeViewController()
@@ -63,7 +72,7 @@ final class MainTabBarController: UITabBarController {
         self.viewControllers = viewControllers
     }
     
-    func showSignInAlert() {
+    private func showSignInAlert() {
         let alertController = UIAlertController(
             title: "Masuk",
             message: "Anda harus masuk terlebih dahulu untuk menggunakan fitur ini.",
@@ -74,7 +83,6 @@ final class MainTabBarController: UITabBarController {
             let vc = SignInViewController()
             let navigationController = UINavigationController(rootViewController: vc)
             navigationController.modalPresentationStyle = .fullScreen
-//            self.tabBarController?.navigationController?.present(navigationController, animated: true)
             self.navigationController?.present(navigationController, animated: true)
         }
         let cancelAction = UIAlertAction(title: "Nanti", style: .cancel)
@@ -82,17 +90,47 @@ final class MainTabBarController: UITabBarController {
         alertController.addAction(signInAction)
         self.present(alertController, animated: true)
     }
+    
+    private func loadUser() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        let managedContext = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSManagedObject>(entityName: "SignedInUser")
+        do {
+            user = try managedContext.fetch(fetchRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
+        }
+    }
 }
 
 extension MainTabBarController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
         let isSignedIn = UserDefaults.standard.bool(forKey: "isSignedIn")
+        var account: NSManagedObject?
+        if !user.isEmpty {
+            account = user[0]
+        }
+        let phone = account?.value(forKey: "phone_number") as? String
         if viewController == tabBarController.viewControllers?[2] {
-            if isSignedIn {
+            if isSignedIn, let _phone = phone, !_phone.isEmpty {
                 let viewController = DetailProductViewController()
                 let navigationController = UINavigationController(rootViewController: viewController)
                 navigationController.modalPresentationStyle = .fullScreen
                 self.navigationController?.present(navigationController, animated: true)
+                return false
+            } else if isSignedIn, let _phone = phone, _phone.isEmpty {
+                let alert = UIAlertController(title: "Lengkapi Akun", message: "Anda harus melengkapi akun anda sebelum mulai menjual.", preferredStyle: .alert)
+                alert.view.tintColor = UIColor(rgb: 0x7126B5)
+                let cancel = UIAlertAction(title: "Nanti", style: .cancel)
+                let complete = UIAlertAction(title: "Lengkapi", style: .default) { _ in
+                    let viewController = CompleteAccountViewController()
+                    let navigationController = UINavigationController(rootViewController: viewController)
+                    navigationController.modalPresentationStyle = .fullScreen
+                    self.navigationController?.present(navigationController, animated: true)
+                }
+                alert.addAction(cancel)
+                alert.addAction(complete)
+                self.present(alert, animated: true)
                 return false
             } else {
                 showSignInAlert()

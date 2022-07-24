@@ -329,7 +329,7 @@ struct SecondHandAPI {
         .uploadProgress(queue: .main) { progress in
             print("Upload Progress: \(progress.fractionCompleted)")
         }
-        .responseDecodable { (response: AFDataResponse<Data>) in
+        .responseData { response in
             completionHandler(response)
         }
     }
