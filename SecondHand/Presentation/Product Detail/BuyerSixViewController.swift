@@ -271,7 +271,6 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
         getOrderedItem()
         loadProductDetail()
         group.leave()
-        print(self.buyerResponse)
     }
     
     private func setupSubViews() {
@@ -465,6 +464,7 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func getOrderedItem() {
+        apiCall.renewAccessToken()
         apiCall.getBuyerOrders { [weak self] response, error in
             guard let _self = self else { return }
             if error == nil {
@@ -472,9 +472,12 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
                 _self.orderedItem = _response.filter({ order in
                     return order.productID == _self.buyerResponse?.id
                 })
-                if !_self.orderedItem.isEmpty {
+                if !_self.orderedItem.isEmpty && _self.orderedItem[0].status == "bid" {
                     _self.publishButton.isEnabled = false
                     _self.publishButton.setActiveButtonTitle(string: "Menunggu Respon Penjual")
+                } else if !_self.orderedItem.isEmpty && _self.orderedItem[0].status == "accepted" {
+                    _self.publishButton.isEnabled = false
+                    _self.publishButton.setActiveButtonTitle(string: "Penawaranmu Sudah Diterima")
                 }
             } else {
                 print(error as Any)
@@ -484,22 +487,24 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private func loadProductDetail() {
         productOwnerLoadingIndicator.startAnimating()
+        apiCall.renewAccessToken()
         apiCall.getBuyerProductDetail(itemId: "\(buyerResponse!.id)") { [weak self] result, error in
             guard let _self = self, let _result = result else {
                 return
             }
-            if let url = URL(string: _result.imageURL ?? "") {
+            _self.productOwnerImageView.image = UIImage(named: "img-sh-offerer-placeholder")
+            if let url = URL(string: _result.user.imageURL ?? "") {
                 _self.productOwnerImageView.kf.indicatorType = .activity
-                _self.productOwnerImageView.kf.setImage(with: url)
+                _self.productOwnerImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
             }
             _self.productOwnerNameLabel.setTitle(
-                text: _result.user?.fullName ?? "nama tidak tersedia",
+                text: _result.user.fullName,
                 size: 14,
                 weight: .medium,
                 color: .black
             )
             _self.productOwnerCityLabel.setTitle(
-                text: _result.user?.city ?? "Location not Available",
+                text: _result.user.city ?? "Location not Available",
                 size: 10,
                 weight: .regular,
                 color: UIColor(rgb: 0x8A8A8A)

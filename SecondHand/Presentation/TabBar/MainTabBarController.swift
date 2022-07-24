@@ -71,11 +71,10 @@ final class MainTabBarController: UITabBarController {
         )
         alertController.view.tintColor = UIColor(rgb: 0x7126B5)
         let signInAction = UIAlertAction(title: "Masuk", style: .default) { _ in
-            self.dismiss(animated: true)
             let vc = SignInViewController()
             let navigationController = UINavigationController(rootViewController: vc)
             navigationController.modalPresentationStyle = .fullScreen
-            self.tabBarController?.navigationController?.present(navigationController, animated: true)
+//            self.tabBarController?.navigationController?.present(navigationController, animated: true)
             self.navigationController?.present(navigationController, animated: true)
         }
         let cancelAction = UIAlertAction(title: "Nanti", style: .cancel)

@@ -15,9 +15,11 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
         case product = 1
     }
     
+    var api = SecondHandAPI.shared
     var refControl = UIRefreshControl()
     var searchTableView = UITableView()
     var products: [SHBuyerProductResponse] = []
+    var displayedProducts: [SHBuyerProductResponse] = []
     var displayedSearchedProducts: [SHBuyerProductResponse] = []
     var recentlyViewedProducts: [SHBuyerProductResponse] = []
     var searchText: String = ""
@@ -26,10 +28,11 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     
     private var signInData: SignInResponse = SignInResponse()
     
-    var scrollToBottomButton: UIButton = {
+    var sorterButton: UIButton = {
         let button = UIButton(configuration: .filled())
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(systemName: "arrow.down"), for: .normal)
+        button.alpha = 0
+        button.setImage(UIImage(systemName: "arrow.up.arrow.down"), for: .normal)
         button.tintColor = UIColor(rgb: 0x7126B5)
         return button
     }()
@@ -38,12 +41,13 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadProducts()
         setupGestureRecognizers()
         setupSearchTableView()
         setupRefreshControl()
-        prepareScrollButton()
+        setupSorterButton()
         registerCells()
-        tableView.backgroundColor = UIColor(rgb: 0x7126B5)
+        tableView.backgroundColor = .white
         tableView.separatorStyle = .none
     }
     
@@ -54,31 +58,19 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     
     override func viewWillAppear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = true
-        let isSorterButtonShown: Bool = UserDefaults.standard.bool(forKey: "isHomeProductSorterShown")
-        guard let cell = tableView.cellForRow(at: IndexPath(row: 1, section: 0)) as? HomeProductCell else { return }
-        cell.isSorterButtonShown = isSorterButtonShown
+        handleSorterButtonShowing()
     }
-    
-//    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        switch tableView {
-//        case searchTableView:
-//            if searchText.isEmpty && !recentlyViewedProducts.isEmpty {
-//                return "Yang anda cari sebelumnya"
-//            } else if !searchText.isEmpty {
-//                return nil
-//            }
-//            return nil
-//        default:
-//            return nil
-//        }
-//    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch tableView {
         case searchTableView:
             return displayedSearchedProducts.count
         default:
-            return 2
+            if displayedProducts.count % 2 == 0 {
+                return (displayedProducts.count / 2) + 1
+            } else {
+                return ((displayedProducts.count + 1) / 2) + 1
+            }
         }
     }
     
@@ -127,25 +119,20 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
                     }
                     cell.categoryCollectionView.alpha = 0
                     cell.categoryCollectionView.fadeIn()
+                    self?.tableView.reloadData()
                 }
                 cell.onCategorySelectorTap = { [weak self] _category in
-                    guard self != nil,
-                          let productCell = tableView.cellForRow(
-                            at: IndexPath(row: 1, section: 0)
-                          ) as? HomeProductCell
-                    else { return }
+                    guard let _self = self else { return }
                     if _category.name == "Semua" {
-                        productCell.displayedProducts = productCell.products
+                        _self.displayedProducts = _self.products
+                        _self.tableView.reloadData()
                     } else {
-                        let filteredProducts: [SHBuyerProductResponse] = productCell.products.filter { product in
+                        let filteredProducts: [SHBuyerProductResponse] = _self.products.filter { product in
                             return product.categories.contains(where: {$0.name == _category.name})
                         }
-                        productCell.displayedProducts = filteredProducts
+                        _self.displayedProducts = filteredProducts
+                        _self.tableView.reloadData()
                     }
-                    productCell.collectionView.reloadData()
-                    productCell.collectionView.fadeOut()
-                    productCell.collectionView.fadeIn()
-                    productCell.sorterButton.setActiveButtonTitle(string: "Urutkan berdasarkan: acak")
                 }
                 cell.onSearchBarTextChange = { [weak self] searchText in
                     guard let _self = self else { return }
@@ -154,11 +141,6 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
                         _self.searchText = searchText
                     } else {
                         let filteredProducts: [SHBuyerProductResponse] = _self.products.filter { product in
-//                            if let name = product.name.lowercased() {
-//                                return name.contains(searchText.lowercased())
-//                            } else {
-//                                return false
-//                            }
                             return product.name.lowercased().contains(searchText.lowercased())
                         }
                         _self.displayedSearchedProducts = filteredProducts
@@ -172,34 +154,31 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
                 }
                 return cell
                 
-            case rowType.product.rawValue:
-                guard let cell = tableView.dequeueReusableCell(
-                    withIdentifier: "\(HomeProductCell.self)",
-                    for: indexPath
-                ) as? HomeProductCell else {
-                    let loadingCell = tableView.dequeueReusableCell(withIdentifier: "loadingCell", for: indexPath)
-                    loadingCell.contentView.heightAnchor.constraint(equalToConstant: 400).isActive = true
-                    return loadingCell
-                }
-                cell.selectionStyle = .none
-                cell.onProductLoad = { [weak self] in
-                    guard let _self = self else { return }
-                    _self.products = cell.products
-                    cell.sorterButton.fadeIn()
-                    cell.loadingIndicator.stopAnimating()
-                    cell.collectionView.fadeOut()
-                    cell.collectionView.fadeIn()
-                }
-                cell.didSelectProduct = { [weak self] product in
-                    guard let _self = self else { return }
-                    let buyerSixVC = BuyerSixViewController()
-                    buyerSixVC.buyerResponse = product
-                    _self.tabBarController?.navigationController?.pushViewController(buyerSixVC, animated: true)
-                }
-                
-                return cell
             default:
-                return UITableViewCell()
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "\(HomeNewProductCell.self)", for: indexPath) as? HomeNewProductCell else { return UITableViewCell() }
+                cell.selectionStyle = .none
+                let row = indexPath.row
+                let leftProduct = self.displayedProducts[(row * 2) - 2]
+                var rightProduct: SHBuyerProductResponse?
+                if (row * 2) - 1 < self.displayedProducts.count - 1  {
+                    rightProduct = self.displayedProducts[(row * 2) - 1]
+                } else {
+                    rightProduct = nil
+                }
+                cell.fill(with: leftProduct, and: rightProduct)
+                cell.onRightProductTap = { [weak self] in
+                    guard let _self = self else { return }
+                    let viewController = BuyerSixViewController()
+                    viewController.buyerResponse = rightProduct
+                    _self.tabBarController?.navigationController?.pushViewController(viewController, animated: true)
+                }
+                cell.onLeftProductTap = { [weak self] in
+                    guard let _self = self else { return }
+                    let viewController = BuyerSixViewController()
+                    viewController.buyerResponse = leftProduct
+                    _self.tabBarController?.navigationController?.pushViewController(viewController, animated: true)
+                }
+                return cell
             }
         }
     }
@@ -228,19 +207,19 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     }
     
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        scrollToBottomButton.fadeOut()
+        sorterButton.fadeOut()
     }
     
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            scrollToBottomButton.fadeIn()
+            sorterButton.fadeIn()
         } else {
-            scrollToBottomButton.fadeOut()
+            sorterButton.fadeOut()
         }
     }
     
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        scrollToBottomButton.fadeIn()
+        sorterButton.fadeIn()
     }
     
     private func setupSearchTableView() {
@@ -272,28 +251,23 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
         tabBarController?.navigationController?.isNavigationBarHidden = true
     }
     
-    private func prepareScrollButton() {
-        view.addSubview(scrollToBottomButton)
+    private func setupSorterButton() {
+        view.addSubview(sorterButton)
         NSLayoutConstraint.activate([
-            scrollToBottomButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20),
-            scrollToBottomButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
-            scrollToBottomButton.heightAnchor.constraint(equalToConstant: 40),
-            scrollToBottomButton.widthAnchor.constraint(equalToConstant: 40)
+            sorterButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20),
+            sorterButton.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
+            sorterButton.heightAnchor.constraint(equalToConstant: 40),
+            sorterButton.widthAnchor.constraint(equalToConstant: 40)
         ])
-        scrollToBottomButton.addTarget(self, action: #selector(onScrollButtonTap), for: .touchUpInside)
-    }
-    
-    @objc func onScrollButtonTap() {
-        if isOnTop {
-            tableView.scrollToRow(at: IndexPath(row: 1, section: 0), at: .bottom, animated: true)
-            isOnTop = false
-            scrollToBottomButton.setImage(UIImage(systemName: "arrow.up"), for: .normal)
-        }
-        else {
-            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .bottom, animated: true)
-            isOnTop = true
-            scrollToBottomButton.setImage(UIImage(systemName: "arrow.down"), for: .normal)
-        }
+        sorterButton.showsMenuAsPrimaryAction = true
+        sorterButton.menu = UIMenu(
+            title: "Urutkan berdasarkan:",
+            image: nil,
+            identifier: nil,
+            options: .displayInline,
+            children: sortMenuElements().reversed()
+        )
+        handleSorterButtonShowing()
     }
     
     @objc private func hideKeyboard() {
@@ -303,6 +277,7 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     private func registerCells() {
         tableView.register(HomeHeaderCell.self, forCellReuseIdentifier: "\(HomeHeaderCell.self)")
         tableView.register(HomeProductCell.self, forCellReuseIdentifier: "\(HomeProductCell.self)")
+        tableView.register(HomeNewProductCell.self, forCellReuseIdentifier: "\(HomeNewProductCell.self)")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "loadingCell")
         searchTableView.register(UITableViewCell.self, forCellReuseIdentifier: "searchHistoryCell")
         searchTableView.register(HomeSearchResultCell.self, forCellReuseIdentifier: "\(HomeSearchResultCell.self)")
@@ -314,17 +289,99 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     }
     
     @objc private func refreshPage() {
-        guard let headerCell = tableView.dequeueReusableCell(withIdentifier: "\(HomeHeaderCell.self)", for: IndexPath(row: 0, section: 0)) as? HomeHeaderCell,
-              let productCell = tableView.dequeueReusableCell(withIdentifier: "\(HomeProductCell.self)", for: IndexPath(row: 0, section: 0)) as? HomeProductCell
-        else { return }
-        let group = DispatchGroup()
-        group.enter()
-        headerCell.loadBanners()
-        headerCell.loadCategories()
-        productCell.loadProducts()
-        group.leave()
-        group.notify(queue: .main) {
-            self.refControl.endRefreshing()
+        api.getBuyerProducts { [weak self] result, error in
+            guard let _self = self, let _result = result else {
+                let alert = UIAlertController(title: "Error", message: "Terjadi kesalahan ketika mengambil data.", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .destructive)
+                alert.addAction(action)
+                self?.present(alert, animated: true)
+                return
+            }
+            _self.products = _result
+            _self.displayedProducts = _self.products
+            _self.tableView.reloadData()
+            _self.refControl.endRefreshing()
+        }
+    }
+    
+    private func loadProducts() {
+        api.getBuyerProducts { [weak self] result, error in
+            guard let _self = self, let _result = result else {
+                let alert = UIAlertController(title: "Error", message: "Terjadi kesalahan ketika mengambil data.", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .destructive)
+                alert.addAction(action)
+                self?.present(alert, animated: true)
+                return
+            }
+            _self.products = _result
+            _self.displayedProducts = _self.products
+            _self.tableView.reloadData()
+        }
+    }
+    
+    private func sortMenuElements() -> [UIMenuElement] {
+        var menus: [UIMenuElement] = []
+        
+        let sortByNameAscending = UIAction(
+            title: "Nama (A - Z)",
+            image: UIImage(systemName: "a.square"),
+            identifier: nil
+        ) { [weak self] _ in
+            guard let _self = self else { return }
+            _self.displayedProducts.sort(by: { ($0.name) < ($1.name) })
+            _self.tableView.reloadData()
+        }
+        let sortByNameDescending = UIAction(
+            title: "Nama (Z - A)",
+            image: UIImage(systemName: "z.square"),
+            identifier: nil
+        ) { [weak self] _ in
+            guard let _self = self else { return }
+            _self.displayedProducts.sort(by: { ($0.name) > ($1.name) })
+            _self.tableView.reloadData()
+        }
+        let sortByPriceAscending = UIAction(
+            title: "Harga (rendah ke tinggi)",
+            image: UIImage(systemName: "0.square"),
+            identifier: nil
+        ) { [weak self] _ in
+            guard let _self = self else { return }
+            _self.displayedProducts.sort(by: { ($0.basePrice) < ($1.basePrice) })
+            _self.tableView.reloadData()
+        }
+        let sortByPriceDescending = UIAction(
+            title: "Harga (tinggi ke rendah)",
+            image: UIImage(systemName: "9.square"),
+            identifier: nil
+        ) { [weak self] _ in
+            guard let _self = self else { return }
+            _self.displayedProducts.sort(by: { ($0.basePrice) > ($1.basePrice) })
+            _self.tableView.reloadData()
+        }
+        let random = UIAction(
+            title: "Acak",
+            image: UIImage(systemName: "arrow.triangle.swap"),
+            identifier: nil
+        ) { [weak self] _ in
+            guard let _self = self else { return }
+            _self.displayedProducts.shuffle()
+            _self.tableView.reloadData()
+        }
+        menus.append(sortByNameAscending)
+        menus.append(sortByNameDescending)
+        menus.append(sortByPriceAscending)
+        menus.append(sortByPriceDescending)
+        menus.append(random)
+        
+        return menus
+    }
+    
+    private func handleSorterButtonShowing() {
+        let isSorterButtonShown: Bool = UserDefaults.standard.bool(forKey: "isHomeProductSorterShown")
+        if isSorterButtonShown {
+            sorterButton.alpha = 1
+        } else {
+            sorterButton.alpha = 0
         }
     }
     

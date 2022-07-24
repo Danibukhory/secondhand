@@ -35,7 +35,7 @@ extension UIView {
     }
     
     func fadeInWithScale(
-        _ duration: TimeInterval = 0.15,
+        _ duration: TimeInterval = 0.5,
         delay: TimeInterval = 0.0,
         completion: @escaping ((Bool) -> Void) = { (finished: Bool) -> Void in }
     ) {
@@ -43,7 +43,7 @@ extension UIView {
         UIView.animate(
             withDuration: duration,
             delay: delay,
-            options: UIView.AnimationOptions.curveEaseIn,
+            options: .transitionCurlUp,
             animations: {
                 self.alpha = 1.0
                 self.transform = CGAffineTransform(scaleX: 1, y: 1)
@@ -67,14 +67,14 @@ extension UIView {
     }
     
     func fadeOutWithScale(
-        _ duration: TimeInterval = 0.15,
+        _ duration: TimeInterval = 0.5,
         delay: TimeInterval = 0.0,
         completion: @escaping (Bool) -> Void = { (finished: Bool) -> Void in}
     ) {
         UIView.animate(
             withDuration: duration,
             delay: delay,
-            options: UIView.AnimationOptions.curveEaseIn,
+            options: .transitionCurlUp,
             animations: {
                 self.alpha = 0.0
                 self.transform = CGAffineTransform(scaleX: 0.85, y: 0.85)

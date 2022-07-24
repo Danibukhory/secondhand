@@ -89,12 +89,12 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
+        let notification = notifications[row]
         switch notifications.count {
         case 0:
             tableView.deselectRow(at: indexPath, animated: true)
             return
         default:
-            let notification = notifications[row]
             switch notification.status {
             case "bid":
 //                guard let user = notification.user else { return }
@@ -122,19 +122,34 @@ final class NotificationViewController: UITableViewController, UIGestureRecogniz
                     let categories: [SHCategoryResponse] = {
                         var array: [SHCategoryResponse] = []
                         for category in _result.categories {
-                            array.append(category!)
+                            array.append(category)
                         }
                         return array
                     }()
-                    viewController.buyerResponse = SHBuyerProductResponse(id: _result.id ?? 0, name: _result.name ?? "nama tidak tersedia", description: _result.description ?? "deskripsi tidak tersedia", basePrice: _result.basePrice ?? 0, imageURL: _result.imageURL ?? "", imageName: _result.imageName ?? "", location: _result.location ?? "lokasi tidak tersedia", userID: _result.userID ?? 0, status: _result.status ?? "available", createdAt: _result.createdAt ?? "", updatedAt: _result.updatedAt ?? "", categories: categories)
+                    viewController.buyerResponse = SHBuyerProductResponse(
+                        id: _result.id,
+                        name: _result.name,
+                        description: _result.description,
+                        basePrice: _result.basePrice,
+                        imageURL: _result.imageURL,
+                        imageName: _result.imageName,
+                        location: _result.location,
+                        userID: _result.userID,
+                        status: _result.status,
+                        createdAt: _result.createdAt,
+                        updatedAt: _result.updatedAt,
+                        categories: categories
+                    )
                     _self.tabBarController?.navigationController?.pushViewController(viewController, animated: true)
                 }
             default:
                 let viewController = NotificationDetailViewController(notification: notification, style: .insetGrouped)
                 navigationController?.pushViewController(viewController, animated: true)
             }
-            
         }
+        self.api.setNotificationAsRead(notificationId: "\(notification.id)")
+        guard let cell = tableView.cellForRow(at: indexPath) as? NotificationCell else { return }
+        cell.isRead = true
     }
     
     override func tableView(

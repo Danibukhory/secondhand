@@ -60,6 +60,15 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
         return backView
     }()
     
+    var profileImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.clipsToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 12
+        return imageView
+    }()
+    
     @objc func pickImageFromLibrary() {
         lazy var config = PHPickerConfiguration(photoLibrary: .shared())
         config.selectionLimit = 1
@@ -104,6 +113,7 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
         
         containerView.addSubviews(
             backgroundProfilePic,
+            profileImageView,
             labelName,
             labelCity,
             labelAddress,
@@ -198,6 +208,11 @@ final class CompleteAccountViewController: UIViewController, UITextFieldDelegate
             backgroundProfilePic.centerXAnchor.constraint(equalTo: margin.centerXAnchor),
             backgroundProfilePic.widthAnchor.constraint(equalToConstant: 96),
             backgroundProfilePic.heightAnchor.constraint(equalToConstant: 96),
+            
+            profileImageView.centerXAnchor.constraint(equalTo: backgroundProfilePic.centerXAnchor),
+            profileImageView.centerYAnchor.constraint(equalTo: backgroundProfilePic.centerYAnchor),
+            profileImageView.widthAnchor.constraint(equalTo: backgroundProfilePic.widthAnchor),
+            profileImageView.heightAnchor.constraint(equalTo: backgroundProfilePic.heightAnchor),
             
             photoIcon.centerXAnchor.constraint(equalTo: backgroundProfilePic.centerXAnchor),
             photoIcon.centerYAnchor.constraint(equalTo: backgroundProfilePic.centerYAnchor),
@@ -296,6 +311,7 @@ extension CompleteAccountViewController: PHPickerViewControllerDelegate {
         imv.backgroundColor = .clear
         imv.image = image
         imv.layer.cornerRadius = 12
+        imv.contentMode = .scaleAspectFill
         return imv
     }
     
@@ -314,6 +330,15 @@ extension CompleteAccountViewController: PHPickerViewControllerDelegate {
             textFieldCity.text = _user.value(forKey: "city") as? String
             textFieldPhone.text = _user.value(forKey: "phone_number") as? String
             textFieldAddress.text = _user.value(forKey: "address") as? String
+        }
+        if !user.isEmpty {
+            let user = user[0]
+            guard let imageUrl = user.value(forKey: "image_url") as? String else { return }
+            print(imageUrl)
+            guard !imageUrl.isEmpty else { return }
+            photoIcon.image = nil
+            profileImageView.kf.indicatorType = .activity
+            profileImageView.kf.setImage(with: URL(string: imageUrl), options: [.cacheOriginalImage, .transition(.fade(0.25))])
         }
     }
 }
