@@ -28,7 +28,9 @@ final class ListSellingViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.title = "Daftar Jual Saya"
+        self.navigationItem.title = "Daftar Jual Saya"
+        self.navigationController?.navigationBar.useSHLargeTitle()
+
         tableView.register(SellerCardCell.self, forCellReuseIdentifier: "\(SellerCardCell.self)")
         tableView.register(MyProductCell.self, forCellReuseIdentifier: "\(MyProductCell.self)")
         tableView.separatorStyle = .none
