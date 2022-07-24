@@ -28,6 +28,7 @@ final class DetailProductViewController: UIViewController {
     private lazy var descTextfield = SHLongRoundedTextfield(frame: CGRect.zero)
     private lazy var priceTextfield: SHRoundedTextfield = {
         let textfield = SHRoundedTextfield(frame: CGRect.zero)
+        textfield.clearButtonMode = .whileEditing
         textfield.keyboardType = .numberPad
         textfield.addTarget(self, action: #selector(onProductValueBeginEditing), for: .editingDidBegin)
         textfield.addTarget(self, action: #selector(onProductValueEndEditing), for: .editingDidEnd)
@@ -75,7 +76,13 @@ final class DetailProductViewController: UIViewController {
         return shapeView
     }()
     
-    var loadingView = SHBlurLoadingView()
+    var loadingView: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView()
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.color = UIColor(rgb: 0x7126B5)
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
     
     @objc func pickImageFromLibrary() {
         lazy var config = PHPickerConfiguration(photoLibrary: .shared())
@@ -313,7 +320,7 @@ final class DetailProductViewController: UIViewController {
             buttonPublish.trailingAnchor.constraint(equalTo: margin.trailingAnchor),
             
             loadingView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loadingView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            loadingView.centerYAnchor.constraint(equalTo: buttonPublish.centerYAnchor)
         ])
         
         for photoFromLibrary in photosFromLibrary {
@@ -366,7 +373,9 @@ final class DetailProductViewController: UIViewController {
     
     private func uploadProduct() {
         DispatchQueue.main.async {
-            self.loadingView.fadeInWithScale()
+            self.buttonPublish.fadeOutWithScale()
+            self.buttonPreview.fadeOutWithScale()
+            self.loadingView.startAnimating()
             let callAPI = SecondHandAPI()
             callAPI.postProductAsSeller(
                 with: self.nameTextfield.text!,
@@ -377,6 +386,9 @@ final class DetailProductViewController: UIViewController {
                 productPicture: self.photosFromLibrary[0].image!
             ) { [weak self] response in
                 guard let _self = self else {
+                    self?.loadingView.stopAnimating()
+                    self?.buttonPreview.fadeInWithScale()
+                    self?.buttonPublish.fadeInWithScale()
                     let alert = UIAlertController(title: "Error", message: "Error terjadi.", preferredStyle: .alert)
                     let action = UIAlertAction(title: "OK", style: .default)
                     alert.addAction(action)
@@ -391,14 +403,18 @@ final class DetailProductViewController: UIViewController {
                         _self.dismiss(animated: true)
                     }
                     alert.addAction(action)
-                    _self.loadingView.fadeOutWithScale()
+                    _self.loadingView.stopAnimating()
+                    _self.buttonPublish.fadeInWithScale()
+                    _self.buttonPreview.fadeInWithScale()
                     _self.present(alert, animated: true)
                 default:
                     let alert = UIAlertController(title: "Error", message: "Upload produk gagal.", preferredStyle: .alert)
                     let action = UIAlertAction(title: "OK", style: .default)
                     alert.addAction(action)
                     print(String(describing: response.response?.statusCode))
-                    _self.loadingView.fadeOutWithScale()
+                    _self.loadingView.stopAnimating()
+                    _self.buttonPublish.fadeInWithScale()
+                    _self.buttonPreview.fadeInWithScale()
                     _self.present(alert, animated: true)
                 }
             }

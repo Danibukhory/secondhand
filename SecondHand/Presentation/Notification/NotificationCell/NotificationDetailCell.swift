@@ -106,20 +106,20 @@ final class NotificationDetailCell: UITableViewCell {
     }
     
     func fill(with data: SHBuyerProductDetailResponse) {
-        if let imageUrl = URL(string: data.user?.imageURL ?? "") {
+        if let imageUrl = URL(string: data.user.imageURL ?? "") {
             sellerImageView.kf.setImage(
                 with: imageUrl,
                 options: [.transition(.fade(0.2))]
             )
         }
         sellerNameLabel.setTitle(
-            text: data.user?.fullName ?? "Nama tidak tersedia",
+            text: data.user.fullName,
             size: 14,
             weight: .medium,
             color: .black
         )
         sellerCityLabel.setTitle(
-            text: data.user?.city ?? "Kota tidak tersedia",
+            text: data.user.city ?? "Kota tidak tersedia",
             size: 10,
             weight: .regular,
             color: UIColor(rgb: 0x8A8A8A)

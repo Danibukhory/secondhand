@@ -11,8 +11,8 @@ final class SettingsViewController: UITableViewController {
     
     var homeProductSorterToggle: UISwitch = {
         let toggle = UISwitch()
-        let isActive = UserDefaults.standard.bool(forKey: "isHomeProductSorterShown")
-        toggle.setOn(isActive, animated: true)
+        let isSorterButtonShown: Bool = UserDefaults.standard.bool(forKey: "isHomeProductSorterShown")
+        toggle.setOn(isSorterButtonShown, animated: true)
         toggle.onTintColor = UIColor(rgb: 0x7126B5)
         return toggle
     }()

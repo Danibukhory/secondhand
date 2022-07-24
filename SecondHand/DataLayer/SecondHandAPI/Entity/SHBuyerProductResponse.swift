@@ -32,15 +32,15 @@ struct SHBuyerProductResponse: Codable {
 }
 
 struct SHBuyerProductDetailResponse: Codable {
-    let id: Int?
-    let name, description: String?
-    let basePrice: Int?
-    let imageURL: String?
-    let imageName, location: String?
-    let userID: Int?
-    let status, createdAt, updatedAt: String?
-    let categories: [SHCategoryResponse?]
-    let user: SHUserResponse?
+    let id: Int
+    let name, description: String
+    let basePrice: Int
+    let imageURL: String
+    let imageName, location: String
+    let userID: Int
+    let status, createdAt, updatedAt: String
+    let categories: [SHCategoryResponse]
+    let user: SHUserResponse
     
     enum CodingKeys: String, CodingKey {
         case id, name
