@@ -96,9 +96,7 @@ struct SecondHandAPI {
         itemId: String,
         _ completionHandler: @escaping (SHBuyerProductDetailResponse?, AFError?) -> Void
     ) {
-        guard let _accessToken = accessToken else { return }
         let headers: HTTPHeaders = [
-            "access_token" : _accessToken,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         AF.request(

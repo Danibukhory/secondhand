@@ -185,10 +185,6 @@ final class OffererViewController: UITableViewController {
                                 _self.popupView?.isPresenting = true
                             }
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            _self.popupView?.backgroundColor = UIColor(rgb: 0x73CA5C)
-                            _self.popupView?.isPresenting = true
-                        }
                     }
                     _self.tabBarController?.navigationController?.present(viewController, animated: false)
                 default:
