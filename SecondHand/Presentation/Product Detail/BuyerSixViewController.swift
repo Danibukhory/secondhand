@@ -492,8 +492,10 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
             guard let _self = self, let _result = result else {
                 return
             }
-            _self.productOwnerImageView.image = UIImage(named: "img-sh-offerer-placeholder")
+            _self.productOwnerImageView.image = UIImage(systemName: "person.crop.square.fill")?.withTintColor(UIColor(rgb: 0x7126B5), renderingMode: .alwaysOriginal)
+            _self.productOwnerImageView.contentMode = .scaleAspectFit
             if let url = URL(string: _result.user.imageURL ?? "") {
+                _self.productOwnerImageView.contentMode = .scaleAspectFill
                 _self.productOwnerImageView.kf.indicatorType = .activity
                 _self.productOwnerImageView.kf.setImage(with: url, options: [.transition(.fade(0.25))])
             }
