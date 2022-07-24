@@ -229,15 +229,6 @@
 			path = AcceptedOffer;
 			sourceTree = "<group>";
 		};
-		38822BBE286AED3D006B2C6C /* DataLayer */ = {
-			isa = PBXGroup;
-			children = (
-				38822BBF286AED43006B2C6C /* SecondHandAPI */,
-				7B878B7D2875D16D00748772 /* IndonesiaCityList.swift */,
-			);
-			path = DataLayer;
-			sourceTree = "<group>";
-		};
 		38822BBF286AED43006B2C6C /* SecondHandAPI */ = {
 			isa = PBXGroup;
 			children = (
@@ -375,7 +366,6 @@
 		6E78118028522ED600104FE1 /* SecondHand */ = {
 			isa = PBXGroup;
 			children = (
-				38822BBE286AED3D006B2C6C /* DataLayer */,
 				E9C1F3322858ABC700489969 /* Presentation */,
 				E9C1F3312858ABC200489969 /* Data */,
 				E9C1F3302858ABB300489969 /* App */,
@@ -496,6 +486,8 @@
 		E9C1F3312858ABC200489969 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				38822BBF286AED43006B2C6C /* SecondHandAPI */,
+				7B878B7D2875D16D00748772 /* IndonesiaCityList.swift */,
 				6E78118A28522ED600104FE1 /* SecondHand.xcdatamodeld */,
 			);
 			path = Data;

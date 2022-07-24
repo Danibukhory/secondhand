@@ -26,7 +26,7 @@ class AccountTableViewController: UITableViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "profileCell")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "notSignedInCell")
         tableView.separatorStyle = .none
-        title = "Akun Saya"
+        navigationItem.title = "Akun Saya"
         navigationController?.navigationBar.useSHLargeTitle()
     }
     
@@ -107,7 +107,6 @@ class AccountTableViewController: UITableViewController {
                 let navigationController = UINavigationController(rootViewController: vc)
                 navigationController.modalPresentationStyle = .fullScreen
                 self.tabBarController?.navigationController?.present(navigationController, animated: true)
-//                self.navigationController?.present(navigationController, animated: true)
             } else {
                 let viewController = AccountDetailViewController()
                 navigationController?.pushViewController(viewController, animated: true)
@@ -115,9 +114,7 @@ class AccountTableViewController: UITableViewController {
         case 1:
             let viewController = CompleteAccountViewController()
             viewController.delegate = self
-            let navigationController = UINavigationController(rootViewController: viewController)
-            navigationController.modalPresentationStyle = .fullScreen
-            self.present(navigationController, animated: true)
+            self.navigationController?.pushViewController(viewController, animated: true)
         case 2:
             let viewController = SettingsViewController(style: .insetGrouped)
             navigationController?.pushViewController(viewController, animated: true)
