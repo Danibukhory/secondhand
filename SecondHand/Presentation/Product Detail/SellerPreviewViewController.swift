@@ -223,8 +223,6 @@ class SellerPreviewViewController: UIViewController {
     
     var publishButton: SHButton = {
         let button = SHButton(frame: CGRect.zero, title: "Terbitkan", type: .filled, size: .regular)
-        button.addTarget(self, action: #selector(publishButtonAction), for: .touchUpInside)
-        
         return button
     }()
     
@@ -323,8 +321,7 @@ class SellerPreviewViewController: UIViewController {
             publishButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -24),
             publishButton.heightAnchor.constraint(equalToConstant: 48),
             publishButton.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
-            publishButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
+            publishButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
@@ -336,6 +333,7 @@ class SellerPreviewViewController: UIViewController {
         self.pageControl.currentPageIndicatorTintColor = .white
         self.view.addSubview(pageControl)
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: .valueChanged)
+        publishButton.addTarget(self, action: #selector(publishButtonAction), for: .touchUpInside)
     }
     @objc func changePage(sender: AnyObject) -> () {
             let x = CGFloat(pageControl.currentPage) * collectionView.frame.size.width

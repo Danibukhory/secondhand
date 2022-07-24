@@ -23,6 +23,7 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     var displayedSearchedProducts: [SHBuyerProductResponse] = []
     var recentlyViewedProducts: [SHBuyerProductResponse] = []
     var searchText: String = ""
+    var isShowingSorterButton: Bool = false
     
     private typealias rowType = HomeViewCellRowType
     
@@ -160,7 +161,7 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
                 let row = indexPath.row
                 let leftProduct = self.displayedProducts[(row * 2) - 2]
                 var rightProduct: SHBuyerProductResponse?
-                if (row * 2) - 1 < self.displayedProducts.count - 1  {
+                if (row * 2) - 1 <= self.displayedProducts.count - 1  {
                     rightProduct = self.displayedProducts[(row * 2) - 1]
                 } else {
                     rightProduct = nil
@@ -211,15 +212,19 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     }
     
     override func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if !decelerate {
-            sorterButton.fadeIn()
-        } else {
-            sorterButton.fadeOut()
+        if isShowingSorterButton {
+            if !decelerate {
+                sorterButton.fadeIn()
+            } else {
+                sorterButton.fadeOut()
+            }
         }
     }
     
     override func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        sorterButton.fadeIn()
+        if isShowingSorterButton {
+            sorterButton.fadeIn()
+        }
     }
     
     private func setupSearchTableView() {
@@ -378,6 +383,7 @@ final class HomeViewController: UITableViewController, UIGestureRecognizerDelega
     
     private func handleSorterButtonShowing() {
         let isSorterButtonShown: Bool = UserDefaults.standard.bool(forKey: "isHomeProductSorterShown")
+        self.isShowingSorterButton = isSorterButtonShown
         if isSorterButtonShown {
             sorterButton.alpha = 1
         } else {
