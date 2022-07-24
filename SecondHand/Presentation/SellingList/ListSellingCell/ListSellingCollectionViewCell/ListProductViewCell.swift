@@ -127,7 +127,7 @@ final class ListProductViewCell: UICollectionViewCell {
             color: .black
         )
         productCategoryLabel.setTitle(
-            text: "Not available",
+            text: data?.status ?? "Tersedia",
             size: 10,
             weight: .regular,
             color: .secondaryLabel
