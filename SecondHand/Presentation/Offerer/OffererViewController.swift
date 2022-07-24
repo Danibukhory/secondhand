@@ -309,6 +309,17 @@ final class OffererViewController: UITableViewController {
     
     private func setupNavigationBar() {
         title = "Info Penawar"
+        let button = UIBarButtonItem(
+            image: UIImage(systemName: "arrow.backward"),
+            style: .plain,
+            target: self,
+            action: #selector(dismissView)
+        )
+        navigationItem.leftBarButtonItem = button
+    }
+    
+    @objc private func dismissView() {
+        self.navigationController?.popViewController(animated: true)
     }
     
     private func setupLoadingView() {
