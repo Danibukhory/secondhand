@@ -167,7 +167,7 @@ final class CompleteAccountViewController: UIViewController { //UITextFieldDeleg
                     address: self.textFieldAddress.text!,
                     accountPicture: self.photosFromLibrary[0].image!
                 ) { response in
-                    if response.response?.statusCode == 201 {
+                    if response.response?.statusCode == 200 {
                         print("Upload successful")
                     } else {
                         print("Upload failed.")
