@@ -8,6 +8,9 @@
 import UIKit
 
 final class SellingListPageViewController: UIViewController {
+    
+    private lazy var popUpView: SHPopupView = SHPopupView(frame: CGRect.zero, popupType: .success, text: "Produk berhasil diterbitkan.")
+    var isPopUpEnabled: Bool = false
 
     var pages = [UIViewController]()
     let items  = ["Produk","Diminati" ,"Terjual"]
@@ -127,6 +130,7 @@ final class SellingListPageViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         productButton.isUserInteractionEnabled = false
+        showPopUpWhenTrue()
         setup()
         configure()
     }
@@ -264,6 +268,24 @@ final class SellingListPageViewController: UIViewController {
                     button.tintColor = .label
                 }
             }
+        }
+    }
+}
+
+extension SellingListPageViewController {
+    func showPopUpWhenTrue() {
+        if self.isPopUpEnabled == false {
+            view.addSubview(popUpView)
+            popUpView.translatesAutoresizingMaskIntoConstraints = false
+            popUpView.isPresenting.toggle()
+            
+            NSLayoutConstraint.activate([
+                popUpView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+                popUpView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+                popUpView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            ])
+            
+            self.isPopUpEnabled = false
         }
     }
 }
