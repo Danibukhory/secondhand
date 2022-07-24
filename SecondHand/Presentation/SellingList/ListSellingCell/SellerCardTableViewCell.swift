@@ -10,6 +10,9 @@ import UIKit
 
 final class SellerCardCell: UITableViewCell {
     
+    typealias DidClickedEditButtonAction = () -> Void
+    var didClickedEditButtonAction: DidClickedEditButtonAction?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -69,11 +72,15 @@ final class SellerCardCell: UITableViewCell {
             attributes: [.font : UIFont(name: "Poppins-Regular", size: 12)!]
         )
         button.setAttributedTitle(attributedTitle, for: .normal)
+        button.addTarget(self, action: #selector(didClickedEditButton), for: .touchUpInside)
         return button
     }()
 }
 
 extension SellerCardCell {
+    @objc private func didClickedEditButton() {
+        didClickedEditButtonAction?()
+    }
     func fill(userDetails data: SHUserResponse?) {
         let urlString = data?.imageURL
         if let url = URL(string: urlString ?? "") {
@@ -90,8 +97,8 @@ extension SellerCardCell {
             self.sellerNameLabel.text = "Nama tidak tersedia"
         }
         
-        if let city = data?.city {
-            self.sellerCityLabel.text = city
+        if !(data?.city!.isEmpty)! {
+            self.sellerCityLabel.text = data?.city!
         } else {
             self.sellerCityLabel.text = "Kota tidak tersedia"
         }

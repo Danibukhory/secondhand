@@ -8,12 +8,25 @@
 import UIKit
 
 final class MyProductCell: UITableViewCell {
-    private lazy var productDetails: [SHSellerProductResponse?]? = nil
-    private lazy var orderDetails: [SHSellerOrderResponse?]? = nil
+    private lazy var productDetails: [SHSellerProductResponse]? = nil
+    private lazy var orderDetails: [SHSellerOrderResponse]? = nil
+    private lazy var sellerSoldProduct: [SHSellerProductResponse]? = {
+        guard let _sellerProduct = productDetails else { return nil }
+        let soldProduct = _sellerProduct.filter { product in
+            return product.status == "sold"
+        }
+        return soldProduct
+    }()
     
     typealias DidSelectCategory = (Int) -> Void
     var didSelectCategory: DidSelectCategory?
-    var selectedCategory: Int = 0
+    var selectedCategory: Int?
+    
+    typealias DidSelectAddProduct = () -> Void
+    var didSelectAddProduct: DidSelectAddProduct?
+    
+    typealias DidSelectMyProduct = (SHSellerProductResponse) -> Void
+    var didSelectMyProduct: DidSelectMyProduct?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -29,7 +42,7 @@ final class MyProductCell: UITableViewCell {
     
     private lazy var categoryLabel: [String] = ["Produk", "Diminati", "Terjual"]
     private lazy var categoryImage: [String] = ["img-sh-box","img-sh-heart","img-sh-dollar-sign"]
-    private lazy var collectionCategoryView: UICollectionView = {
+    var collectionCategoryView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         flowLayout.minimumInteritemSpacing = 16
@@ -39,7 +52,7 @@ final class MyProductCell: UITableViewCell {
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
         return collectionView
     }()
-    private lazy var collectionProductView: UICollectionView = {
+    var collectionProductView: UICollectionView = {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .vertical
         flowLayout.minimumInteritemSpacing = 16
@@ -91,8 +104,9 @@ extension MyProductCell {
         collectionProductView.backgroundColor = .clear
         collectionProductView.register(ListProductDashedCell.self, forCellWithReuseIdentifier: "\(ListProductDashedCell.self)")
         collectionProductView.register(ListProductViewCell.self, forCellWithReuseIdentifier: "\(ListProductViewCell.self)")
+        collectionProductView.register(NoProductAvailableCell.self, forCellWithReuseIdentifier: "\(NoProductAvailableCell.self)")
     }
-    func fill(productDetails dataProduct: [SHSellerProductResponse?]?, orderDetails dataOrder: [SHSellerOrderResponse]?) {
+    func fill(productDetails dataProduct: [SHSellerProductResponse]?, orderDetails dataOrder: [SHSellerOrderResponse]?) {
         self.productDetails = dataProduct
         self.orderDetails = dataOrder
     }
@@ -106,10 +120,20 @@ extension MyProductCell: UICollectionViewDataSource, UICollectionViewDelegate, U
         case collectionProductView:
             if selectedCategory == 0 {
                 return productDetails!.count + 1
-            } else {
-                return orderDetails!.count
             }
-//            return 1
+            else if selectedCategory == 1{
+                if orderDetails!.count > 0 {
+                    return orderDetails!.count
+                } else {
+                    return 1
+                }
+            } else {
+                if sellerSoldProduct!.count > 0 {
+                    return sellerSoldProduct!.count
+                } else {
+                    return 1
+                }
+            }
         default:
             return 1
         }
@@ -137,10 +161,26 @@ extension MyProductCell: UICollectionViewDataSource, UICollectionViewDelegate, U
                     cell2.fill(sellerResponse: productDetails?[ind-1])
                     return cell2
                 }
+            }
+            else if selectedCategory == 1 {
+                if orderDetails!.count > 0 {
+                    guard let cell2 = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ListProductViewCell.self)", for: indexPath) as? ListProductViewCell else { return UICollectionViewCell() }
+                    cell2.fill(sellerResponse: orderDetails?[ind])
+                    return cell2
+                } else {
+                    guard let noCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(NoProductAvailableCell.self)", for: indexPath) as? NoProductAvailableCell else { return UICollectionViewCell() }
+                    return noCell
+                }
+                
             } else {
-                guard let cell2 = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ListProductViewCell.self)", for: indexPath) as? ListProductViewCell else { return UICollectionViewCell() }
-                cell2.fill(sellerResponse: orderDetails?[ind])
-                return cell2
+                if sellerSoldProduct!.count > 0 {
+                    guard let cell3 = collectionView.dequeueReusableCell(withReuseIdentifier: "\(ListProductViewCell.self)", for: indexPath) as? ListProductViewCell else { return UICollectionViewCell() }
+                    cell3.fill(sellerResponse: sellerSoldProduct?[ind])
+                    return cell3
+                } else {
+                    guard let noCell = collectionView.dequeueReusableCell(withReuseIdentifier: "\(NoProductAvailableCell.self)", for: indexPath) as? NoProductAvailableCell else { return UICollectionViewCell() }
+                    return noCell
+                }
             }
         default:
             return UICollectionViewCell()
@@ -153,11 +193,18 @@ extension MyProductCell: UICollectionViewDataSource, UICollectionViewDelegate, U
             return CGSize(width: 120, height: 40)
         case collectionProductView:
             let screenRect: CGRect = UIScreen.main.bounds
-            var width: CGFloat = 0
-            let height: CGFloat = 206
-            let screenWidth: CGFloat = screenRect.width
-            width = (screenWidth - 48) / 2
-            return CGSize(width: width, height: height)
+            if selectedCategory == 1, orderDetails!.count == 0 {
+                return CGSize(width: screenRect.width - 20, height: screenRect.width - 20)
+            }
+            else if selectedCategory == 2, sellerSoldProduct!.count == 0 {
+                return CGSize(width: screenRect.width - 20, height: screenRect.width - 20)
+            } else {
+                var width: CGFloat = 0
+                let height: CGFloat = 206
+                let screenWidth: CGFloat = screenRect.width
+                width = (screenWidth - 48) / 2
+                return CGSize(width: width, height: height)
+            }
         default:
             return CGSize.zero
         }
@@ -170,6 +217,15 @@ extension MyProductCell: UICollectionViewDataSource, UICollectionViewDelegate, U
             guard let cell = collectionView.cellForItem(at: indexPath) as? ListCategoryViewCell else { return }
             cell.selectedState()
             didSelectCategory?(ind)
+            
+        case collectionProductView:
+            if ind == 0, selectedCategory == 0 {
+                didSelectAddProduct?()
+            } else if selectedCategory == 0 {
+                let productItem = productDetails?[ind-1]
+                didSelectMyProduct?(productItem!)
+                print("kepencet")
+            }
         default:
             break
         }
@@ -183,5 +239,31 @@ extension MyProductCell: UICollectionViewDataSource, UICollectionViewDelegate, U
         default:
             break
         }
+    }
+}
+
+final class NoProductAvailableCell: UICollectionViewCell {
+    private lazy var noImageView: UIImageView = UIImageView(image: UIImage(named: "img-no-data"))
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func setupView() {
+        contentView.addSubview(noImageView)
+        noImageView.contentMode = .scaleAspectFit
+        
+        noImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            noImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            noImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            noImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            noImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+        ])
     }
 }

@@ -133,7 +133,7 @@ final class ListProductViewCell: UICollectionViewCell {
             color: .secondaryLabel
         )
         productPriceLabel.setTitle(
-            text: data?.basePrice?.convertToCurrency() ?? "Rp. 0",
+            text: data?.basePrice.convertToCurrency() ?? "Rp. 0",
             size: 14,
             weight: .regular,
             color: .black

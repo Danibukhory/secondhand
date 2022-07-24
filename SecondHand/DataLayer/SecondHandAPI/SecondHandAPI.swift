@@ -70,12 +70,12 @@ struct SecondHandAPI {
     func getSellerProducts(
         _ completionHandler: @escaping ([SHSellerProductResponse]?, AFError?) -> Void
     ) {
-//        guard let _accessToken = accessToken else { return }
+        guard let _accessToken = accessToken else { return }
         
-        let access = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTQ5MjcxODZ9.fghFryd8OPEHztZlrN50PtZj0EC7NWFVj2iPPN9xi1M"
+//        let access = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTQ5MjcxODZ9.fghFryd8OPEHztZlrN50PtZj0EC7NWFVj2iPPN9xi1M"
         let headers: HTTPHeaders = [
-//            "access_token" : _accessToken,
-            "access_token" : access,
+            "access_token" : _accessToken,
+//            "access_token" : access,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         AF.request(
@@ -243,11 +243,11 @@ struct SecondHandAPI {
     func getUserDetails(
         _ completionHandler: @escaping (SHUserResponse?, AFError?) -> Void
     ) {
-//        guard let _accessToken = accessToken else { return }
-        let access = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTQ5MjcxODZ9.fghFryd8OPEHztZlrN50PtZj0EC7NWFVj2iPPN9xi1M"
+        guard let _accessToken = accessToken else { return }
+//        let access = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTQ5MjcxODZ9.fghFryd8OPEHztZlrN50PtZj0EC7NWFVj2iPPN9xi1M"
         
         let headers: HTTPHeaders = [
-            "access_token" : access,
+            "access_token" : _accessToken,
         ]
         AF.request(
             baseUrl + "auth/user",
@@ -505,12 +505,12 @@ struct SecondHandAPI {
     func getSellerOrders(
         _ completionHandler: @escaping ([SHSellerOrderResponse]?, AFError?) -> Void
     ) {
-//        guard let _accessToken = accessToken else { return }
+        guard let _accessToken = accessToken else { return }
         
-        let access = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTQ5MjcxODZ9.fghFryd8OPEHztZlrN50PtZj0EC7NWFVj2iPPN9xi1M"
+//        let access = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5kb2VAbWFpbC5jb20iLCJpYXQiOjE2NTQ5MjcxODZ9.fghFryd8OPEHztZlrN50PtZj0EC7NWFVj2iPPN9xi1M"
         
         let headers: HTTPHeaders = [
-            "access_token" : access, //_accessToken
+            "access_token" : _accessToken,
             "Content-Type" : "application/x-www-form-urlencoded"
         ]
         AF.request(

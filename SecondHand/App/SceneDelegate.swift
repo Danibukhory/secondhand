@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: UIScreen.main.bounds)
-        let tabBarController = ListSellingViewController()
+        let tabBarController = MainTabBarController()
         let navigationController = UINavigationController(rootViewController: tabBarController)
         navigationController.isNavigationBarHidden = true
         window?.rootViewController = navigationController

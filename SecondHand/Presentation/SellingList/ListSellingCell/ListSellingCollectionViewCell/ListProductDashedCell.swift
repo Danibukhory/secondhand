@@ -32,9 +32,8 @@ final class ListProductDashedCell: UICollectionViewCell {
         let width = (screenWidth - 48) / 2
         let shapeRect = CGRect(x: 0, y: 0, width: width, height: 206)
 
-
         shapeLayer.bounds = shapeRect
-        shapeLayer.position = CGPoint(x: 68, y: 103)
+        shapeLayer.position = CGPoint(x: width/2, y: 103) //ipod (x: 68, y: 103)
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.strokeColor = color
         shapeLayer.lineWidth = 2
@@ -51,10 +50,18 @@ final class ListProductDashedCell: UICollectionViewCell {
         return shapeView
     }()
     
+    private lazy var labelAddProduct: UILabel = {
+        let label = UILabel()
+        label.setTitle(text: "Tambah Produk", size: 12, weight: .regular, color: .systemGray)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private func configure() {
         contentView.addSubviews(
             dashedView,
-            photoIcon
+            photoIcon,
+            labelAddProduct
         )
         
         NSLayoutConstraint.activate([
@@ -62,12 +69,17 @@ final class ListProductDashedCell: UICollectionViewCell {
             dashedView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             dashedView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             dashedView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            dashedView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            dashedView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             dashedView.heightAnchor.constraint(equalToConstant: 206),
             
             photoIcon.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             photoIcon.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             photoIcon.widthAnchor.constraint(equalToConstant: 14),
             photoIcon.heightAnchor.constraint(equalToConstant: 14),
+            
+            labelAddProduct.topAnchor.constraint(equalTo: photoIcon.bottomAnchor, constant: 13),
+            labelAddProduct.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
         ])
     }
 }
