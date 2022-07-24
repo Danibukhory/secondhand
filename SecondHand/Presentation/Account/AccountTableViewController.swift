@@ -178,9 +178,9 @@ extension AccountTableViewController: DidClickSaveButtonAction {
             popUpView.isPresenting.toggle()
             
             NSLayoutConstraint.activate([
-                popUpView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: 50),
-                popUpView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor, constant: 16),
-                popUpView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor, constant: -16)
+                popUpView.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+                popUpView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+                popUpView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
             ])
         }
     }

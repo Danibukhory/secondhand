@@ -27,12 +27,10 @@ final class SellerCardCell: UITableViewCell {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = UIColor.systemBackground
         containerView.layer.cornerRadius = 16
-        containerView.layer.borderColor = UIColor.lightGray.cgColor
-        containerView.layer.borderWidth = 1
         containerView.layer.shadowColor = UIColor.black.cgColor
         containerView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        containerView.layer.shadowOpacity = 0.7
-        containerView.layer.shadowRadius = 1.8
+        containerView.layer.shadowOpacity = 0.15
+        containerView.layer.shadowRadius = 4
         return containerView
     }()
     private lazy var imageTopView: UIImageView = {
@@ -57,21 +55,8 @@ final class SellerCardCell: UITableViewCell {
         cityLabel.font = UIFont(name: "Poppins-Light", size: 10)
         return cityLabel
     }()
-    private lazy var editButton: UIButton = {
-        let button = UIButton()
-        button.configuration = .bordered()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.tintColor = UIColor.black
-        button.backgroundColor = .systemBackground
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor(rgb: 0x7126B5).cgColor
-        button.layer.cornerRadius = 8
-        button.clipsToBounds = true
-        let attributedTitle = NSAttributedString(
-            string: "Edit",
-            attributes: [.font : UIFont(name: "Poppins-Regular", size: 12)!]
-        )
-        button.setAttributedTitle(attributedTitle, for: .normal)
+    private lazy var editButton: SHButton = {
+        let button = SHButton(frame: .zero, title: "Edit", type: .bordered, size: .small)
         button.addTarget(self, action: #selector(didClickedEditButton), for: .touchUpInside)
         return button
     }()

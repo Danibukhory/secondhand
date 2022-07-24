@@ -130,7 +130,9 @@ extension ListSellingViewController {
                 cell.didClickedEditButtonAction = {
                     let viewController = CompleteAccountViewController()
                     viewController.delegate = self
-                    self.navigationController?.pushViewController(viewController, animated: true)
+                    let navigationController = UINavigationController(rootViewController: viewController)
+                    navigationController.modalPresentationStyle = .fullScreen
+                    self.navigationController?.present(navigationController, animated: true)
                 }
                 return cell
             

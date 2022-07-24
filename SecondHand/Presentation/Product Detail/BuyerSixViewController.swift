@@ -472,7 +472,7 @@ class BuyerSixViewController: UIViewController, UIGestureRecognizerDelegate {
                 _self.orderedItem = _response.filter({ order in
                     return order.productID == _self.buyerResponse?.id
                 })
-                if !_self.orderedItem.isEmpty && _self.orderedItem[0].status == "bid" {
+                if !_self.orderedItem.isEmpty && _self.orderedItem[0].status == "pending" {
                     _self.publishButton.isEnabled = false
                     _self.publishButton.setActiveButtonTitle(string: "Menunggu Respon Penjual")
                 } else if !_self.orderedItem.isEmpty && _self.orderedItem[0].status == "accepted" {
